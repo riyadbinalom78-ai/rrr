@@ -42,6 +42,14 @@ header{
   justify-content:space-between;
   align-items:center;
   padding:12px 0 10px;
+
+  /* added */
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+  background: linear-gradient(rgba(4,6,12,0.18), rgba(4,6,12,0.06));
+  border-bottom:1px solid rgba(255,255,255,0.02);
 }
 
 .brand{
@@ -50,33 +58,59 @@ header{
   letter-spacing:-0.5px;
 }
 
-.nav{
-  display:flex;
-  gap:12px;
-  align-items:center;
-}
-
-.nav a{
-  color:var(--muted);
-  font-weight:600;
-  font-size:14px;
-  padding:8px 12px;
-  border-radius:14px;
-  display:flex;
-  align-items:center;
-  gap:6px;
-  border:1px solid rgba(255,255,255,0.05);
+/* ===== 3 DOT MENU (added) ===== */
+.menu-wrap{ position:relative; }
+.menu-btn{
+  width:46px; height:46px; border-radius:14px; display:grid; place-items:center;
   background: rgba(255,255,255,0.02);
+  color:var(--muted);
+  border:1px solid rgba(255,255,255,0.05);
+  cursor:pointer;
   transition:0.2s;
 }
-
-.nav a i{font-size:14px; color:rgba(220,230,250,0.7);}
-.nav a:hover{
+.menu-btn:hover{
   color:#fff;
   transform: translateY(-2px);
   border:1px solid rgba(38,163,255,0.2);
   box-shadow:0 10px 25px rgba(38,163,255,0.15);
 }
+
+.menu{
+  position:absolute;
+  right:0;
+  top:56px;
+  width:220px;
+  padding:10px;
+  border-radius:16px;
+  background: rgba(4,16,39,0.95);
+  border:1px solid rgba(255,255,255,0.06);
+  box-shadow:0 18px 60px rgba(0,0,0,0.55);
+  display:none;
+  backdrop-filter: blur(12px);
+}
+.menu.open{ display:block; }
+.menu a{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  padding:10px;
+  border-radius:12px;
+  color:var(--muted);
+  font-weight:700;
+}
+.menu a i{
+  width:18px;
+  text-align:center;
+  color:rgba(220,230,250,0.75);
+}
+.menu a:hover{
+  background: rgba(255,255,255,0.03);
+  color:#fff;
+  transform:translateX(3px);
+}
+
+/* old nav hidden */
+.nav{ display:none; }
 
 /* Blog Cards */
 .blog-card{
@@ -119,7 +153,7 @@ footer{
 }
 
 @media(max-width:720px){
-  .nav{display:flex; flex-direction:column; gap:8px;}
+  .menu{ right:8px; top:54px; }
 }
 </style>
 </head>
@@ -130,13 +164,21 @@ footer{
     <!-- NAVBAR -->
     <header>
       <div class="brand">Riyad Bin Alom</div>
-      <nav class="nav">
-        <a href="index.html"><i class="fas fa-home"></i> Home</a>
-        <a href="about.html"><i class="fas fa-user"></i> About</a>
-        <a href="skills.html"><i class="fas fa-code"></i> Skills</a>
-        <a href="blog.html"><i class="fas fa-pen-nib"></i> Blog</a>
-        <a href="contact.html"><i class="fas fa-envelope"></i> Contact</a>
-      </nav>
+
+      <!-- 3 dot menu -->
+      <div class="menu-wrap">
+        <button class="menu-btn" id="menuBtn" aria-label="Menu">
+          <i class="fa-solid fa-ellipsis-vertical"></i>
+        </button>
+
+        <div class="menu" id="menuBox">
+          <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+          <a href="about.html"><i class="fa-solid fa-user"></i> About</a>
+          <a href="skills.html"><i class="fa-solid fa-code"></i> Skills</a>
+          <a href="blog.html"><i class="fa-solid fa-pen-nib"></i> Blog</a>
+          <a href="contact.html"><i class="fa-solid fa-envelope"></i> Contact</a>
+        </div>
+      </div>
     </header>
 
     <!-- BLOG CONTENT -->
@@ -144,46 +186,43 @@ footer{
 
       <!-- Blog Card 1 -->
       <div class="blog-card">
-     <h1> The Weight of Wearing a Mask</h1>
-     
-      <p>In a world that feels like a never-ending masquerade, the hardest thing to do is to show your true face. I look around and see people expertly performing roles that were written for them by others. We have become a society of actors, reciting lines we don't believe in, just to avoid the sting of being cast out.</p>
+        <h1> The Weight of Wearing a Mask</h1>
 
-    <h2>Masked Faces and Unmasked Souls</h2>
-    
-    <p>Every time I step outside, I feel the pressure to put on my own mask. A mask that smiles at things I find tragic. A mask that stays silent when my soul wants to scream for the truth. We trade our authenticity for acceptance, saying the right things to the right people, but when the lights go out, we are strangers even to ourselves.</p>
+        <p>In a world that feels like a never-ending masquerade, the hardest thing to do is to show your true face. I look around and see people expertly performing roles that were written for them by others. We have become a society of actors, reciting lines we don't believe in, just to avoid the sting of being cast out.</p>
 
-    <div style="background: #f9f9f9; padding: 20px; border-radius: 5px; margin: 20px 0;">
-        <ul style="list-style-type: square; color: #555;">
+        <h2>Masked Faces and Unmasked Souls</h2>
+
+        <p>Every time I step outside, I feel the pressure to put on my own mask. A mask that smiles at things I find tragic. A mask that stays silent when my soul wants to scream for the truth. We trade our authenticity for acceptance, saying the right things to the right people, but when the lights go out, we are strangers even to ourselves.</p>
+
+        <div style="background: #f9f9f9; padding: 20px; border-radius: 5px; margin: 20px 0;">
+          <ul style="list-style-type: square; color: #555;">
             <li><strong>The Counterfeit Connection:</strong> We are more connected digitally than ever, yet more distant in spirit.</li>
             <li><strong>The Noise of the Crowd:</strong> Society demands that we fit into narrow boxes. To think differently is to be labeled an outsider.</li>
             <li><strong>The Spiritual Suffocation:</strong> For someone who seeks the depth of faith, this performance is exhausting. It feels like breathing in a room with no oxygen.</li>
-        </ul>
-    </div>
+          </ul>
+        </div>
 
-    <p>I have chosen, more often than not, to take the mask off. But the world doesn't like an unmasked soul. It’s too raw, too honest, and too much of a reminder of what they have lost. This is why I feel so alone. My "different" thinking isn't a choice; it's a refusal to lie.</p>
+        <p>I have chosen, more often than not, to take the mask off. But the world doesn't like an unmasked soul. It’s too raw, too honest, and too much of a reminder of what they have lost. This is why I feel so alone. My "different" thinking isn't a choice; it's a refusal to lie.</p>
 
-    <p>I would rather sit in the silence of my own room, talking to my Creator who knows my heart without a mask, than be the life of a party where no one truly knows me. I am tired of the polished versions of people. I crave the cracked, the broken, and the real.</p>
+        <p>I would rather sit in the silence of my own room, talking to my Creator who knows my heart without a mask, than be the life of a party where no one truly knows me. I am tired of the polished versions of people. I crave the cracked, the broken, and the real.</p>
 
-    <p>I am looking for souls that don't need a script to exist. Until I find them, I will embrace this solitude. It is lonely, yes, but it is honest. And in a world of beautiful lies, honesty is the only luxury I can afford.</p>
-
-    
-          
+        <p>I am looking for souls that don't need a script to exist. Until I find them, I will embrace this solitude. It is lonely, yes, but it is honest. And in a world of beautiful lies, honesty is the only luxury I can afford.</p>
       </div>
 
       <!-- Blog Card 2 -->
       <div class="blog-card">
-   <h1>The Art of Being a Stranger</h1>
-      <p>There is a profound beauty in not belonging. In a world that constantly demands you to fit in, to trend, and to be "seen," there is a quiet strength in choosing to remain a stranger. I often recall the timeless wisdom: <em>"Be in this world as if you were a stranger or a traveler."</em> To most, this sounds like a lonely existence. To me, it feels like the only way to stay sane.</p>
+        <h1>The Art of Being a Stranger</h1>
+        <p>There is a profound beauty in not belonging. In a world that constantly demands you to fit in, to trend, and to be "seen," there is a quiet strength in choosing to remain a stranger. I often recall the timeless wisdom: <em>"Be in this world as if you were a stranger or a traveler."</em> To most, this sounds like a lonely existence. To me, it feels like the only way to stay sane.</p>
 
         <h2>The Disconnect from the Modern Pulse</h2>
         <p>I look at the world around me—the constant rush for validation, the obsession with the temporary, the noise that never sleeps—and I feel a deep sense of detachment. It’s as if everyone is playing a game whose rules I refuse to learn.</p>
 
         <div class="quote-section">
-            <ul>
-                <li><strong>The Foreign Tongue:</strong> People speak of "hustle" and "legacy" in terms of bricks and bank accounts. I find myself thinking of a home that isn't on any map.</li>
-                <li><strong>The Misfit Soul:</strong> My heart doesn’t beat for the things this society worships. While they seek the spotlight, I find myself retreating into the shadows of my prayer mat.</li>
-                <li><strong>The Weight of Expectations:</strong> Society expects me to "evolve" by shedding my values. But every time I try to blend in, I feel like I am betraying my essence.</li>
-            </ul>
+          <ul>
+            <li><strong>The Foreign Tongue:</strong> People speak of "hustle" and "legacy" in terms of bricks and bank accounts. I find myself thinking of a home that isn't on any map.</li>
+            <li><strong>The Misfit Soul:</strong> My heart doesn’t beat for the things this society worships. While they seek the spotlight, I find myself retreating into the shadows of my prayer mat.</li>
+            <li><strong>The Weight of Expectations:</strong> Society expects me to "evolve" by shedding my values. But every time I try to blend in, I feel like I am betraying my essence.</li>
+          </ul>
         </div>
 
         <h2>Finding Peace in the Periphery</h2>
@@ -196,27 +235,26 @@ footer{
 
       <!-- Blog Card 3 -->
       <div class="blog-card">
-
         <h1>The Quiet Weight of Thinking Differently</h1>
-        
+
         <p>There is a specific kind of exhaustion that comes with being surrounded by people, yet feeling entirely unseen. I walk through the same streets, breathe the same air, and speak the same language as everyone else, yet I often feel like a traveler from a distant era—or perhaps, a different world altogether.</p>
 
         <p>In a society that celebrates noise, I find myself craving silence. In a culture that prioritizes the temporary and the superficial, my heart anchors itself to the eternal.</p>
 
         <h2>The Cost of an Unconventional Soul</h2>
-        
+
         <p>Being a Muslim in a world that often views faith as a relic of the past is a lonely path. It is not just about the rituals; it is about the perspective. While others chase the "now," I am constantly thinking about the "after." While the world measures success in gold and digital applause, I find myself measuring it in peace and the purity of intent.</p>
 
         <div>
-            <ul>
-                <li><strong>The Mismatch:</strong> My values are often met with raised eyebrows or patronizing smiles. To them, I am "outdated"; to me, they are simply drifting.</li>
-                <li><strong>The Emotional Distance:</strong> It’s hard to build bridges when your foundation is built on truths that society is trying to dismantle.</li>
-                <li><strong>The Internal Fortress:</strong> Over time, I’ve learned to build a world inside my mind—a place where my thoughts are safe from the judgment of the masses.</li>
-            </ul>
+          <ul>
+            <li><strong>The Mismatch:</strong> My values are often met with raised eyebrows or patronizing smiles. To them, I am "outdated"; to me, they are simply drifting.</li>
+            <li><strong>The Emotional Distance:</strong> It’s hard to build bridges when your foundation is built on truths that society is trying to dismantle.</li>
+            <li><strong>The Internal Fortress:</strong> Over time, I’ve learned to build a world inside my mind—a place where my thoughts are safe from the judgment of the masses.</li>
+          </ul>
         </div>
 
         <h2>A Stranger by Choice</h2>
-        
+
         <p>There is a profound loneliness in being "different." It’s the feeling of being at a gathering where everyone is laughing at a joke you don’t find funny, or chasing a dream you find meaningless. My isolation isn't a lack of people; it’s a lack of resonance.</p>
 
         <p>I often wonder if there are others like me—souls who feel the same ache, who look at the stars and feel a pull toward their Creator that the world tries to drown out with static.</p>
@@ -224,8 +262,8 @@ footer{
         <p>Perhaps this loneliness is a gift. Perhaps it is a shield, protecting my heart from becoming as hollow as the trends I refuse to follow. I may walk this path alone, but I would rather be a stranger to this world than a stranger to myself.</p>
 
         <div class="footer-note">
-            <em>Reflections on solitude and faith.</div>
-
+          <em>Reflections on solitude and faith.</em>
+        </div>
       </div>
 
     </section>
@@ -235,5 +273,30 @@ footer{
     </footer>
 
   </div>
+
+  <!-- 3 DOT MENU JS -->
+  <script>
+    (function(){
+      const menuBtn = document.getElementById("menuBtn");
+      const menuBox = document.getElementById("menuBox");
+
+      if(menuBtn && menuBox){
+        menuBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          menuBox.classList.toggle("open");
+        });
+
+        document.addEventListener("click", (e) => {
+          if (!menuBox.contains(e.target) && !menuBtn.contains(e.target)) {
+            menuBox.classList.remove("open");
+          }
+        });
+
+        document.addEventListener("keydown", (ev) => {
+          if(ev.key === "Escape") menuBox.classList.remove("open");
+        });
+      }
+    })();
+  </script>
 </body>
 </html>

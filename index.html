@@ -16,15 +16,16 @@
   --accent2:#7c3aed;
   --accent-grad: linear-gradient(90deg,var(--accent1),var(--accent2));
   --glass: rgba(255,255,255,0.02);
-  --radius:18px;
+  --card: rgba(255,255,255,0.03);
   --maxw:1300px;
 }
 
+/* Base */
 *{box-sizing:border-box;}
 html,body{height:100%;}
 body{
   margin:0;
-  font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
   background:
     radial-gradient(800px 380px at 8% 6%, rgba(124,58,237,0.04), transparent 20%),
     radial-gradient(700px 300px at 92% 12%, rgba(37,99,235,0.03), transparent 18%),
@@ -32,277 +33,233 @@ body{
   color:#eef6ff;
   line-height:1.45;
 }
-
 a{color:inherit; text-decoration:none;}
-.container{ max-width:var(--maxw); margin:0 auto; padding:28px 20px; }
+.container{max-width:var(--maxw); margin:0 auto; padding:28px 20px; opacity:0; transition:opacity .45s ease;}
 
 /* NAVBAR */
 header.topbar{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  position:sticky;
-  top:0;
-  z-index:60;
-  padding:10px 0;
-  backdrop-filter: blur(6px);
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  position:sticky; top:0; z-index:120; padding:12px 0; backdrop-filter: blur(12px);
+  border-bottom:1px solid rgba(255,255,255,0.04);
 }
-.brand{
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-.logo{
-  width:48px; height:48px; border-radius:12px;
-  display:grid; place-items:center;
-  background:var(--accent-grad); color:#041027; font-weight:800;
-  box-shadow:0 12px 40px rgba(37,99,235,0.08);
-  font-size:18px;
-}
+.brand{ display:flex; align-items:center; gap:12px; }
+.logo{ width:46px; height:46px; border-radius:12px; display:grid; place-items:center;
+  background:var(--accent-grad); color:#041029; font-weight:800; box-shadow:0 8px 28px rgba(38,163,255,0.10); }
 .brand .title{ font-weight:800; font-size:18px; }
 
-nav.mainnav{
-  display:flex;
-  gap:10px;
-  align-items:center;
-}
+nav.mainnav{ display:flex; gap:8px; align-items:center; }
 nav.mainnav a{
-  display:inline-flex; gap:8px; align-items:center;
-  padding:8px 12px; border-radius:12px;
+  display:inline-flex; gap:8px; align-items:center; padding:8px 14px; border-radius:12px;
   color:var(--muted); font-weight:700; font-size:14px;
-  background:var(--glass); border:1px solid rgba(255,255,255,0.03);
-  transition:transform .14s ease, color .14s ease, box-shadow .14s ease;
+  background:var(--glass); border:1px solid rgba(255,255,255,0.03); transition: all .18s ease;
 }
-nav.mainnav a i{ font-size:14px; color:rgba(220,230,250,0.7); }
-nav.mainnav a:hover{ transform:translateY(-3px); color:#fff; box-shadow:0 14px 30px rgba(0,0,0,0.35); }
+nav.mainnav a:hover{ transform:translateY(-3px); color:#fff; background: rgba(255,255,255,0.06); box-shadow:0 8px 22px rgba(0,0,0,0.25); }
+nav.mainnav a.active{ color:#041029; background:var(--accent-grad); box-shadow:0 12px 36px rgba(37,99,235,0.10); transform:translateY(-2px); }
 
-/* Hamburger for mobile */
-.hambtn{ display:none; background:transparent; border:none; color:var(--muted); font-size:20px; padding:8px; border-radius:10px; }
+/* Hamburger */
+.hambtn{ display:none; background:transparent; border:none; color:var(--muted); font-size:22px; padding:8px; }
 @media(max-width:880px){
-  nav.mainnav{ display:none; flex-direction:column; }
-  .hambtn{ display:inline-flex; align-items:center; gap:8px; }
+  nav.mainnav{ display:none; position:absolute; top:100%; left:0; width:100%; background:var(--bg); padding:14px; box-shadow:0 12px 36px rgba(0,0,0,0.5); }
+  .hambtn{ display:block; }
 }
 
 /* HERO */
-.hero{
-  display:grid;
-  grid-template-columns: 1fr 560px;
-  gap:36px;
-  align-items:center;
-  padding-top:18px;
-  padding-bottom:28px;
-}
-@media(max-width:1100px){
-  .hero{ grid-template-columns: 1fr 480px; gap:24px; }
-}
-@media(max-width:880px){
-  .hero{ grid-template-columns: 1fr; }
-}
+.hero{ display:grid; grid-template-columns:1fr 520px; gap:28px; align-items:center; padding:56px 0; }
+@media(max-width:1080px){ .hero{ grid-template-columns:1fr 420px; } }
+@media(max-width:880px){ .hero{ grid-template-columns:1fr; text-align:center; padding-top:36px; } }
 
-.intro-eyebrow{ color:var(--accent1); font-weight:800; font-size:14px; letter-spacing:0.6px; margin-bottom:10px; display:inline-block;}
-h1{
-  margin:0;
-  font-size: clamp(36px, 6vw, 72px);
-  line-height:1.02;
-  font-weight:900;
-  letter-spacing:-0.6px;
-}
-h1 .accent{ color: var(--accent1); background: linear-gradient(90deg, rgba(38,163,255,0.06), rgba(124,58,237,0.06)); padding:4px 8px; border-radius:8px; }
-.sub{ margin-top:14px; color:var(--muted); font-size:17px; max-width:64ch; }
+.intro-eyebrow{ color:var(--accent1); font-weight:800; font-size:13px; letter-spacing:1px; text-transform:uppercase; margin-bottom:12px; }
+h1{ margin:0; font-size:clamp(34px,6vw,64px); line-height:1.02; font-weight:900; }
+h1 .accent{ color:var(--accent1); }
+.sub{ margin-top:12px; color:var(--muted); font-size:17px; max-width:64ch; }
 
-.cta-row{ margin-top:20px; display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
-.btn{
-  display:inline-flex; align-items:center; gap:10px;
-  padding:12px 16px; border-radius:12px; font-weight:800; cursor:pointer;
-  border:none;
-}
-.btn.primary{
-  background:var(--accent-grad); color:#041027; box-shadow:0 20px 60px rgba(37,99,235,0.10);
-}
-.btn.ghost{
-  background:transparent; color:var(--muted); border:1px solid rgba(255,255,255,0.06);
-}
-.btn:hover{ transform:translateY(-3px); }
+/* CTA row */
+.cta-row{ margin-top:18px; display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+.btn{ display:inline-flex; align-items:center; gap:10px; padding:12px 18px; border-radius:12px; font-weight:800; border:none; cursor:pointer; transition:transform .16s ease; }
+.btn.primary{ background:var(--accent-grad); color:#041029; box-shadow:0 12px 36px rgba(37,99,235,0.10); }
+.btn.primary:hover{ transform:translateY(-4px); }
 
-/* profile panel */
-.profile-panel{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:18px;
-  position:relative;
-}
-.profile-frame{
-  width:560px; height:560px; border-radius:28px; overflow:hidden;
-  display:grid; place-items:center;
-  background: linear-gradient(180deg, rgba(255,255,255,0.008), rgba(255,255,255,0.004));
-  border:1px solid rgba(255,255,255,0.02);
-  box-shadow: 0 30px 90px rgba(0,0,0,0.6);
-}
-@media(max-width:1100px){ .profile-frame{ width:480px; height:480px } }
-@media(max-width:880px){ .profile-frame{ width:360px; height:360px } }
+/* profile */
+.profile-panel{ display:flex; flex-direction:column; align-items:center; gap:14px; position:relative; }
+.profile-frame{ width:440px; height:440px; border-radius:20px; overflow:hidden; display:grid; place-items:center; background: rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.03); box-shadow: 0 30px 80px rgba(0,0,0,0.6); animation: float 6s ease-in-out infinite; }
+@keyframes float{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+@media(max-width:880px){ .profile-frame{ width:320px; height:320px; } }
 
-.avatar-wrap{
-  width:86%; height:86%; border-radius:50%; overflow:hidden; display:grid; place-items:center;
-  border:8px solid rgba(255,255,255,0.03);
-  background:#0b0f18;
-}
-.avatar-wrap img{ width:100%; height:100%; object-fit:cover; display:block; border-radius:50%; }
+.avatar-wrap{ width:84%; height:84%; border-radius:50%; overflow:hidden; border:3px solid rgba(255,255,255,0.04); }
+.avatar-wrap img{ width:100%; height:100%; object-fit:cover; transition:transform .35s ease; }
+.avatar-wrap:hover img{ transform:scale(1.06); }
 
-.glow{
-  position:absolute; width:86%; height:86%; border-radius:50%; pointer-events:none;
-  background:
-    radial-gradient(circle at 30% 30%, rgba(38,163,255,0.08), transparent 25%),
-    radial-gradient(circle at 70% 70%, rgba(124,58,237,0.06), transparent 25%);
-  filter: blur(18px);
-  z-index:3;
-  transform:translateY(-2px);
-}
+/* social row (below image) */
+.social-row{ display:flex; gap:12px; margin-top:12px; }
+.social-row a{ width:44px; height:44px; display:grid; place-items:center; border-radius:10px; background:var(--card); color:var(--muted); border:1px solid rgba(255,255,255,0.03); transition:transform .14s ease; }
+.social-row a:hover{ transform:translateY(-6px); color:#fff; }
 
-.social-vertical{
-  position:absolute; left:-74px; top:50%; transform:translateY(-50%);
-  display:flex; flex-direction:column; gap:12px;
-}
-.social-vertical a{
-  width:56px; height:56px; display:grid; place-items:center; border-radius:12px; color:#fff;
-  background: rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.04);
-  transition:transform .12s ease, box-shadow .12s ease;
-}
-.social-vertical a:hover{ transform:translateY(-6px); box-shadow:0 18px 50px rgba(37,99,235,0.10); }
-@media(max-width:1100px){ .social-vertical{ left:-64px } }
-@media(max-width:880px){ .social-vertical{ position:static; transform:none; flex-direction:row; margin-top:10px; left:auto } }
+/* sections */
+section.page-section{ padding:72px 0; border-bottom:1px solid rgba(255,255,255,0.03); }
+.section-inner{ max-width:900px; margin:0 auto; }
+.section-title{ font-size:26px; font-weight:800; color:#fff; margin-bottom:16px; display:flex; gap:10px; align-items:center; }
+.section-title::after{ content:""; height:2px; flex:1; background:var(--accent-grad); opacity:.28; }
 
-.scroll-hint{
-  display:inline-flex; align-items:center; gap:10px; margin-top:18px; color:var(--muted); font-weight:700; font-size:13px;
-}
-.scroll-hint i{ font-size:18px; }
+/* reveal animation */
+.reveal{ opacity:0; transform:translateY(26px); transition: all .65s ease; }
+.reveal.active{ opacity:1; transform:translateY(0); }
 
-section.page-section{ padding:56px 0; }
-.section-inner{ max-width:980px; margin:0 auto; padding:0 18px; }
-.section-title{ font-size:22px; font-weight:800; color:#fff; margin-bottom:12px; }
-.muted{ color:var(--muted) }
+/* footer */
+footer{ padding:40px 0; text-align:center; color:var(--muted); font-weight:700; }
 
-@media(max-width:520px){
-  .brand .title{ font-size:16px }
-  .avatar-wrap{ width:88%; height:88% }
-  .profile-frame{ width:320px; height:320px }
-}
+/* responsive tweaks */
+@media(max-width:1080px){ .hero{ gap:20px; } }
+@media(max-width:520px){ .brand .title{ font-size:16px; } }
 </style>
 </head>
-
 <body>
-<div class="container">
-  <header class="topbar" role="banner">
-    <div class="brand">
-      <div class="logo">R</div>
-      <div class="title">Riyad Bin Alom</div>
-    </div>
-    <nav class="mainnav" role="navigation" aria-label="Main navigation">
-      <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
-      <a href="about.html"><i class="fa-solid fa-user"></i> About</a>
-      <a href="skills.html"><i class="fa-solid fa-code"></i> Skills</a>
-      <a href="blog.html"><i class="fa-solid fa-pen-nib"></i> Blog</a>
-      <a href="contact.html"><i class="fa-solid fa-envelope"></i> Contact</a>
-    </nav>
-    <button class="hambtn" aria-label="Open menu" id="hambBtn"><i class="fa-solid fa-bars"></i></button>
-  </header>
-
-  <!-- HERO -->
-  <main id="home" class="hero">
-    <div>
-      <div class="intro-eyebrow">Hey, I’m</div>
-      <h1><span class="accent">Riyad Bin Alom</span></h1>
-      <div class="sub">Lost sometimes, learning always. Student — interested in Science, Islam & History. I study, reflect, and try to contribute positively.</div>
-
-      <div class="cta-row">
-        <a class="btn primary" href="about.html"><i class="fa-solid fa-magnifying-glass"></i> Explore More</a>
-        <a class="btn ghost" href="blog.html"><i class="fa-solid fa-book-open"></i> View Blog</a>
+  <div class="container" id="pageContainer">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo">R</div>
+        <div class="title">Riyad Bin Alom</div>
       </div>
 
-      <div class="scroll-hint"><i class="fa-solid fa-angle-down"></i> Scroll to learn more</div>
-    </div>
+      <!-- NAV LINKS: now point to separate pages -->
+      <nav class="mainnav" id="mainNav">
+        <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+        <a href="about.html"><i class="fa-solid fa-user"></i> About</a>
+        <a href="skills.html"><i class="fa-solid fa-code"></i> Skills</a>
+        <a href="blog.html"><i class="fa-solid fa-pen-nib"></i> Blog</a>
+        <a href="contact.html"><i class="fa-solid fa-envelope"></i> Contact</a>
+      </nav>
 
-    <div class="profile-panel">
-      <div class="social-vertical">
-        <a href="https://www.facebook.com/riyadbinalom33" target="_blank"><i class="fab fa-facebook-f"></i></a>
-        <a href="https://x.com/Riyad_Bin_Alom" target="_blank"><i class="fab fa-x-twitter"></i></a>
-        <a href="https://www.instagram.com/riyadbinalom33" target="_blank"><i class="fab fa-instagram"></i></a>
-        <a href="https://www.youtube.com/@3RiyadBinalom" target="_blank"><i class="fab fa-youtube"></i></a>
-      </div>
+      <button class="hambtn" id="hambBtn" aria-label="menu"><i class="fa-solid fa-bars"></i></button>
+    </header>
 
-      <div class="profile-frame">
-        <div class="glow"></div>
-        <div class="avatar-wrap">
-          <img src="riyad.jpg" alt="Riyad Bin Alom">
+    <!-- HERO -->
+    <main id="home" class="hero">
+      <div class="reveal active">
+        <div class="intro-eyebrow">Hey, I’m</div>
+        <h1><span class="accent">Riyad Bin Alom</span></h1>
+
+        <div class="sub">
+          <strong style="color:#fff; font-weight:800;">Learning with discipline. Living with purpose.</strong><br>
+          Student — interested in Science, Islam & History. I study, reflect, and try to contribute positively.
+        </div>
+
+        <div class="cta-row">
+          <!-- Explore now opens about.html -->
+          <a class="btn primary" href="about.html"><i class="fa-solid fa-magnifying-glass"></i> Explore</a>
+          <a href="blog.html" style="color:var(--muted); font-weight:800; text-decoration:underline;">View Blog</a>
         </div>
       </div>
-    </div>
-  </main>
 
-  <!-- ABOUT preview -->
-  <section id="about" class="page-section">
-    <div class="section-inner">
-      <div class="section-title">About</div>
-      <p class="muted">Student • Interested in Science, Islam & History</p>
-      <p class="muted" style="margin-top:12px;">
-        Knowledge never ends. I read, reflect, and apply — science trains the mind, Islam guides the heart, and history gives perspective.
-        My aim is disciplined study, thoughtful conversation, and small acts that help my family and community.
-      </p>
-    </div>
-  </section>
+      <div class="profile-panel reveal active">
+        <div class="profile-frame" role="img" aria-label="Riyad profile">
+          <div class="avatar-wrap">
+            <img src="riyad.jpg" alt="Riyad Bin Alom">
+          </div>
+        </div>
 
-  <!-- SKILLS preview -->
-  <section id="skills" class="page-section">
-    <div class="section-inner">
-      <div class="section-title">Skills (preview)</div>
-      <p class="muted">Research • Critical thinking • Writing • Basic web (HTML/CSS) • Languages (Bengali, English, Hindi)</p>
-    </div>
-  </section>
+        <div class="social-row">
+          <a href="https://facebook.com/riyadbinalom33" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://x.com/Riyad_Bin_Alom" target="_blank" aria-label="X"><i class="fab fa-x-twitter"></i></a>
+          <a href="https://instagram.com/riyadbinalom33" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="https://www.youtube.com/@3RiyadBinalom" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+    </main>
 
-  <!-- BLOG preview -->
-  <section id="blog" class="page-section">
-    <div class="section-inner">
-      <div class="section-title">Blog</div>
-      <p class="muted">Short reflections on faith, study techniques, and society. <a href="blog.html">Read full blog</a></p>
-    </div>
-  </section>
+    <!-- ABOUT (preview) -->
+    <section id="about" class="page-section reveal">
+      <div class="section-inner">
+        <div class="section-title">About</div>
+        <p style="font-size:18px; line-height:1.8; color:var(--muted);">
+          Knowledge never ends. I read, reflect, and apply — science trains the mind, Islam guides the heart, and history gives perspective.
+          My aim is disciplined study, thoughtful conversation, and small acts that help my family and community.
+        </p>
+      </div>
+    </section>
 
-  <!-- CONTACT preview -->
-  <section id="contact" class="page-section">
-    <div class="section-inner">
-      <div class="section-title">Contact</div>
-      <p class="muted">Email: <a href="mailto:riyadbinalom78@gmail.com">riyadbinalom78@gmail.com</a></p>
-    </div>
-  </section>
+    <!-- SKILLS -->
+    <section id="skills" class="page-section reveal">
+      <div class="section-inner">
+        <div class="section-title">Skills</div>
+        <p style="font-size:18px; color:var(--muted);">
+          Research • Critical thinking • Writing • Basic web (HTML/CSS) • Languages (Bengali, English, Hindi)
+        </p>
+      </div>
+    </section>
 
-  <footer style="padding:36px 0; text-align:center; color:var(--muted);">© 2026 • Riyad Bin Alom</footer>
-</div>
+    <!-- BLOG -->
+    <section id="blog" class="page-section reveal">
+      <div class="section-inner">
+        <div class="section-title">Blog</div>
+        <p style="font-size:18px; color:var(--muted);">
+          Short reflections on faith, study techniques, and society.
+          <a href="blog.html" style="color:var(--accent1); font-weight:800; margin-left:8px;">Read full blog →</a>
+        </p>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="page-section reveal">
+      <div class="section-inner">
+        <div class="section-title">Contact</div>
+        <p style="font-size:18px; color:var(--muted);">
+          Let's connect! Email:
+          <a href="mailto:riyadbinalom78@gmail.com" style="color:var(--accent1); font-weight:800;">riyadbinalom78@gmail.com</a>
+        </p>
+      </div>
+    </section>
+
+    <footer>
+      © 2026 • Riyad Bin Alom
+    </footer>
+  </div>
 
 <script>
-const hamb = document.getElementById('hambBtn');
-const nav = document.querySelector('nav.mainnav');
-hamb && hamb.addEventListener('click', ()=>{
-  if(nav.style.display==='flex'){ nav.style.display='none'; hamb.innerHTML='<i class="fa-solid fa-bars"></i>'; }
-  else{ nav.style.display='flex'; nav.style.flexDirection='column'; hamb.innerHTML='<i class="fa-solid fa-xmark"></i>'; }
-});
+document.addEventListener('DOMContentLoaded', () => {
+  // page fade-in
+  const container = document.getElementById('pageContainer');
+  setTimeout(()=> container.style.opacity = 1, 60);
 
-// Smooth scroll to sections
-document.querySelectorAll('nav.mainnav a, .cta-row a').forEach(a=>{
-  a.addEventListener('click', function(e){
-    const href=this.getAttribute('href');
-    if(href.startsWith('#')){ 
-      const el=document.getElementById(href.slice(1));
-      if(el){
-        e.preventDefault();
-        const y=el.getBoundingClientRect().top+window.pageYOffset-18;
-        window.scrollTo({top:y,behavior:'smooth'});
-        if(window.innerWidth<=880){ nav.style.display='none'; hamb.innerHTML='<i class="fa-solid fa-bars"></i>'; }
+  // mobile menu toggle
+  const hamb = document.getElementById('hambBtn');
+  const nav = document.getElementById('mainNav');
+  if(hamb && nav){
+    hamb.addEventListener('click', () => {
+      const current = window.getComputedStyle(nav).display;
+      if(current === 'none'){
+        nav.style.display = 'flex';
+        nav.style.flexDirection = 'column';
+        hamb.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+      } else {
+        nav.style.display = 'none';
+        hamb.innerHTML = '<i class="fa-solid fa-bars"></i>';
       }
-    }
+    });
+  }
+
+  // reveal-on-scroll using IntersectionObserver
+  const reveals = document.querySelectorAll('.reveal');
+  const ro = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting) e.target.classList.add('active');
+    });
+  }, {threshold: 0.12});
+  reveals.forEach(r => ro.observe(r));
+
+  // Active nav highlight by current page (filename)
+  const navLinks = document.querySelectorAll('nav.mainnav a');
+  const currentFile = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+  navLinks.forEach(link=>{
+    const href = (link.getAttribute('href') || '').split('/').pop().toLowerCase();
+    if(href === currentFile) link.classList.add('active');
   });
+
+  // Ensure mobile nav closes on window resize to desktop
+  window.addEventListener('resize', ()=> {
+    if(window.innerWidth > 880 && nav) { nav.style.display = ''; if(hamb) hamb.innerHTML = '<i class="fa-solid fa-bars"></i>'; }
+  });
+
 });
 </script>
-
 </body>
 </html>
