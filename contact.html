@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Contact — Riyad Bin Alom</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+<style>
+:root{--bg:#041027;--muted: rgba(220,230,250,0.82);--accent1:#26a3ff;--accent2:#7c3aed;--accent-grad: linear-gradient(90deg,var(--accent1),var(--accent2));--card: rgba(255,255,255,0.03);--radius:14px;--maxw:1100px;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{ font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial; background: var(--bg); color:#eef6ff; line-height:1.6; }
+.wrap{ max-width:var(--maxw); margin:18px auto; padding:20px; }
+header{ display:flex; justify-content:space-between; align-items:center; gap:12px; padding-bottom:10px; }
+.brand{ display:flex; gap:12px; align-items:center; }
+.logo{ width:44px;height:44px;border-radius:10px; display:grid; place-items:center; background:var(--accent-grad); color:#031029; font-weight:800; }
+.brand-name{ font-weight:800; font-size:16px; }
+nav.nav{ display:flex; gap:10px; align-items:center; }
+nav.nav a{ color:var(--muted); font-weight:700; padding:8px 12px; border-radius:12px; background: rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.03); text-decoration:none; display:flex; gap:8px; align-items:center; }
+nav.nav a:hover{ color:#fff; transform:translateY(-3px); box-shadow:0 14px 40px rgba(0,0,0,0.35); }
+
+h1{ font-size:28px; font-weight:800; margin-bottom:12px; }
+.card{ background:var(--card); border-radius:var(--radius); padding:20px; border:1px solid rgba(255,255,255,0.04); box-shadow:0 12px 30px rgba(0,0,0,0.28); margin-bottom:18px; }
+.contact-line{ display:flex; gap:12px; flex-wrap:wrap; margin-top:8px; }
+.email-pill{ padding:12px 14px; border-radius:12px; background: rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.03); color:var(--muted); font-weight:700; }
+.email-pill a{ color:#fff; text-decoration:underline; text-underline-offset:4px; }
+.copy-btn{ margin-left:6px; padding:8px 10px; border-radius:10px; background: rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.03); color:var(--muted); cursor:pointer; font-weight:700; }
+.copy-btn.copied{ background:var(--accent-grad); color:#031029; border:none; }
+.social-row{ display:flex; gap:10px; margin-top:14px; flex-wrap:wrap; }
+.social-row a{ width:46px;height:46px;border-radius:12px;display:grid;place-items:center; background: rgba(255,255,255,0.03); color:#fff; border:1px solid rgba(255,255,255,0.04); transition: transform .12s ease, box-shadow .12s ease; }
+.social-row a:hover{ transform: translateY(-4px); box-shadow:0 12px 40px rgba(37,99,235,0.10); }
+footer{ margin-top:28px; color:var(--muted); text-align:center; font-size:14px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="brand"><div class="logo">R</div><div class="brand-name">Riyad Bin Alom</div></div>
+  <nav class="nav">
+    <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+    <a href="about.html"><i class="fa-solid fa-user"></i> About</a>
+    <a href="skills.html"><i class="fa-solid fa-code"></i> Skills</a>
+    <a href="blog.html"><i class="fa-solid fa-pen-nib"></i> Blog</a>
+    <a href="contact.html"><i class="fa-solid fa-envelope"></i> Contact</a>
+  </nav>
+</header>
+
+<h1>Contact</h1>
+<div class="card">
+  <div style="font-weight:800; color:#fff; margin-bottom:8px;">Email</div>
+  <div style="display:flex; gap:8px; flex-wrap:wrap;">
+    <div class="email-pill" id="emailText">
+      <a href="mailto:riyadbinalom78@gmail.com">riyadbinalom78@gmail.com</a>
+    </div>
+    <button class="copy-btn" id="copyBtn" onclick="copyEmail()">Copy</button>
+  </div>
+
+  <div style="font-weight:800; color:#fff; margin-top:14px; margin-bottom:6px;">Social</div>
+  <div class="social-row">
+    <a href="https://www.facebook.com/riyadbinalom33" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+    <a href="https://x.com/Riyad_Bin_Alom" target="_blank" aria-label="X"><i class="fab fa-x-twitter"></i></a>
+    <a href="https://www.instagram.com/riyadbinalom33" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+    <a href="https://www.youtube.com/@3RiyadBinalom" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+  </div>
+</div>
+
+<footer>© 2026 • Riyad Bin Alom</footer>
+</div>
+
+<script>
+function copyEmail(){
+  const email='riyadbinalom78@gmail.com';
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(email).then(()=>{
+      const btn=document.getElementById('copyBtn');
+      btn.classList.add('copied');
+      btn.innerText='Copied';
+      setTimeout(()=>{ btn.classList.remove('copied'); btn.innerText='Copy'; },2200);
+    }).catch(()=>alert('Copy failed — please copy manually.'));
+  }
+}
+</script>
+</body>
+</html>

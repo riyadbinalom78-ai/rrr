@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — Riyad Bin Alom</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+<style>
+:root{
+  --bg:#041027;
+  --muted: rgba(220,230,250,0.78);
+  --accent1:#26a3ff;
+  --accent2:#7c3aed;
+  --accent-grad: linear-gradient(90deg,var(--accent1),var(--accent2));
+  --radius:16px;
+  --maxw:1000px;
+}
+
+*{box-sizing:border-box; margin:0; padding:0;}
+body{
+  font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+  background: var(--bg);
+  color:#eef6ff;
+  line-height:1.5;
+}
+
+a{ text-decoration:none; color:var(--accent1);}
+a:hover{color:var(--accent2);}
+
+.wrap{
+  max-width:var(--maxw);
+  margin:0 auto;
+  padding:22px 18px 40px;
+}
+
+/* NAVBAR */
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:12px 0 10px;
+}
+
+.brand{
+  font-weight:800;
+  font-size:18px;
+  letter-spacing:-0.5px;
+}
+
+.nav{
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+
+.nav a{
+  color:var(--muted);
+  font-weight:600;
+  font-size:14px;
+  padding:8px 12px;
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  border:1px solid rgba(255,255,255,0.05);
+  background: rgba(255,255,255,0.02);
+  transition:0.2s;
+}
+
+.nav a i{font-size:14px; color:rgba(220,230,250,0.7);}
+.nav a:hover{
+  color:#fff;
+  transform: translateY(-2px);
+  border:1px solid rgba(38,163,255,0.2);
+  box-shadow:0 10px 25px rgba(38,163,255,0.15);
+}
+
+/* HERO */
+.hero{
+  display:grid;
+  grid-template-columns: 1fr 420px;
+  gap:28px;
+  align-items:center;
+  margin-top:20px;
+}
+
+h1{font-size:clamp(28px,5vw,48px); margin:0; font-weight:900;}
+h2{font-weight:700; color:var(--muted); margin:6px 0 12px;}
+p{color:var(--muted); line-height:1.7; margin-bottom:16px;}
+
+/* PROFILE IMAGE */
+.profile{
+  width:420px;
+  height:420px;
+  border-radius:50%;
+  overflow:hidden;
+  box-shadow:0 15px 45px rgba(0,0,0,0.55);
+  background:#0b0f18;
+}
+
+.profile img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:50%;
+}
+
+footer{
+  margin-top:40px;
+  text-align:center;
+  color:var(--muted);
+  font-size:14px;
+}
+
+/* ===== Responsive ===== */
+@media(max-width:980px){
+  .hero{grid-template-columns:1fr;}
+  .profile{width:300px;height:300px; margin:20px auto;}
+}
+
+@media(max-width:720px){
+  .nav{display:flex; flex-direction:column; gap:8px;}
+}
+</style>
+</head>
+
+<body>
+  <div class="wrap">
+
+    <!-- NAVBAR -->
+    <header>
+      <div class="brand">Riyad Bin Alom</div>
+      <nav class="nav">
+        <a href="index.html"><i class="fas fa-home"></i> Home</a>
+        <a href="about.html"><i class="fas fa-user"></i> About</a>
+        <a href="skills.html"><i class="fas fa-code"></i> Skills</a>
+        <a href="blog.html"><i class="fas fa-pen-nib"></i> Blog</a>
+        <a href="contact.html"><i class="fas fa-envelope"></i> Contact</a>
+      </nav>
+    </header>
+
+    <!-- HERO / ABOUT -->
+    <section class="hero">
+      <!-- Left text -->
+      <div>
+        <h1>About Me</h1>
+        <h2>Student • Interested in Science, Islam & History</h2>
+        <p>
+          Knowledge never ends, and every new lesson lights the path forward. I strive to explore ideas deeply, learn with patience, and grow step by step.
+        </p>
+        <p>
+          Islam teaches me peace, respect, and purpose. Life is a journey where curiosity and reflection guide me towards understanding myself and my surroundings.
+        </p>
+        <p>
+          My goal is to balance learning, thinking, and contributing to society. Every experience, challenge, and interaction adds to personal growth, helping me become a mindful and responsible individual.
+        </p>
+      </div>
+
+      <!-- Right profile image -->
+      <div class="profile">
+        <img src="riyad_about.jpg" alt="Riyad Bin Alom">
+      </div>
+    </section>
+
+    <footer>
+      © 2026 • Riyad Bin Alom
+    </footer>
+
+  </div>
+</body>
+</html>
