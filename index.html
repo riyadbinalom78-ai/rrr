@@ -18,6 +18,7 @@
   --glass: rgba(255,255,255,0.02);
   --card: rgba(255,255,255,0.03);
   --maxw:1300px;
+  --radius:16px;
 }
 
 /* Base */
@@ -41,6 +42,7 @@ header.topbar{
   display:flex; align-items:center; justify-content:space-between; gap:12px;
   position:sticky; top:0; z-index:120; padding:12px 0; backdrop-filter: blur(12px);
   border-bottom:1px solid rgba(255,255,255,0.04);
+  background: linear-gradient(180deg, rgba(4,6,12,0.45), rgba(4,6,12,0.03));
 }
 .brand{ display:flex; align-items:center; gap:12px; }
 .logo{ width:46px; height:46px; border-radius:12px; display:grid; place-items:center;
@@ -63,33 +65,53 @@ nav.mainnav a.active{ color:#041029; background:var(--accent-grad); box-shadow:0
   .hambtn{ display:block; }
 }
 
-/* HERO */
-.hero{ display:grid; grid-template-columns:1fr 520px; gap:28px; align-items:center; padding:56px 0; }
+/* HERO layout: left & right as siblings */
+.hero{ display:grid; grid-template-columns:1fr 520px; gap:28px; align-items:center; padding:56px 0; overflow:visible; }
 @media(max-width:1080px){ .hero{ grid-template-columns:1fr 420px; } }
 @media(max-width:880px){ .hero{ grid-template-columns:1fr; text-align:center; padding-top:36px; } }
 
+/* LEFT */
+.hero-left{ padding-right:6px; }
 .intro-eyebrow{ color:var(--accent1); font-weight:800; font-size:13px; letter-spacing:1px; text-transform:uppercase; margin-bottom:12px; }
 h1{ margin:0; font-size:clamp(34px,6vw,64px); line-height:1.02; font-weight:900; }
 h1 .accent{ color:var(--accent1); }
 .sub{ margin-top:12px; color:var(--muted); font-size:17px; max-width:64ch; }
 
-/* CTA row */
-.cta-row{ margin-top:18px; display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
-.btn{ display:inline-flex; align-items:center; gap:10px; padding:12px 18px; border-radius:12px; font-weight:800; border:none; cursor:pointer; transition:transform .16s ease; }
+/* CTA row — buttons styled via classes */
+.cta-row{ margin-top:18px; display:flex; gap:12px; align-items:center; flex-wrap:wrap; position:relative; z-index:20; }
+.btn{ display:inline-flex; align-items:center; gap:10px; padding:12px 18px; border-radius:12px; font-weight:800; border:none; cursor:pointer; transition:transform .16s ease, box-shadow .16s ease; text-decoration:none; }
 .btn.primary{ background:var(--accent-grad); color:#041029; box-shadow:0 12px 36px rgba(37,99,235,0.10); }
 .btn.primary:hover{ transform:translateY(-4px); }
+.btn.secondary{
+  background:transparent;
+  color:var(--muted);
+  border:2px solid rgba(255,255,255,0.08);
+  padding:12px 20px;
+  border-radius:12px;
+  font-weight:800;
+}
+.btn.secondary:hover{
+  background:var(--accent1);
+  color:#fff;
+  border-color:var(--accent1);
+  transform:translateY(-4px);
+  box-shadow:0 12px 36px rgba(38,163,255,0.12);
+}
 
-/* profile */
+/* RIGHT: profile panel (no float animation that moves up/down) */
 .profile-panel{ display:flex; flex-direction:column; align-items:center; gap:14px; position:relative; }
-.profile-frame{ width:440px; height:440px; border-radius:20px; overflow:hidden; display:grid; place-items:center; background: rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.03); box-shadow: 0 30px 80px rgba(0,0,0,0.6); animation: float 6s ease-in-out infinite; }
-@keyframes float{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.profile-frame{ width:440px; height:440px; border-radius:20px; overflow:hidden; display:grid; place-items:center; background: rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.03); box-shadow: 0 30px 80px rgba(0,0,0,0.6); transition: transform .45s ease; }
 @media(max-width:880px){ .profile-frame{ width:320px; height:320px; } }
 
-.avatar-wrap{ width:84%; height:84%; border-radius:50%; overflow:hidden; border:3px solid rgba(255,255,255,0.04); }
-.avatar-wrap img{ width:100%; height:100%; object-fit:cover; transition:transform .35s ease; }
-.avatar-wrap:hover img{ transform:scale(1.06); }
+.avatar-wrap{ width:88%; height:88%; border-radius:18px; overflow:hidden; border:3px solid rgba(255,255,255,0.04); } /* rounded-square */
+.avatar-wrap img{ width:100%; height:100%; object-fit:cover; transition:transform .35s ease; display:block; }
+.avatar-wrap:hover img{ transform:scale(1.04); }
 
-/* social row (below image) */
+/* Keep profile behind text slightly if needed (but z-index managed) */
+.profile-panel{ z-index:10; }
+.cta-row{ z-index:30; }
+
+/* social row under image */
 .social-row{ display:flex; gap:12px; margin-top:12px; }
 .social-row a{ width:44px; height:44px; display:grid; place-items:center; border-radius:10px; background:var(--card); color:var(--muted); border:1px solid rgba(255,255,255,0.03); transition:transform .14s ease; }
 .social-row a:hover{ transform:translateY(-6px); color:#fff; }
@@ -108,8 +130,8 @@ section.page-section{ padding:72px 0; border-bottom:1px solid rgba(255,255,255,0
 footer{ padding:40px 0; text-align:center; color:var(--muted); font-weight:700; }
 
 /* responsive tweaks */
-@media(max-width:1080px){ .hero{ gap:20px; } }
-@media(max-width:520px){ .brand .title{ font-size:16px; } }
+@media(max-width:1080px){ .hero{ gap:20px; } .profile-frame{ width:380px; height:380px;} }
+@media(max-width:520px){ .brand .title{ font-size:16px; } .profile-frame{ width:320px;height:320px } }
 </style>
 </head>
 <body>
@@ -120,8 +142,8 @@ footer{ padding:40px 0; text-align:center; color:var(--muted); font-weight:700; 
         <div class="title">Riyad Bin Alom</div>
       </div>
 
-      <!-- NAV LINKS: now point to separate pages -->
-      <nav class="mainnav" id="mainNav">
+      <!-- NAV LINKS -->
+      <nav class="mainnav" id="mainNav" aria-label="Main navigation">
         <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
         <a href="about.html"><i class="fa-solid fa-user"></i> About</a>
         <a href="skills.html"><i class="fa-solid fa-code"></i> Skills</a>
@@ -133,8 +155,9 @@ footer{ padding:40px 0; text-align:center; color:var(--muted); font-weight:700; 
     </header>
 
     <!-- HERO -->
-    <main id="home" class="hero">
-      <div class="reveal active">
+    <main id="home" class="hero" role="main">
+      <!-- left column -->
+      <div class="hero-left reveal active">
         <div class="intro-eyebrow">Hey, I’m</div>
         <h1><span class="accent">Riyad Bin Alom</span></h1>
 
@@ -143,57 +166,27 @@ footer{ padding:40px 0; text-align:center; color:var(--muted); font-weight:700; 
           Student — interested in Science, Islam & History. I study, reflect, and try to contribute positively.
         </div>
 
-  <div class="cta-row" style="margin-top:20px; display:flex; gap:14px; flex-wrap:wrap; align-items:center;">
-  
-  <!-- Explore Button -->
-  <a class="btn primary" href="about.html" style="
-    display:flex;
-    align-items:center;
-    gap:8px;
-    padding:12px 20px;
-    background: linear-gradient(90deg, #4f46e5, #ec4899);
-    color:#fff;
-    font-weight:700;
-    border-radius:12px;
-    text-decoration:none;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
-  " onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 12px 40px rgba(79,70,229,0.2)'" 
-     onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
-    <i class="fa-solid fa-magnifying-glass"></i> Explore
-  </a>
+        <div class="cta-row">
+          <a class="btn primary" href="about.html"><i class="fa-solid fa-magnifying-glass"></i> Explore</a>
+          <a class="btn secondary" href="blog.html"><i class="fa-solid fa-book"></i> View Blog</a>
+        </div>
+      </div>
 
-  <!-- Blog Button -->
-  <a href="blog.html" style="
-    display:inline-block;
-    padding:12px 20px;
-    background:#ffffff;
-    color:#4f46e5;
-    font-weight:700;
-    border-radius:12px;
-    border:2px solid #4f46e5;
-    text-decoration:none;
-    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, color 0.15s ease;
-  " onmouseover="this.style.background='#4f46e5'; this.style.color='#fff'; this.style.transform='translateY(-3px)'; this.style.boxShadow='0 12px 40px rgba(79,70,229,0.2)'" 
-     onmouseout="this.style.background='#fff'; this.style.color='#4f46e5'; this.style.transform='translateY(0)'; this.style.boxShadow='none'">
-    View Blog
-  </a>
-
-</div>
-
-      <div class="profile-panel reveal active">
+      <!-- right column: profile -->
+      <aside class="profile-panel reveal active">
         <div class="profile-frame" role="img" aria-label="Riyad profile">
           <div class="avatar-wrap">
-            <img src="riyad.jpg" alt="Riyad Bin Alom">
+            <img src="riyad.jpg" alt="Riyad Bin Alom" id="heroImg">
           </div>
         </div>
 
-        <div class="social-row">
+        <div class="social-row" aria-label="social links">
           <a href="https://facebook.com/riyadbinalom33" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
           <a href="https://x.com/Riyad_Bin_Alom" target="_blank" aria-label="X"><i class="fab fa-x-twitter"></i></a>
           <a href="https://instagram.com/riyadbinalom33" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
           <a href="https://www.youtube.com/@3RiyadBinalom" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
         </div>
-      </div>
+      </aside>
     </main>
 
     <!-- ABOUT (preview) -->
@@ -289,6 +282,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if(window.innerWidth > 880 && nav) { nav.style.display = ''; if(hamb) hamb.innerHTML = '<i class="fa-solid fa-bars"></i>'; }
   });
 
+  // Defensive: ensure avatar is rounded-rect and covers
+  const heroImg = document.getElementById('heroImg');
+  if(heroImg){
+    heroImg.style.objectFit = 'cover';
+    heroImg.style.width = '100%';
+    heroImg.style.height = '100%';
+  }
 });
 </script>
 </body>
