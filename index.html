@@ -143,12 +143,42 @@ footer{ padding:40px 0; text-align:center; color:var(--muted); font-weight:700; 
           Student — interested in Science, Islam & History. I study, reflect, and try to contribute positively.
         </div>
 
-        <div class="cta-row">
-          <!-- Explore now opens about.html -->
+  <div class="cta-row" style="margin-top:20px; display:flex; gap:14px; flex-wrap:wrap; align-items:center;">
+  
+  <!-- Explore Button -->
+  <a class="btn primary" href="about.html" style="
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:12px 20px;
+    background: linear-gradient(90deg, #4f46e5, #ec4899);
+    color:#fff;
+    font-weight:700;
+    border-radius:12px;
+    text-decoration:none;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  " onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 12px 40px rgba(79,70,229,0.2)'" 
+     onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+    <i class="fa-solid fa-magnifying-glass"></i> Explore
+  </a>
 
-          <a class="btn primary" href="about.html"><i class="fa-solid fa-magnifying-glass"></i> Explore</a>
+  <!-- Blog Button -->
+  <a href="blog.html" style="
+    display:inline-block;
+    padding:12px 20px;
+    background:#ffffff;
+    color:#4f46e5;
+    font-weight:700;
+    border-radius:12px;
+    border:2px solid #4f46e5;
+    text-decoration:none;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, color 0.15s ease;
+  " onmouseover="this.style.background='#4f46e5'; this.style.color='#fff'; this.style.transform='translateY(-3px)'; this.style.boxShadow='0 12px 40px rgba(79,70,229,0.2)'" 
+     onmouseout="this.style.background='#fff'; this.style.color='#4f46e5'; this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+    View Blog
+  </a>
 
-      </div>
+</div>
 
       <div class="profile-panel reveal active">
         <div class="profile-frame" role="img" aria-label="Riyad profile">
