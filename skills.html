@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Skills — Riyad Bin Alom</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+<style>
+:root{
+  --bg:#0e0d0b;--bg2:#141210;--bg3:#1a1713;
+  --text:#e8e0d0;--muted:#a09080;--gold:#d4a843;--rust:#c0622a;
+  --border:rgba(212,168,67,0.12);--border2:rgba(232,224,208,0.06);
+  --card:rgba(255,255,255,0.025);--maxw:1280px;--nav-h:72px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:0.35;}
+a{color:inherit;text-decoration:none;}
+
+/* NAVBAR */
+.navbar{position:sticky;top:0;z-index:200;height:var(--nav-h);display:flex;align-items:center;background:rgba(14,13,11,0.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+.nav-inner{max-width:var(--maxw);margin:0 auto;padding:0 28px;width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.nav-brand{display:flex;align-items:center;gap:14px;flex-shrink:0;}
+.nav-logo{width:42px;height:42px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--rust));display:grid;place-items:center;font-family:'Playfair Display',serif;font-weight:900;font-size:20px;color:#0e0d0b;box-shadow:0 4px 20px rgba(212,168,67,0.25);}
+.nav-name{font-family:'Playfair Display',serif;font-weight:600;font-size:17px;}
+.nav-links{display:flex;align-items:center;gap:4px;}
+.nav-links a{display:inline-flex;align-items:center;gap:7px;padding:8px 16px;border-radius:8px;font-size:14px;font-weight:500;color:var(--muted);transition:all .2s ease;}
+.nav-links a i{font-size:12px;}
+.nav-links a:hover{color:var(--text);background:var(--card);}
+.nav-links a.active{color:var(--gold);background:rgba(212,168,67,0.08);border:1px solid rgba(212,168,67,0.15);}
+.nav-ham{display:none;background:none;border:1px solid var(--border);color:var(--muted);width:42px;height:42px;border-radius:8px;cursor:pointer;font-size:16px;transition:all .2s;}
+.nav-ham:hover{color:var(--gold);border-color:var(--gold);}
+.mobile-menu{display:none;position:fixed;inset:0;top:var(--nav-h);background:rgba(14,13,11,0.98);backdrop-filter:blur(20px);z-index:150;flex-direction:column;padding:28px;gap:6px;border-top:1px solid var(--border);}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{display:flex;align-items:center;gap:14px;padding:16px 18px;border-radius:12px;font-size:16px;font-weight:500;color:var(--muted);border:1px solid transparent;transition:all .2s;}
+.mobile-menu a i{width:20px;text-align:center;color:var(--gold);}
+.mobile-menu a:hover,.mobile-menu a.active{color:var(--gold);border-color:var(--border);background:var(--card);}
+
+/* WRAP */
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;}
+
+/* PAGE HERO */
+.page-hero{padding:72px 0 56px;border-bottom:1px solid var(--border2);}
+.page-eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:12px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;}
+.page-eyebrow::before{content:'';width:32px;height:1px;background:var(--gold);opacity:0.6;}
+.page-h1{font-family:'Playfair Display',serif;font-size:clamp(40px,5.5vw,66px);font-weight:900;line-height:1.0;letter-spacing:-0.02em;margin-bottom:10px;}
+.page-sub{color:var(--muted);font-size:16px;max-width:55ch;}
+
+/* MAIN GRID */
+.skills-main{display:grid;grid-template-columns:1fr 340px;gap:36px;padding:60px 0;align-items:start;}
+
+/* SKILL GROUP */
+.skill-group{margin-bottom:48px;}
+.skill-group:last-child{margin-bottom:0;}
+.group-label{
+  display:flex;align-items:center;gap:14px;
+  margin-bottom:24px;
+}
+.group-label-text{
+  font-family:'Playfair Display',serif;
+  font-size:20px;font-weight:700;
+}
+.group-label-line{flex:1;height:1px;background:var(--border2);}
+
+/* SKILL ITEM */
+.skill-item{
+  padding:18px 0;
+  border-bottom:1px solid var(--border2);
+}
+.skill-item:last-child{border-bottom:none;}
+.skill-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.skill-name{font-weight:600;font-size:15px;}
+.skill-level{
+  font-size:12px;font-weight:600;
+  padding:3px 10px;border-radius:20px;
+  background:rgba(212,168,67,0.1);
+  color:var(--gold);
+  border:1px solid rgba(212,168,67,0.2);
+  letter-spacing:0.05em;
+}
+.skill-bar{
+  height:5px;
+  background:rgba(255,255,255,0.06);
+  border-radius:10px;
+  overflow:hidden;
+  margin-bottom:8px;
+}
+.skill-bar-fill{
+  height:100%;
+  border-radius:10px;
+  background:linear-gradient(90deg,var(--gold),var(--rust));
+  width:0%;
+  transition:width 1.1s cubic-bezier(.2,.9,.25,1);
+}
+.skill-desc{font-size:13px;color:var(--muted);line-height:1.6;}
+
+/* ASIDE */
+aside{display:flex;flex-direction:column;gap:20px;position:sticky;top:90px;}
+
+.aside-photo{
+  border-radius:16px;overflow:hidden;
+  position:relative;
+}
+.aside-photo::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(14,13,11,0.5),transparent 60%);z-index:1;
+}
+.aside-photo img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;}
+
+.aside-card{
+  background:var(--card);
+  border:1px solid var(--border2);
+  border-radius:16px;
+  padding:22px;
+}
+.aside-card-title{
+  font-weight:700;font-size:14px;
+  color:var(--text);margin-bottom:14px;
+  display:flex;align-items:center;gap:8px;
+}
+.aside-card-title i{color:var(--gold);}
+.aside-card-body{color:var(--muted);font-size:14px;line-height:1.75;}
+.aside-card-body li{
+  display:flex;align-items:flex-start;gap:8px;
+  margin-bottom:8px;
+  list-style:none;
+}
+.aside-card-body li::before{
+  content:'—';color:var(--gold);font-size:12px;margin-top:3px;flex-shrink:0;
+}
+
+/* DIVIDER */
+.divider{border:none;border-top:1px solid var(--border2);}
+
+/* FOOTER */
+.footer{padding:40px 0;border-top:1px solid var(--border2);text-align:center;color:var(--muted);font-size:14px;}
+.footer span{color:var(--gold);}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal-d1{transition-delay:.1s;}.reveal-d2{transition-delay:.2s;}
+
+/* RESPONSIVE */
+@media(max-width:960px){.skills-main{grid-template-columns:1fr;}aside{position:static;}}
+@media(max-width:840px){.wrap{padding:0 20px;}.nav-links{display:none;}.nav-ham{display:grid;place-items:center;}}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-inner">
+    <div class="nav-brand">
+      <div class="nav-logo">R</div>
+      <div class="nav-name">Riyad Bin Alom</div>
+    </div>
+    <div class="nav-links">
+      <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+      <a href="about.html"><i class="fa-solid fa-user"></i> About</a>
+      <a href="skills.html" class="active"><i class="fa-solid fa-code"></i> Skills</a>
+      <a href="blog.html"><i class="fa-solid fa-pen-nib"></i> Blog</a>
+      <a href="contact.html"><i class="fa-solid fa-envelope"></i> Contact</a>
+    </div>
+    <button class="nav-ham" id="hamBtn" aria-label="Menu"><i class="fa-solid fa-bars" id="hamIcon"></i></button>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+  <a href="about.html"><i class="fa-solid fa-user"></i> About</a>
+  <a href="skills.html" class="active"><i class="fa-solid fa-code"></i> Skills</a>
+  <a href="blog.html"><i class="fa-solid fa-pen-nib"></i> Blog</a>
+  <a href="contact.html"><i class="fa-solid fa-envelope"></i> Contact</a>
+</div>
+
+<div class="wrap">
+  <section class="page-hero">
+    <div class="page-eyebrow reveal">Capabilities</div>
+    <h1 class="page-h1 reveal reveal-d1">Skills &amp; Strengths</h1>
+    <p class="page-sub reveal reveal-d2">An organized overview of my academic, communication, language, and practical abilities.</p>
+  </section>
+
+  <div class="skills-main">
+    <!-- LEFT: SKILLS -->
+    <main>
+
+      <!-- Group 1 -->
+      <div class="skill-group reveal">
+        <div class="group-label">
+          <span class="group-label-text">Core Academic &amp; Thinking</span>
+          <span class="group-label-line"></span>
+        </div>
+
+        <div class="skill-item">
+          <div class="skill-top">
+            <span class="skill-name">Research &amp; Study</span>
+            <span class="skill-level">Advanced</span>
+          </div>
+          <div class="skill-bar"><div class="skill-bar-fill" data-w="88"></div></div>
+          <div class="skill-desc">Systematic reading, structured note-taking, referencing sources, and summarizing ideas clearly.</div>
+        </div>
+
+        <div class="skill-item">
+          <div class="skill-top">
+            <span class="skill-name">Critical Thinking</span>
+            <span class="skill-level">Advanced</span>
+          </div>
+          <div class="skill-bar"><div class="skill-bar-fill" data-w="82"></div></div>
+          <div class="skill-desc">Analyzing arguments, comparing viewpoints, and forming well-reasoned conclusions.</div>
+        </div>
+
+        <div class="skill-item">
+          <div class="skill-top">
+            <span class="skill-name">Historical Analysis</span>
+            <span class="skill-level">Strong</span>
+          </div>
+          <div class="skill-bar"><div class="skill-bar-fill" data-w="75"></div></div>
+          <div class="skill-desc">Reading primary and secondary sources; connecting past events to present context.</div>
+        </div>
+
+        <div class="skill-item">
+          <div class="skill-top">
+            <span class="skill-name">Islamic Studies</span>
+            <span class="skill-level">Strong</span>
+          </div>
+          <div class="skill-bar"><div class="skill-bar-fill" data-w="78"></div></div>
+          <div class="skill-desc">Textual reading, ethical reflection, and practical application of learned principles.</div>
+        </div>
+      </div>
+
+      <!-- Group 2 -->
+      <div class="skill-group reveal reveal-d1">
+        <div class="group-label">
+          <span class="group-label-text">Communication &amp; Community</span>
+          <span class="group-label-line"></span>
+        </div>
+
+        <div class="skill-item">
+          <div class="skill-top">
+            <span class="skill-name">Writing &amp; Expression</span>
+            <span class="skill-level">Strong</span>
+          </div>
+          <div class="skill-bar"><div class="skill-bar-fill" data-w="78"></div></div>
+          <div class="skill-desc">Organizing thoughts clearly — essays, short reflections, study notes and summaries.</div>
+        </div>
+
+        <div class="skill-item">
+          <div class="skill-top">
+            <span class="skill-name">Presentation &amp; Discussion</span>
+            <span class="skill-level">Good</span>
+          </div>
+          <div class="skill-bar"><div class="skill-bar-fill" data-w="70"></div></div>
+          <div class="skill-desc">Leading study groups, participating in respectful dialogue and small community talks.</div>
+        </div>
+      </div>
+
+      <!-- Group 3 -->
+      <div class="skill-group reveal reveal-d2">
+        <div class="group-label">
+          <span class="group-label-text">Technical &amp; Practical</span>
+          <span class="group-label-line"></span>
+        </div>
+
+        <div class="skill-item">
+          <div class="skill-top">
+            <span class="skill-name">Web Basics (HTML / CSS)</span>
+            <span class="skill-level">Practical</span>
+          </div>
+          <div class="skill-bar"><div class="skill-bar-fill" data-w="60"></div></div>
+          <div class="skill-desc">Building and editing simple websites (like this one) using Acode and basic web tools.</div>
+        </div>
+
+        <div class="skill-item">
+          <div class="skill-top">
+            <span class="skill-name">AI &amp; Online Learning</span>
+            <span class="skill-level">Learning</span>
+          </div>
+          <div class="skill-bar"><div class="skill-bar-fill" data-w="48"></div></div>
+          <div class="skill-desc">Curious and learning the basics of AI; following online courses and tutorials.</div>
+        </div>
+      </div>
+
+      <!-- Group 4 -->
+      <div class="skill-group reveal">
+        <div class="group-label">
+          <span class="group-label-text">Languages</span>
+          <span class="group-label-line"></span>
+        </div>
+
+        <div class="skill-item">
+          <div class="skill-top">
+            <span class="skill-name">Bengali (বাংলা)</span>
+            <span class="skill-level">Native</span>
+          </div>
+          <div class="skill-bar"><div class="skill-bar-fill" data-w="98"></div></div>
+        </div>
+
+        <div class="skill-item">
+          <div class="skill-top">
+            <span class="skill-name">English</span>
+            <span class="skill-level">Fluent</span>
+          </div>
+          <div class="skill-bar"><div class="skill-bar-fill" data-w="82"></div></div>
+        </div>
+
+        <div class="skill-item">
+          <div class="skill-top">
+            <span class="skill-name">Hindi (हिन्दी)</span>
+            <span class="skill-level">Conversational</span>
+          </div>
+          <div class="skill-bar"><div class="skill-bar-fill" data-w="70"></div></div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- RIGHT ASIDE -->
+    <aside class="reveal reveal-d1">
+      <div class="aside-photo">
+        <img src="riyad_skil.jpg" alt="Riyad Bin Alom">
+      </div>
+
+      <div class="aside-card">
+        <div class="aside-card-title"><i class="fa-solid fa-bolt"></i> Quick Summary</div>
+        <div class="aside-card-body">
+          Student with a disciplined study approach. Strengths in close reading, structured notes, balanced thinking, and clear expression. Open to collaborations and learning new tools.
+        </div>
+      </div>
+
+      <div class="aside-card">
+        <div class="aside-card-title"><i class="fa-solid fa-gears"></i> How I Work</div>
+        <ul class="aside-card-body">
+          <li>Short study sessions with focused notes</li>
+          <li>Regular review and simple teaching to remember better</li>
+          <li>Respectful discussion and humility in debate</li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="wrap">© 2026 · <span>Riyad Bin Alom</span> · All rights reserved</div>
+</footer>
+
+<script>
+const hamBtn = document.getElementById('hamBtn');
+const hamIcon = document.getElementById('hamIcon');
+const mobileMenu = document.getElementById('mobileMenu');
+let menuOpen = false;
+hamBtn.addEventListener('click', () => {
+  menuOpen = !menuOpen;
+  mobileMenu.classList.toggle('open', menuOpen);
+  hamIcon.className = menuOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
+});
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.08 });
+reveals.forEach(r => observer.observe(r));
+
+// Animate bars when in view
+const bars = document.querySelectorAll('.skill-bar-fill');
+const barObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      e.target.style.width = e.target.getAttribute('data-w') + '%';
+      barObserver.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+bars.forEach(b => barObserver.observe(b));
+</script>
+</body>
+</html>

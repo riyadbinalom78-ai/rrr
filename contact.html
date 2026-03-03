@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Contact — Riyad Bin Alom</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+<style>
+:root{
+  --bg:#0e0d0b;--bg2:#141210;--bg3:#1a1713;
+  --text:#e8e0d0;--muted:#a09080;--gold:#d4a843;--rust:#c0622a;
+  --border:rgba(212,168,67,0.12);--border2:rgba(232,224,208,0.06);
+  --card:rgba(255,255,255,0.025);--maxw:1280px;--nav-h:72px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:0.35;}
+a{color:inherit;text-decoration:none;}
+
+/* NAVBAR */
+.navbar{position:sticky;top:0;z-index:200;height:var(--nav-h);display:flex;align-items:center;background:rgba(14,13,11,0.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+.nav-inner{max-width:var(--maxw);margin:0 auto;padding:0 28px;width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.nav-brand{display:flex;align-items:center;gap:14px;flex-shrink:0;}
+.nav-logo{width:42px;height:42px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--rust));display:grid;place-items:center;font-family:'Playfair Display',serif;font-weight:900;font-size:20px;color:#0e0d0b;box-shadow:0 4px 20px rgba(212,168,67,0.25);}
+.nav-name{font-family:'Playfair Display',serif;font-weight:600;font-size:17px;}
+.nav-links{display:flex;align-items:center;gap:4px;}
+.nav-links a{display:inline-flex;align-items:center;gap:7px;padding:8px 16px;border-radius:8px;font-size:14px;font-weight:500;color:var(--muted);transition:all .2s ease;}
+.nav-links a i{font-size:12px;}
+.nav-links a:hover{color:var(--text);background:var(--card);}
+.nav-links a.active{color:var(--gold);background:rgba(212,168,67,0.08);border:1px solid rgba(212,168,67,0.15);}
+.nav-ham{display:none;background:none;border:1px solid var(--border);color:var(--muted);width:42px;height:42px;border-radius:8px;cursor:pointer;font-size:16px;transition:all .2s;}
+.nav-ham:hover{color:var(--gold);border-color:var(--gold);}
+.mobile-menu{display:none;position:fixed;inset:0;top:var(--nav-h);background:rgba(14,13,11,0.98);backdrop-filter:blur(20px);z-index:150;flex-direction:column;padding:28px;gap:6px;border-top:1px solid var(--border);}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{display:flex;align-items:center;gap:14px;padding:16px 18px;border-radius:12px;font-size:16px;font-weight:500;color:var(--muted);border:1px solid transparent;transition:all .2s;}
+.mobile-menu a i{width:20px;text-align:center;color:var(--gold);}
+.mobile-menu a:hover,.mobile-menu a.active{color:var(--gold);border-color:var(--border);background:var(--card);}
+
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;}
+
+/* PAGE HERO */
+.page-hero{padding:72px 0 56px;border-bottom:1px solid var(--border2);}
+.page-eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:12px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;}
+.page-eyebrow::before{content:'';width:32px;height:1px;background:var(--gold);opacity:0.6;}
+.page-h1{font-family:'Playfair Display',serif;font-size:clamp(40px,5.5vw,66px);font-weight:900;line-height:1.0;letter-spacing:-0.02em;margin-bottom:10px;}
+.page-sub{color:var(--muted);font-size:16px;max-width:55ch;}
+
+/* CONTACT GRID */
+.contact-section{padding:64px 0;}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start;}
+
+/* INFO CARD */
+.info-card{
+  background:var(--card);
+  border:1px solid var(--border2);
+  border-radius:20px;
+  padding:36px;
+}
+.info-card-title{
+  font-family:'Playfair Display',serif;
+  font-size:28px;font-weight:700;
+  margin-bottom:10px;
+}
+.info-card-sub{
+  color:var(--muted);font-size:15px;
+  margin-bottom:28px;
+  line-height:1.7;
+}
+
+.contact-item{
+  display:flex;align-items:center;gap:14px;
+  padding:16px 0;
+  border-bottom:1px solid var(--border2);
+}
+.contact-item:last-of-type{border-bottom:none;}
+.contact-icon{
+  width:44px;height:44px;border-radius:12px;
+  background:rgba(212,168,67,0.08);
+  border:1px solid rgba(212,168,67,0.15);
+  display:grid;place-items:center;
+  color:var(--gold);font-size:16px;flex-shrink:0;
+}
+.contact-item-label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:3px;}
+.contact-item-value{font-weight:600;font-size:15px;color:var(--text);}
+.contact-item-value a{transition:color .2s;}
+.contact-item-value a:hover{color:var(--gold);}
+
+/* SOCIAL ROW */
+.social-heading{
+  font-size:12px;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;
+  color:var(--muted);margin:28px 0 14px;
+}
+.social-row{display:flex;gap:10px;flex-wrap:wrap;}
+.social-btn{
+  display:flex;align-items:center;gap:9px;
+  padding:10px 16px;border-radius:10px;
+  border:1px solid var(--border2);
+  color:var(--muted);font-size:14px;font-weight:500;
+  background:var(--card);
+  transition:all .2s;
+}
+.social-btn i{font-size:15px;}
+.social-btn:hover{color:var(--gold);border-color:rgba(212,168,67,0.25);transform:translateY(-2px);}
+
+/* FORM CARD */
+.form-card{
+  background:var(--card);
+  border:1px solid var(--border2);
+  border-radius:20px;
+  padding:36px;
+}
+.form-card-title{
+  font-family:'Playfair Display',serif;
+  font-size:22px;font-weight:700;
+  margin-bottom:24px;
+}
+
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+.form-field{display:flex;flex-direction:column;gap:7px;margin-bottom:16px;}
+.form-field.full{grid-column:1/-1;}
+label{
+  font-size:12px;font-weight:600;
+  color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;
+}
+input,textarea{
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--border2);
+  border-radius:12px;
+  padding:13px 16px;
+  color:var(--text);
+  font-family:'DM Sans',sans-serif;
+  font-size:14px;
+  outline:none;
+  transition:all .2s;
+  width:100%;
+}
+input::placeholder,textarea::placeholder{color:rgba(160,144,128,0.5);}
+input:focus,textarea:focus{
+  border-color:rgba(212,168,67,0.35);
+  background:rgba(212,168,67,0.03);
+  box-shadow:0 0 0 4px rgba(212,168,67,0.06);
+}
+textarea{min-height:140px;resize:vertical;}
+
+.submit-row{display:flex;justify-content:flex-end;margin-top:8px;}
+.submit-btn{
+  display:inline-flex;align-items:center;gap:9px;
+  padding:13px 28px;
+  border:none;border-radius:12px;
+  background:linear-gradient(135deg,var(--gold),var(--rust));
+  color:#0e0d0b;
+  font-family:'DM Sans',sans-serif;
+  font-size:14px;font-weight:700;
+  cursor:pointer;
+  transition:all .22s ease;
+  letter-spacing:0.02em;
+}
+.submit-btn:hover{transform:translateY(-3px);box-shadow:0 12px 35px rgba(212,168,67,0.25);}
+
+/* SUCCESS MSG */
+.success-msg{
+  display:none;
+  padding:16px 20px;
+  background:rgba(212,168,67,0.08);
+  border:1px solid rgba(212,168,67,0.2);
+  border-radius:12px;
+  color:var(--gold);
+  font-size:14px;
+  font-weight:600;
+  margin-top:16px;
+  text-align:center;
+}
+.success-msg.show{display:block;}
+
+/* FOOTER */
+.footer{padding:40px 0;border-top:1px solid var(--border2);text-align:center;color:var(--muted);font-size:14px;}
+.footer span{color:var(--gold);}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .65s ease,transform .65s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal-d1{transition-delay:.12s;}
+
+/* RESPONSIVE */
+@media(max-width:900px){.contact-grid{grid-template-columns:1fr;}}
+@media(max-width:840px){.wrap{padding:0 20px;}.nav-links{display:none;}.nav-ham{display:grid;place-items:center;}}
+@media(max-width:500px){.form-row{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-inner">
+    <div class="nav-brand">
+      <div class="nav-logo">R</div>
+      <div class="nav-name">Riyad Bin Alom</div>
+    </div>
+    <div class="nav-links">
+      <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+      <a href="about.html"><i class="fa-solid fa-user"></i> About</a>
+      <a href="skills.html"><i class="fa-solid fa-code"></i> Skills</a>
+      <a href="blog.html"><i class="fa-solid fa-pen-nib"></i> Blog</a>
+      <a href="contact.html" class="active"><i class="fa-solid fa-envelope"></i> Contact</a>
+    </div>
+    <button class="nav-ham" id="hamBtn" aria-label="Menu"><i class="fa-solid fa-bars" id="hamIcon"></i></button>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+  <a href="about.html"><i class="fa-solid fa-user"></i> About</a>
+  <a href="skills.html"><i class="fa-solid fa-code"></i> Skills</a>
+  <a href="blog.html"><i class="fa-solid fa-pen-nib"></i> Blog</a>
+  <a href="contact.html" class="active"><i class="fa-solid fa-envelope"></i> Contact</a>
+</div>
+
+<div class="wrap">
+  <section class="page-hero">
+    <div class="page-eyebrow reveal">Let's Connect</div>
+    <h1 class="page-h1 reveal reveal-d1">Get in Touch</h1>
+    <p class="page-sub reveal reveal-d1">Have a question, an idea, or just want to say hello? I'd love to hear from you.</p>
+  </section>
+
+  <section class="contact-section">
+    <div class="contact-grid">
+
+      <!-- INFO -->
+      <div class="info-card reveal">
+        <div class="info-card-title">Say Hello</div>
+        <div class="info-card-sub">
+          Whether you have inquiries, collaboration ideas, or simply want to have a thoughtful conversation — feel free to reach out.
+        </div>
+
+        <div class="contact-item">
+          <div class="contact-icon"><i class="fa-regular fa-envelope"></i></div>
+          <div>
+            <div class="contact-item-label">Email</div>
+            <div class="contact-item-value">
+              <a href="mailto:riyadbinalom@example.com">riyadbinalom@gmail.com</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-item">
+          <div class="contact-icon"><i class="fa-solid fa-location-dot"></i></div>
+          <div>
+            <div class="contact-item-label">Location</div>
+            <div class="contact-item-value">Bangladesh</div>
+          </div>
+        </div>
+
+        <div class="contact-item">
+          <div class="contact-icon"><i class="fa-solid fa-comment-dots"></i></div>
+          <div>
+            <div class="contact-item-label">Response Time</div>
+            <div class="contact-item-value">Usually within 24–48 hours</div>
+          </div>
+        </div>
+
+        <div class="social-heading">Follow Along</div>
+        <div class="social-row">
+          <a class="social-btn" href="https://www.facebook.com/riyadbinalom33" target="_blank">
+            <i class="fab fa-facebook-f"></i> Facebook
+          </a>
+          <a class="social-btn" href="https://x.com/Riyad_Bin_Alom" target="_blank">
+            <i class="fab fa-x-twitter"></i> X
+          </a>
+          <a class="social-btn" href="https://www.instagram.com/riyadbinalom33" target="_blank">
+            <i class="fab fa-instagram"></i> Instagram
+          </a>
+          <a class="social-btn" href="https://www.youtube.com/@3RiyadBinalom" target="_blank">
+            <i class="fab fa-youtube"></i> YouTube
+          </a>
+        </div>
+      </div>
+
+      <!-- FORM -->
+      <div class="form-card reveal reveal-d1">
+        <div class="form-card-title">Send a Message</div>
+        <form id="contactForm">
+          <div class="form-row">
+            <div class="form-field">
+              <label for="firstName">First Name</label>
+              <input id="firstName" type="text" placeholder="Your first name" required>
+            </div>
+            <div class="form-field">
+              <label for="lastName">Last Name</label>
+              <input id="lastName" type="text" placeholder="Your last name" required>
+            </div>
+          </div>
+          <div class="form-field">
+            <label for="email">Email Address</label>
+            <input id="email" type="email" placeholder="your@email.com" required>
+          </div>
+          <div class="form-field">
+            <label for="message">Your Message</label>
+            <textarea id="message" placeholder="Write your message here..." required></textarea>
+          </div>
+          <div class="submit-row">
+            <button class="submit-btn" type="submit">
+              Send Message <i class="fa-solid fa-paper-plane"></i>
+            </button>
+          </div>
+          <div class="success-msg" id="successMsg">
+            <i class="fa-solid fa-circle-check"></i> Message sent! I'll get back to you soon.
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<footer class="footer">
+  <div class="wrap">© 2026 · <span>Riyad Bin Alom</span> · All rights reserved</div>
+</footer>
+
+<script>
+const hamBtn = document.getElementById('hamBtn');
+const hamIcon = document.getElementById('hamIcon');
+const mobileMenu = document.getElementById('mobileMenu');
+let menuOpen = false;
+hamBtn.addEventListener('click', () => {
+  menuOpen = !menuOpen;
+  mobileMenu.classList.toggle('open', menuOpen);
+  hamIcon.className = menuOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
+});
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.08 });
+reveals.forEach(r => observer.observe(r));
+
+// Form submit
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const first = document.getElementById('firstName').value.trim();
+  const last = document.getElementById('lastName').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const msg = document.getElementById('message').value.trim();
+  const subject = encodeURIComponent('Message from Portfolio Contact Form');
+  const body = encodeURIComponent(`Name: ${first} ${last}\nEmail: ${email}\n\nMessage:\n${msg}`);
+  window.location.href = `mailto:riyadbinalom@gmail.com?subject=${subject}&body=${body}`;
+  document.getElementById('successMsg').classList.add('show');
+  this.reset();
+});
+</script>
+</body>
+</html>

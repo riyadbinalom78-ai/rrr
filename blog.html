@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Blog — Riyad Bin Alom</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+<style>
+:root{
+  --bg:#0e0d0b;--bg2:#141210;--bg3:#1a1713;
+  --text:#e8e0d0;--muted:#a09080;--gold:#d4a843;--rust:#c0622a;
+  --border:rgba(212,168,67,0.12);--border2:rgba(232,224,208,0.06);
+  --card:rgba(255,255,255,0.025);--maxw:1280px;--nav-h:72px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:0.35;}
+a{color:inherit;text-decoration:none;}
+
+/* NAVBAR */
+.navbar{position:sticky;top:0;z-index:200;height:var(--nav-h);display:flex;align-items:center;background:rgba(14,13,11,0.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+.nav-inner{max-width:var(--maxw);margin:0 auto;padding:0 28px;width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.nav-brand{display:flex;align-items:center;gap:14px;flex-shrink:0;}
+.nav-logo{width:42px;height:42px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--rust));display:grid;place-items:center;font-family:'Playfair Display',serif;font-weight:900;font-size:20px;color:#0e0d0b;box-shadow:0 4px 20px rgba(212,168,67,0.25);}
+.nav-name{font-family:'Playfair Display',serif;font-weight:600;font-size:17px;}
+.nav-links{display:flex;align-items:center;gap:4px;}
+.nav-links a{display:inline-flex;align-items:center;gap:7px;padding:8px 16px;border-radius:8px;font-size:14px;font-weight:500;color:var(--muted);transition:all .2s ease;}
+.nav-links a i{font-size:12px;}
+.nav-links a:hover{color:var(--text);background:var(--card);}
+.nav-links a.active{color:var(--gold);background:rgba(212,168,67,0.08);border:1px solid rgba(212,168,67,0.15);}
+.nav-ham{display:none;background:none;border:1px solid var(--border);color:var(--muted);width:42px;height:42px;border-radius:8px;cursor:pointer;font-size:16px;transition:all .2s;}
+.nav-ham:hover{color:var(--gold);border-color:var(--gold);}
+.mobile-menu{display:none;position:fixed;inset:0;top:var(--nav-h);background:rgba(14,13,11,0.98);backdrop-filter:blur(20px);z-index:150;flex-direction:column;padding:28px;gap:6px;border-top:1px solid var(--border);}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{display:flex;align-items:center;gap:14px;padding:16px 18px;border-radius:12px;font-size:16px;font-weight:500;color:var(--muted);border:1px solid transparent;transition:all .2s;}
+.mobile-menu a i{width:20px;text-align:center;color:var(--gold);}
+.mobile-menu a:hover,.mobile-menu a.active{color:var(--gold);border-color:var(--border);background:var(--card);}
+
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;}
+
+/* PAGE HERO */
+.page-hero{padding:72px 0 56px;border-bottom:1px solid var(--border2);}
+.page-eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:12px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;}
+.page-eyebrow::before{content:'';width:32px;height:1px;background:var(--gold);opacity:0.6;}
+.page-h1{font-family:'Playfair Display',serif;font-size:clamp(40px,5.5vw,66px);font-weight:900;line-height:1.0;letter-spacing:-0.02em;margin-bottom:10px;}
+.page-sub{color:var(--muted);font-size:16px;max-width:60ch;}
+
+/* BLOG LAYOUT */
+.blog-layout{display:grid;grid-template-columns:1fr 300px;gap:48px;padding:60px 0;}
+
+/* ARTICLE */
+.article{
+  padding:48px 0;
+  border-bottom:1px solid var(--border2);
+}
+.article:last-child{border-bottom:none;}
+.article-meta{
+  display:flex;align-items:center;gap:16px;
+  margin-bottom:16px;
+}
+.article-tag{
+  font-size:11px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;
+  color:var(--gold);
+  padding:3px 10px;border-radius:20px;
+  border:1px solid rgba(212,168,67,0.2);
+  background:rgba(212,168,67,0.06);
+}
+.article-date{font-size:13px;color:var(--muted);}
+.article-h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(24px,3.5vw,36px);
+  font-weight:700;
+  line-height:1.2;
+  letter-spacing:-0.01em;
+  margin-bottom:24px;
+}
+.article-h1-bn{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(22px,3vw,30px);
+  font-weight:700;
+  line-height:1.3;
+  letter-spacing:0;
+  margin-bottom:24px;
+}
+.article-h2{
+  font-family:'Playfair Display',serif;
+  font-size:20px;font-weight:600;
+  margin:32px 0 14px;
+  color:var(--text);
+}
+.article-p{
+  color:var(--muted);
+  font-size:16px;
+  line-height:1.85;
+  margin-bottom:18px;
+}
+.article-p:last-child{margin-bottom:0;}
+.article-p strong{color:var(--text);font-weight:600;}
+.article-p em{color:var(--text);font-style:italic;}
+
+/* INSIGHT BOX */
+.insight-box{
+  background:var(--card);
+  border:1px solid var(--border2);
+  border-radius:14px;
+  padding:24px;
+  margin:28px 0;
+}
+.insight-box li{
+  list-style:none;
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+  padding:10px 0;
+  border-bottom:1px solid var(--border2);
+  color:var(--muted);
+  font-size:15px;
+  line-height:1.7;
+}
+.insight-box li:last-child{border-bottom:none;}
+.insight-box li::before{
+  content:'◆';
+  color:var(--gold);
+  font-size:9px;
+  margin-top:7px;
+  flex-shrink:0;
+}
+.insight-box li strong{color:var(--text);}
+
+/* BLOCKQUOTE */
+.article-quote{
+  border-left:3px solid var(--gold);
+  padding:16px 24px;
+  margin:28px 0;
+  background:rgba(212,168,67,0.04);
+  border-radius:0 10px 10px 0;
+}
+.article-quote p{
+  font-family:'Playfair Display',serif;
+  font-style:italic;
+  font-size:17px;
+  color:var(--text);
+  line-height:1.6;
+  margin:0;
+}
+
+/* ARTICLE FOOTER NOTE */
+.article-footer{
+  font-family:'Playfair Display',serif;
+  font-style:italic;
+  font-size:14px;
+  color:var(--muted);
+  margin-top:24px;
+  padding-top:20px;
+  border-top:1px solid var(--border2);
+}
+
+/* Bangla article sign */
+.article-signoff{
+  text-align:center;
+  font-weight:600;
+  font-size:15px;
+  color:var(--gold);
+  margin-top:24px;
+  padding-top:20px;
+  border-top:1px solid var(--border2);
+  font-style:italic;
+}
+
+/* Article image */
+.article-image{
+  border-radius:14px;
+  overflow:hidden;
+  margin:28px 0;
+}
+.article-image img{
+  width:100%;max-width:300px;
+  aspect-ratio:1;
+  object-fit:cover;
+  display:block;
+  margin:0 auto;
+  border-radius:14px;
+}
+
+/* SIDEBAR */
+.blog-sidebar{display:flex;flex-direction:column;gap:24px;position:sticky;top:90px;}
+.sidebar-card{
+  background:var(--card);border:1px solid var(--border2);border-radius:16px;padding:22px;
+}
+.sidebar-title{font-weight:700;font-size:14px;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.sidebar-title i{color:var(--gold);}
+.sidebar-link{
+  display:flex;gap:10px;align-items:flex-start;
+  padding:10px 0;border-bottom:1px solid var(--border2);
+  cursor:pointer;transition:all .2s;
+}
+.sidebar-link:last-child{border-bottom:none;padding-bottom:0;}
+.sidebar-link-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);margin-top:7px;flex-shrink:0;}
+.sidebar-link-text{font-size:13px;color:var(--muted);line-height:1.5;transition:color .2s;}
+.sidebar-link:hover .sidebar-link-text{color:var(--gold);}
+
+/* FOOTER */
+.footer{padding:40px 0;border-top:1px solid var(--border2);text-align:center;color:var(--muted);font-size:14px;}
+.footer span{color:var(--gold);}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .65s ease,transform .65s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal-d1{transition-delay:.1s;}
+
+/* RESPONSIVE */
+@media(max-width:960px){.blog-layout{grid-template-columns:1fr;}.blog-sidebar{position:static;}}
+@media(max-width:840px){.wrap{padding:0 20px;}.nav-links{display:none;}.nav-ham{display:grid;place-items:center;}}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-inner">
+    <div class="nav-brand">
+      <div class="nav-logo">R</div>
+      <div class="nav-name">Riyad Bin Alom</div>
+    </div>
+    <div class="nav-links">
+      <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+      <a href="about.html"><i class="fa-solid fa-user"></i> About</a>
+      <a href="skills.html"><i class="fa-solid fa-code"></i> Skills</a>
+      <a href="blog.html" class="active"><i class="fa-solid fa-pen-nib"></i> Blog</a>
+      <a href="contact.html"><i class="fa-solid fa-envelope"></i> Contact</a>
+    </div>
+    <button class="nav-ham" id="hamBtn" aria-label="Menu"><i class="fa-solid fa-bars" id="hamIcon"></i></button>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+  <a href="about.html"><i class="fa-solid fa-user"></i> About</a>
+  <a href="skills.html"><i class="fa-solid fa-code"></i> Skills</a>
+  <a href="blog.html" class="active"><i class="fa-solid fa-pen-nib"></i> Blog</a>
+  <a href="contact.html"><i class="fa-solid fa-envelope"></i> Contact</a>
+</div>
+
+<div class="wrap">
+  <section class="page-hero">
+    <div class="page-eyebrow reveal">Reflections</div>
+    <h1 class="page-h1 reveal reveal-d1">The Blog</h1>
+    <p class="page-sub reveal reveal-d1">Short reflections on faith, solitude, society, and the quiet weight of thinking differently.</p>
+  </section>
+
+  <div class="blog-layout">
+
+    <!-- ARTICLES -->
+    <main>
+
+      <!-- Article 1 -->
+      <article class="article reveal">
+        <div class="article-meta">
+          <span class="article-tag">Faith · Society</span>
+          <span class="article-date">2026</span>
+        </div>
+        <h1 class="article-h1">The Weight of Wearing a Mask</h1>
+
+        <p class="article-p">In a world that feels like a never-ending masquerade, the hardest thing to do is to show your true face. I look around and see people expertly performing roles that were written for them by others. We have become a society of actors, reciting lines we don't believe in, just to avoid the sting of being cast out.</p>
+
+        <h2 class="article-h2">Masked Faces and Unmasked Souls</h2>
+
+        <p class="article-p">Every time I step outside, I feel the pressure to put on my own mask. A mask that smiles at things I find tragic. A mask that stays silent when my soul wants to scream for the truth. We trade our authenticity for acceptance, saying the right things to the right people, but when the lights go out, we are strangers even to ourselves.</p>
+
+        <div class="insight-box">
+          <ul>
+            <li><strong>The Counterfeit Connection:</strong> We are more connected digitally than ever, yet more distant in spirit.</li>
+            <li><strong>The Noise of the Crowd:</strong> Society demands that we fit into narrow boxes. To think differently is to be labeled an outsider.</li>
+            <li><strong>The Spiritual Suffocation:</strong> For someone who seeks the depth of faith, this performance is exhausting. It feels like breathing in a room with no oxygen.</li>
+          </ul>
+        </div>
+
+        <p class="article-p">I have chosen, more often than not, to take the mask off. But the world doesn't like an unmasked soul. It's too raw, too honest, and too much of a reminder of what they have lost. This is why I feel so alone. My "different" thinking isn't a choice; it's a refusal to lie.</p>
+
+        <p class="article-p">I would rather sit in the silence of my own room, talking to my Creator who knows my heart without a mask, than be the life of a party where no one truly knows me. I am tired of the polished versions of people. I crave the cracked, the broken, and the real.</p>
+
+        <div class="article-quote">
+          <p>I am looking for souls that don't need a script to exist. Until I find them, I will embrace this solitude — lonely, yes, but honest.</p>
+        </div>
+      </article>
+
+      <!-- Article 2 -->
+      <article class="article reveal">
+        <div class="article-meta">
+          <span class="article-tag">Identity · Solitude</span>
+          <span class="article-date">2026</span>
+        </div>
+        <h1 class="article-h1">The Art of Being a Stranger</h1>
+
+        <p class="article-p">There is a profound beauty in not belonging. In a world that constantly demands you to fit in, to trend, and to be "seen," there is a quiet strength in choosing to remain a stranger. I often recall the timeless wisdom: <em>"Be in this world as if you were a stranger or a traveler."</em> To most, this sounds like a lonely existence. To me, it feels like the only way to stay sane.</p>
+
+        <h2 class="article-h2">The Disconnect from the Modern Pulse</h2>
+
+        <p class="article-p">I look at the world around me — the constant rush for validation, the obsession with the temporary, the noise that never sleeps — and I feel a deep sense of detachment. It's as if everyone is playing a game whose rules I refuse to learn.</p>
+
+        <div class="insight-box">
+          <ul>
+            <li><strong>The Foreign Tongue:</strong> People speak of "hustle" and "legacy" in terms of bricks and bank accounts. I find myself thinking of a home that isn't on any map.</li>
+            <li><strong>The Misfit Soul:</strong> My heart doesn't beat for the things this society worships. While they seek the spotlight, I find myself retreating into the shadows of my prayer mat.</li>
+            <li><strong>The Weight of Expectations:</strong> Society expects me to "evolve" by shedding my values. But every time I try to blend in, I feel like I am betraying my essence.</li>
+          </ul>
+        </div>
+
+        <h2 class="article-h2">Finding Peace in the Periphery</h2>
+
+        <p class="article-p">Being a stranger doesn't mean I hate people; it means I don't need their applause to feel whole. There is a certain freedom in being misunderstood. When people don't "get" you, they stop trying to mold you into their image.</p>
+
+        <p class="article-p">I have realized that this loneliness is actually a compass. It points away from the hollow distractions of this life and toward something far more substantial. I am a traveler passing through a crowded terminal — observing everything, but unpacking my bags nowhere.</p>
+
+        <div class="article-quote">
+          <p>I would rather walk a lonely path with my values intact than run a crowded race toward a finish line that doesn't exist.</p>
+        </div>
+      </article>
+
+      <!-- Article 3 -->
+      <article class="article reveal">
+        <div class="article-meta">
+          <span class="article-tag">Faith · Reflection</span>
+          <span class="article-date">2026</span>
+        </div>
+        <h1 class="article-h1">The Quiet Weight of Thinking Differently</h1>
+
+        <p class="article-p">There is a specific kind of exhaustion that comes with being surrounded by people, yet feeling entirely unseen. I walk through the same streets, breathe the same air, and speak the same language as everyone else, yet I often feel like a traveler from a distant era — or perhaps, a different world altogether.</p>
+
+        <p class="article-p">In a society that celebrates noise, I find myself craving silence. In a culture that prioritizes the temporary and the superficial, my heart anchors itself to the eternal.</p>
+
+        <h2 class="article-h2">The Cost of an Unconventional Soul</h2>
+
+        <p class="article-p">Being a Muslim in a world that often views faith as a relic of the past is a lonely path. It is not just about the rituals; it is about the perspective. While others chase the "now," I am constantly thinking about the "after."</p>
+
+        <div class="insight-box">
+          <ul>
+            <li><strong>The Mismatch:</strong> My values are often met with raised eyebrows or patronizing smiles. To them, I am "outdated"; to me, they are simply drifting.</li>
+            <li><strong>The Emotional Distance:</strong> It's hard to build bridges when your foundation is built on truths that society is trying to dismantle.</li>
+            <li><strong>The Internal Fortress:</strong> Over time, I've learned to build a world inside my mind — a place where my thoughts are safe from the judgment of the masses.</li>
+          </ul>
+        </div>
+
+        <p class="article-p">I often wonder if there are others like me — souls who feel the same ache, who look at the stars and feel a pull toward their Creator that the world tries to drown out with static. Perhaps this loneliness is a gift. Perhaps it is a shield, protecting my heart from becoming as hollow as the trends I refuse to follow.</p>
+
+        <div class="article-footer">— Reflections on solitude and faith.</div>
+      </article>
+
+      <!-- Article 4 (Bengali) -->
+      <article class="article reveal">
+        <div class="article-meta">
+          <span class="article-tag">বাংলা · গল্প</span>
+          <span class="article-date">2026</span>
+        </div>
+        <h1 class="article-h1-bn">বাতিঘর</h1>
+
+        <p class="article-p">বিশাল এক সমুদ্রের মাঝে একা দাঁড়িয়ে আছে একটি বাতিঘর। রাত হলে সে নিজের বুক চিরে আলো জ্বালায়, যাতে দূরদেশের জাহাজগুলো পথ না হারায়। কিন্তু অদ্ভুত ব্যাপার হলো, সে যত বেশি মানুষের উপকারে আলো দেয়, তীরের মানুষগুলো তত বেশি তার ওপর বিরক্ত হয়।</p>
+
+        <p class="article-p">বাতিঘরটি যে মাটির ওপর দাঁড়িয়ে আছে, সেই মাটিই যেন তার সবচেয়ে বড় কষ্টের জায়গা। পরিবারের মতো আগলে রাখা সেই দেয়ালগুলোই তাকে সারাক্ষণ চেপে ধরে রাখে। এক অসহ্য নীরব যন্ত্রণা সে বুকের ভেতর বয়ে বেড়ায়, কিন্তু পাথর দিয়ে গড়া শরীর বলে সেই আর্তনাদ সে কাউকে শোনাতে পারে না।</p>
+
+        <p class="article-p">তার বুকের ভেতর সবসময় একটা অজানা ভয় কাজ করে। অন্ধকার বাড়লে তার মনে হয়, একদিন হয়তো তার এই আলো আর জ্বলবে না। তখন কেউ তাকে মনে রাখবে না, কেউ তাকে খুঁজতেও আসবে না।</p>
+
+        <p class="article-p">কখনো কখনো ঝড়ের সময় কিছু ছোট নৌকা খুব মায়া নিয়ে তার কাছে আসতে চায়। বাতিঘর তাদের আলো দিয়ে পথ দেখায়, কিন্তু খুব বেশি কাছে আসতে দেয় না। কারণ সে জানে, তার চারপাশের পাথরগুলো বড্ড ধারালো। তাই সে তাদের এমনভাবে আলো ফেলে দেয় যাতে তারা নিরাপদে দূরে সরে যেতে পারে।</p>
+
+        <p class="article-p">এইভাবেই দিন যায়, রাত যায়। সমুদ্র বদলায়, ঝড় আসে, আবার শান্ত হয়। শুধু বাতিঘরটি তার নিঃসঙ্গ আলো নিয়ে একাই দাঁড়িয়ে থাকে।</p>
+
+        <div class="article-image">
+          <img src="lighthouse.jpg" alt="Lighthouse">
+        </div>
+
+        <div class="article-signoff">সব বাতিঘর সমুদ্রে থাকে না — কিছু থাকে মানুষের ভেতরেও।</div>
+      </article>
+
+    </main>
+
+    <!-- SIDEBAR -->
+    <aside class="blog-sidebar reveal reveal-d1">
+      <div class="sidebar-card">
+        <div class="sidebar-title"><i class="fa-solid fa-list"></i> All Posts</div>
+        <div class="sidebar-link">
+          <span class="sidebar-link-dot"></span>
+          <span class="sidebar-link-text">The Weight of Wearing a Mask</span>
+        </div>
+        <div class="sidebar-link">
+          <span class="sidebar-link-dot"></span>
+          <span class="sidebar-link-text">The Art of Being a Stranger</span>
+        </div>
+        <div class="sidebar-link">
+          <span class="sidebar-link-dot"></span>
+          <span class="sidebar-link-text">The Quiet Weight of Thinking Differently</span>
+        </div>
+        <div class="sidebar-link">
+          <span class="sidebar-link-dot"></span>
+          <span class="sidebar-link-text">বাতিঘর</span>
+        </div>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="sidebar-title"><i class="fa-solid fa-tags"></i> Topics</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;">
+          <span style="font-size:12px;padding:4px 10px;border-radius:20px;border:1px solid var(--border);color:var(--muted);">Faith</span>
+          <span style="font-size:12px;padding:4px 10px;border-radius:20px;border:1px solid var(--border);color:var(--muted);">Society</span>
+          <span style="font-size:12px;padding:4px 10px;border-radius:20px;border:1px solid var(--border);color:var(--muted);">Identity</span>
+          <span style="font-size:12px;padding:4px 10px;border-radius:20px;border:1px solid var(--border);color:var(--muted);">Solitude</span>
+          <span style="font-size:12px;padding:4px 10px;border-radius:20px;border:1px solid var(--border);color:var(--muted);">Reflection</span>
+          <span style="font-size:12px;padding:4px 10px;border-radius:20px;border:1px solid var(--border);color:var(--muted);">বাংলা</span>
+        </div>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="sidebar-title"><i class="fa-solid fa-quote-left"></i> Quote</div>
+        <p style="font-family:'Playfair Display',serif;font-style:italic;font-size:14px;color:var(--muted);line-height:1.7;">
+          "Be in this world as if you were a stranger or a traveler."
+        </p>
+      </div>
+    </aside>
+
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="wrap">© 2026 · <span>Riyad Bin Alom</span> · All rights reserved</div>
+</footer>
+
+<script>
+const hamBtn = document.getElementById('hamBtn');
+const hamIcon = document.getElementById('hamIcon');
+const mobileMenu = document.getElementById('mobileMenu');
+let menuOpen = false;
+hamBtn.addEventListener('click', () => {
+  menuOpen = !menuOpen;
+  mobileMenu.classList.toggle('open', menuOpen);
+  hamIcon.className = menuOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
+});
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.07 });
+reveals.forEach(r => observer.observe(r));
+</script>
+</body>
+</html>
