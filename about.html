@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — Riyad Bin Alom</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+<style>
+:root{
+  --bg:#041027;
+  --muted: rgba(220,230,250,0.78);
+  --accent1:#26a3ff;
+  --accent2:#7c3aed;
+  --accent-grad: linear-gradient(90deg,var(--accent1),var(--accent2));
+  --radius:16px;
+  --maxw:1000px;
+}
+
+*{box-sizing:border-box; margin:0; padding:0;}
+body{
+  font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+  background: var(--bg);
+  color:#eef6ff;
+  line-height:1.5;
+}
+
+a{ text-decoration:none; color:var(--accent1);}
+a:hover{color:var(--accent2);}
+
+.wrap{
+  max-width:var(--maxw);
+  margin:0 auto;
+  padding:22px 18px 40px;
+}
+
+/* NAVBAR */
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:12px 0 10px;
+  position:sticky;
+  top:0;
+  z-index:100;
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.brand{
+  font-weight:800;
+  font-size:18px;
+  letter-spacing:-0.5px;
+}
+
+/* ====== 3 DOT MENU NAV (HOME PAGE STYLE) ====== */
+.menu-wrap{
+  position:relative;
+}
+
+.menu-btn{
+  width:46px;
+  height:46px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.02);
+  color:rgba(220,230,250,0.9);
+  font-size:18px;
+  cursor:pointer;
+  display:grid;
+  place-items:center;
+  transition:0.2s;
+}
+
+.menu-btn:hover{
+  transform: translateY(-2px);
+  border:1px solid rgba(38,163,255,0.25);
+  box-shadow:0 10px 25px rgba(0,0,0,0.35);
+}
+
+.menu{
+  position:absolute;
+  right:0;
+  top:54px;
+  width:220px;
+  padding:10px;
+  border-radius:16px;
+  background: rgba(4,16,39,0.92);
+  border:1px solid rgba(255,255,255,0.06);
+  box-shadow:0 18px 60px rgba(0,0,0,0.55);
+  backdrop-filter: blur(16px);
+  display:none;
+}
+
+.menu.open{ display:block; }
+
+.menu a{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:12px 12px;
+  border-radius:14px;
+  color:rgba(220,230,250,0.85);
+  font-weight:700;
+  font-size:14px;
+  transition:0.2s;
+}
+
+.menu a i{
+  width:18px;
+  text-align:center;
+  color:rgba(220,230,250,0.7);
+}
+
+.menu a:hover{
+  background: rgba(255,255,255,0.06);
+  color:#fff;
+  transform: translateX(2px);
+}
+
+/* HERO */
+.hero{
+  display:grid;
+  grid-template-columns: 1fr 420px;
+  gap:28px;
+  align-items:center;
+  margin-top:20px;
+}
+
+h1{font-size:clamp(28px,5vw,48px); margin:0; font-weight:900;}
+h2{font-weight:700; color:var(--muted); margin:6px 0 12px;}
+p{color:var(--muted); line-height:1.7; margin-bottom:16px;}
+
+/* PROFILE IMAGE */
+.profile{
+  width:420px;
+  height:420px;
+  border-radius:50%;
+  overflow:hidden;
+  box-shadow:0 15px 45px rgba(0,0,0,0.55);
+  background:#0b0f18;
+}
+
+.profile img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:50%;
+}
+
+footer{
+  margin-top:40px;
+  text-align:center;
+  color:var(--muted);
+  font-size:14px;
+}
+
+/* ===== Responsive ===== */
+@media(max-width:980px){
+  .hero{grid-template-columns:1fr;}
+  .profile{width:300px;height:300px; margin:20px auto;}
+}
+</style>
+</head>
+
+<body>
+  <div class="wrap">
+
+    <!-- NAVBAR -->
+    <header>
+      <div class="brand">Riyad Bin Alom</div>
+
+      <!-- 3 DOT MENU -->
+      <div class="menu-wrap">
+        <button class="menu-btn" id="menuBtn" aria-label="Menu">
+          <i class="fa-solid fa-ellipsis-vertical"></i>
+        </button>
+
+        <div class="menu" id="menuBox">
+          <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+          <a href="about.html"><i class="fa-solid fa-user"></i> About</a>
+          <a href="skills.html"><i class="fa-solid fa-code"></i> Skills</a>
+          <a href="blog.html"><i class="fa-solid fa-pen-nib"></i> Blog</a>
+          <a href="contact.html"><i class="fa-solid fa-envelope"></i> Contact</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- HERO / ABOUT -->
+    <section class="hero">
+
+      <!-- Left text -->
+      <div>
+        <h1>About Me</h1>
+        <h2>The Stranger in Search of Truth and Justice</h2>
+
+        <p style="font-size: 1.3rem; font-weight: bold; color: #2c3e50; margin-bottom: 20px;">
+          Student • Explorer of Science, AI, Islam & History • Voice for the Oppresse.
+        </p>
+
+        <p>
+          I have always felt like a quiet observer in a world that never stops talking. While the crowd rushes toward the latest trends and fleeting validations, I find myself drifting in the opposite direction—toward the timeless, the profound, and the unseen. My journey is not defined by the company I keep, but by the weight of the questions I ask and the truths I seek within the intersections of faith and reason.
+        </p>
+
+        <p style="font-size: 1.1rem; line-height: 1.8;">
+          For me, <strong>Islam</strong> is the anchor that prevents my soul from being swept away by the chaos of modern society. It is a philosophy of peace, a manual for discipline, and a constant reminder that my purpose transcends this temporary existence. When I look at the universe through the lens of <strong>Science</strong>, I don't just see equations; I see the intricate design of a Creator. When I look back at <strong>History</strong>, I see the rise and fall of civilizations that remind me of our own fragility and the weight of our legacy.
+        </p>
+
+        <p>
+          However, my search for truth is not just theoretical; it demands action. I cannot remain a silent observer when humanity is tested. I stand firmly in unwavering solidarity with <strong>Palestine</strong>. I believe that freedom is a God-given right, not a political privilege. I have taken to the streets and raised my voice in protest, joining the global movement for their liberation, because I know that silence in the face of oppression is complicity.
+        </p>
+
+        <p>
+          I embrace the identity of a "Stranger" in these times. In this age of digital noise, choosing to stand for unpopular truths often leads to a certain kind of solitude—a loneliness that I have grown to cherish. It is in this isolation that I learn to unlearn the superficialities of the world. I strive to grow step by step, with patience and curiosity, seeking a balance between a sharp mind, a humble heart, and a courageous spirit.
+        </p>
+
+        <p style="font-size: 1.1rem; font-style: italic; color: #555; border-left: 3px solid #2c3e50; padding-left: 15px; margin-top: 25px;">
+          My goal is simple yet demanding: to become a mindful individual who contributes to the world not just with information, but with insight and justice. I am a student of the eternal, a traveler through time, and a believer in the beauty of being misunderstood by a world that has forgotten how to reflect.
+        </p>
+
+        <p style="text-align: right; font-weight: bold; margin-top: 30px;">
+          — Unmasked. Authentic. Resilient.
+        </p>
+      </div>
+
+      <!-- Right profile image -->
+      <div class="profile">
+        <img src="riyad_about.jpg" alt="Riyad Bin Alom">
+      </div>
+    </section>
+
+    <div style="text-align: center; margin-top: 30px; margin-bottom: 40px; padding: 0 20px;">
+      <p style="font-size: 1.2rem; color: #2c3e50; font-weight: 600; font-style: italic; letter-spacing: 0.5px; line-height: 1.6;">
+        “In a world of convenient silences, I choose the uncomfortable truth: Solidarity with the resilient soul of Palestine.🇵🇸”
+      </p>
+      <hr style="width: 60px; border: none; border-top: 2px solid #c0392b; margin: 20px auto 0;">
+    </div>
+
+    <footer>
+      © 2026 • Riyad Bin Alom
+    </footer>
+
+  </div>
+
+<script>
+/* ===== 3 DOT MENU JS ===== */
+const menuBtn = document.getElementById("menuBtn");
+const menuBox = document.getElementById("menuBox");
+
+menuBtn.addEventListener("click", () => {
+  menuBox.classList.toggle("open");
+});
+
+// click outside close
+document.addEventListener("click", (e) => {
+  if (!menuBox.contains(e.target) && !menuBtn.contains(e.target)) {
+    menuBox.classList.remove("open");
+  }
+});
+</script>
+
+</body>
+</html>

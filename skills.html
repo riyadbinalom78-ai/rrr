@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Skills — Riyad Bin Alom</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+<style>
+  :root{
+    --bg:#041027;
+    --card: rgba(255,255,255,0.03);
+    --muted: rgba(220,230,250,0.82);
+    --accent1:#26a3ff;
+    --accent2:#7c3aed;
+    --accent-grad: linear-gradient(90deg,var(--accent1),var(--accent2));
+    --maxw:1100px;
+    --radius:14px;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+    background:
+      radial-gradient(900px 450px at 10% 5%, rgba(124,58,237,0.04), transparent 20%),
+      radial-gradient(900px 450px at 90% 15%, rgba(37,99,235,0.03), transparent 22%),
+      var(--bg);
+    color:#eef6ff;
+    line-height:1.55;
+  }
+
+  .wrap{ max-width:var(--maxw); margin:18px auto; padding:20px; }
+
+  /* header */
+  header{ display:flex; justify-content:space-between; align-items:center; gap:12px; padding-bottom:10px; position:sticky; top:0; z-index:100; backdrop-filter: blur(12px); background: linear-gradient(rgba(4,6,12,0.15), rgba(4,6,12,0.05)); border-bottom:1px solid rgba(255,255,255,0.02); }
+  .brand{ display:flex; gap:12px; align-items:center; }
+  .logo{ width:44px; height:44px; border-radius:10px; display:grid; place-items:center; background:var(--accent-grad); color:#031029; font-weight:800; box-shadow:0 12px 36px rgba(37,99,235,0.08); }
+  .brand-name{ font-weight:800; font-size:16px; }
+
+  /* ===== 3 DOT MENU (added) ===== */
+  .menu-wrap{ position:relative; }
+  .menu-btn{
+    width:46px; height:46px; border-radius:12px; display:grid; place-items:center;
+    background: rgba(255,255,255,0.02); color:var(--muted); border:1px solid rgba(255,255,255,0.03);
+    cursor:pointer; transition:0.18s;
+  }
+  .menu-btn:hover{ transform:translateY(-3px); color:#fff; border-color: rgba(38,163,255,0.12); box-shadow:0 10px 30px rgba(0,0,0,0.35); }
+
+  .menu{
+    position:absolute; right:0; top:56px; width:220px; padding:10px; border-radius:14px;
+    background: rgba(4,16,39,0.95); border:1px solid rgba(255,255,255,0.04); box-shadow:0 18px 60px rgba(0,0,0,0.55);
+    display:none; backdrop-filter: blur(12px);
+  }
+  .menu.open{ display:block; }
+  .menu a{ display:flex; gap:10px; align-items:center; padding:10px; border-radius:10px; color:var(--muted); font-weight:700; text-decoration:none; }
+  .menu a i{ width:18px; text-align:center; color:rgba(220,230,250,0.75); }
+  .menu a:hover{ background: rgba(255,255,255,0.03); color:#fff; transform:translateX(3px); }
+
+  /* nav (kept hidden since we use 3-dot menu) */
+  nav.nav{ display:none; }
+
+  /* page title */
+  .page-head{
+    margin:8px 0 18px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+  }
+  .page-head .left{
+    display:flex; flex-direction:column;
+  }
+  .page-head h1{ font-size:28px; font-weight:800; margin-bottom:6px; }
+  .page-head p{ color:var(--muted); margin:0; font-size:15px; }
+
+  /* layout */
+  .content{
+    display:grid;
+    grid-template-columns: 1fr 360px;
+    gap:24px;
+    align-items:start;
+  }
+  @media(max-width:980px){ .content{ grid-template-columns:1fr; } }
+
+  /* skills list card */
+  .card{
+    background:var(--card);
+    border-radius:var(--radius);
+    padding:18px;
+    border:1px solid rgba(255,255,255,0.04);
+    box-shadow:0 10px 30px rgba(0,0,0,0.35);
+  }
+
+  .skill{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    margin-bottom:16px;
+  }
+
+  .skill .row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:8px;
+  }
+  .skill .row b{ font-weight:800; font-size:15px; }
+  .skill .row small{ color:var(--muted); font-weight:600; }
+
+  /* progress bar */
+  .bar{
+    width:100%;
+    height:12px;
+    background: rgba(255,255,255,0.03);
+    border-radius:12px;
+    overflow:hidden;
+    margin-top:8px;
+    border:1px solid rgba(255,255,255,0.02);
+  }
+  .bar > i{
+    display:block;
+    height:100%;
+    background: linear-gradient(90deg, var(--accent1), var(--accent2));
+    border-radius:12px;
+    transition: width .8s cubic-bezier(.2,.9,.25,1);
+  }
+
+  /* aside profile / summary */
+  aside.right{
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+  }
+  .profile{
+    width:100%;
+    height:360px;
+    border-radius:18px;
+    overflow:hidden;
+    display:grid;
+    place-items:center;
+    border:1px solid rgba(255,255,255,0.03);
+    background: rgba(255,255,255,0.01);
+  }
+  .profile img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+  .summary{
+    padding:14px;
+    border-radius:12px;
+    background: rgba(255,255,255,0.02);
+    color:var(--muted);
+    font-weight:600;
+  }
+
+  /* skill groups */
+  .group-title{ font-weight:800; margin:14px 0 8px; font-size:16px; color:#fff; }
+
+  /* small helpers */
+  .muted{ color:var(--muted); font-size:14px; }
+  footer{ margin-top:28px; color:var(--muted); text-align:center; font-size:14px; }
+
+  /* responsive */
+  @media(max-width:720px){
+    .profile{ height:300px; }
+    /* place menu button to the right and keep it visible */
+    .menu{ right: 8px; top: 52px; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- header/nav -->
+    <header>
+      <div class="brand">
+        <div class="logo">R</div>
+        <div class="brand-name">Riyad Bin Alom</div>
+      </div>
+
+      <!-- 3-dot menu (replaces nav for consistent header) -->
+      <div class="menu-wrap">
+        <button class="menu-btn" id="menuBtn" aria-label="Menu">
+          <i class="fa-solid fa-ellipsis-vertical"></i>
+        </button>
+
+        <div class="menu" id="menuBox">
+          <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+          <a href="about.html"><i class="fa-solid fa-user"></i> About</a>
+          <a href="skills.html"><i class="fa-solid fa-code"></i> Skills</a>
+          <a href="blog.html"><i class="fa-solid fa-pen-nib"></i> Blog</a>
+          <a href="contact.html"><i class="fa-solid fa-envelope"></i> Contact</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- page heading -->
+    <div class="page-head">
+      <div class="left">
+        <h1>Skills & Strengths</h1>
+        <p class="muted">Organized list of skills — study, communication, research, languages and practical interests.</p>
+      </div>
+    </div>
+
+    <!-- main content -->
+    <div class="content">
+
+      <!-- left: skills -->
+      <main>
+        <div class="card">
+          <div class="group-title">Core Academic & Thinking</div>
+
+          <div class="skill">
+            <div class="row">
+              <b>Research & Study</b>
+              <small>Advanced</small>
+            </div>
+            <div class="bar"><i style="width:88%"></i></div>
+            <div class="muted">Systematic reading, note-taking, referencing sources, summarizing ideas clearly.</div>
+          </div>
+
+          <div class="skill">
+            <div class="row">
+              <b>Critical Thinking</b>
+              <small>Advanced</small>
+            </div>
+            <div class="bar"><i style="width:82%"></i></div>
+            <div class="muted">Analyzing arguments, comparing viewpoints, and forming reasoned conclusions.</div>
+          </div>
+
+          <div class="skill">
+            <div class="row">
+              <b>Historical Analysis</b>
+              <small>Strong</small>
+            </div>
+            <div class="bar"><i style="width:75%"></i></div>
+            <div class="muted">Reading primary and secondary sources; connecting past events to present context.</div>
+          </div>
+
+          <div class="skill">
+            <div class="row">
+              <b>Islamic Studies</b>
+              <small>Strong</small>
+            </div>
+            <div class="bar"><i style="width:78%"></i></div>
+            <div class="muted">Textual reading, ethical reflection, and practical application of learned principles.</div>
+          </div>
+
+          <div style="height:8px"></div>
+
+          <div class="group-title">Communication & Community</div>
+
+          <div class="skill">
+            <div class="row">
+              <b>Writing & Expression</b>
+              <small>Strong</small>
+            </div>
+            <div class="bar"><i style="width:78%"></i></div>
+            <div class="muted">Organizing thoughts clearly — essays, short reflections, study notes and summaries.</div>
+          </div>
+
+          <div class="skill">
+            <div class="row">
+              <b>Presentation & Discussion</b>
+              <small>Good</small>
+            </div>
+            <div class="bar"><i style="width:70%"></i></div>
+            <div class="muted">Leading study groups, participating in respectful dialogue and small community talks.</div>
+          </div>
+
+          <div style="height:8px"></div>
+
+          <div class="group-title">Technical & Practical</div>
+
+          <div class="skill">
+            <div class="row">
+              <b>Web Basics (HTML / CSS)</b>
+              <small>Beginner → Practical</small>
+            </div>
+            <div class="bar"><i style="width:60%"></i></div>
+            <div class="muted">Building and editing simple websites (like this one) using Acode and basic web tools.</div>
+          </div>
+
+          <div class="skill">
+            <div class="row">
+              <b>AI & Online Learning</b>
+              <small>Beginner → Learning</small>
+            </div>
+            <div class="bar"><i style="width:48%"></i></div>
+            <div class="muted">Curious and learning basics of AI, following online courses and tutorials.</div>
+          </div>
+
+          <div style="height:6px"></div>
+
+          <div class="group-title">Languages</div>
+
+          <div class="skill">
+            <div class="row">
+              <b>Bengali (বাংলা)</b>
+              <small>Native</small>
+            </div>
+            <div class="bar"><i style="width:98%"></i></div>
+          </div>
+
+          <div class="skill">
+            <div class="row">
+              <b>English</b>
+              <small>Fluent</small>
+            </div>
+            <div class="bar"><i style="width:82%"></i></div>
+          </div>
+
+          <div class="skill">
+            <div class="row">
+              <b>Hindi / हिन्दी</b>
+              <small>Conversational</small>
+            </div>
+            <div class="bar"><i style="width:70%"></i></div>
+          </div>
+
+        </div>
+      </main>
+
+      <!-- right: profile + summary -->
+      <aside class="right">
+        <div class="profile">
+          <!-- small portrait (use riyad_skil.jpg or another file) -->
+          <img src="riyad_skil.jpg" alt="Riyad Bin Alom">
+        </div>
+
+        <div class="card summary">
+          <div style="font-weight:800; margin-bottom:8px; color:#fff">Quick Summary</div>
+          <div class="muted">
+            Student with a disciplined study approach. Strengths in close reading, structured notes, balanced thinking, and clear expression. Open to collaborations and learning new tools.
+          </div>
+        </div>
+
+        <div class="card">
+          <div style="font-weight:800; margin-bottom:8px; color:#fff">How I work</div>
+          <div class="muted">
+            - Short study sessions with focused notes.<br>
+            - Regular review and simple teaching to remember better.<br>
+            - Respectful discussion and humility in debate.
+          </div>
+        </div>
+
+      </aside>
+    </div>
+
+    <footer>© 2026 • Riyad Bin Alom</footer>
+  </div>
+
+  <!-- small JS to animate bars on load -->
+  <script>
+    window.addEventListener('load', () => {
+      document.querySelectorAll('.bar > i').forEach((el) => {
+        const w = el.style.width || '0%';
+        el.style.width = '0%';
+        // animate
+        setTimeout(()=> el.style.width = w, 60);
+      });
+    });
+
+    /* ===== 3 DOT MENU JS (same as about) ===== */
+    (function(){
+      const menuBtn = document.getElementById("menuBtn");
+      const menuBox = document.getElementById("menuBox");
+      if(menuBtn && menuBox){
+        menuBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          menuBox.classList.toggle("open");
+        });
+        // close on outside click
+        document.addEventListener("click", (e) => {
+          if (!menuBox.contains(e.target) && !menuBtn.contains(e.target)) {
+            menuBox.classList.remove("open");
+          }
+        });
+        // accessibility: close on ESC
+        document.addEventListener('keydown', (ev) => {
+          if(ev.key === 'Escape') menuBox.classList.remove('open');
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
