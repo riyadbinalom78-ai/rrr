@@ -4,94 +4,479 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Lab — Riyad Bin Alom</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 <style>
+/* ═══════════════════════════════════════
+   PSYCHOLOGY-BASED COLOR SYSTEM
+   • Dark bg  → focus, depth, immersion
+   • Gold     → achievement, creativity
+   • Emerald  → growth, Islamic identity
+   • Steel    → strength, memory
+   • Rust     → warmth, action
+═══════════════════════════════════════ */
 :root{
-  --bg:#0e0d0b;--bg2:#141210;--bg3:#1a1713;
-  --text:#e8e0d0;--muted:#a09080;--gold:#d4a843;--rust:#c0622a;
-  --border:rgba(212,168,67,0.12);--border2:rgba(232,224,208,0.06);
-  --card:rgba(255,255,255,0.025);--maxw:1280px;--nav-h:72px;
+  --bg:       #0b0c0e;
+  --bg2:      #111318;
+  --bg3:      #181b21;
+  --bg4:      #1e2128;
+
+  --text:     #edeae4;
+  --muted:    #8a8d96;
+  --subtle:   #3a3d45;
+
+  --gold:     #d4a843;
+  --gold-dim: rgba(212,168,67,0.12);
+  --rust:     #c0622a;
+  --emerald:  #27ae74;
+  --emerald-dim: rgba(39,174,116,0.12);
+  --steel:    #4a7fa5;
+  --steel-dim:rgba(74,127,165,0.12);
+  --violet:   #7c5cbf;
+
+  --border:   rgba(255,255,255,0.06);
+  --border-g: rgba(212,168,67,0.18);
+
+  --maxw:1300px;
+  --nav-h:70px;
+  --ease: cubic-bezier(.22,1,.36,1);
 }
+
 *{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
-body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;}
-body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:0.35;}
+body{
+  font-family:'DM Sans',system-ui,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.6;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* Grain texture */
+body::before{
+  content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:0.28;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+}
+
+/* Ambient light blobs */
+.ambient{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 55% 35% at 85% 15%, rgba(212,168,67,0.05) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 30% at 10% 90%, rgba(39,174,116,0.04) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 50% 50%, rgba(74,127,165,0.03) 0%, transparent 70%);
+}
+
 a{color:inherit;text-decoration:none;}
 
-.navbar{position:sticky;top:0;z-index:200;height:var(--nav-h);display:flex;align-items:center;background:rgba(14,13,11,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+/* ── NAV ── */
+.navbar{
+  position:sticky;top:0;z-index:500;
+  height:var(--nav-h);
+  display:flex;align-items:center;
+  background:rgba(11,12,14,0.88);
+  backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);
+}
 .nav-inner{max-width:var(--maxw);margin:0 auto;padding:0 28px;width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;}
 .nav-brand{display:flex;align-items:center;gap:12px;flex-shrink:0;}
-.nav-logo{width:42px;height:42px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--rust));display:grid;place-items:center;font-family:'Playfair Display',serif;font-weight:900;font-size:20px;color:#0e0d0b;box-shadow:0 4px 20px rgba(212,168,67,0.25);}
-.nav-name{font-family:'Playfair Display',serif;font-weight:600;font-size:17px;white-space:nowrap;}
-.nav-links{display:flex;align-items:center;gap:2px;}
-.nav-links a{display:inline-flex;align-items:center;gap:6px;padding:8px 13px;border-radius:8px;font-size:13px;font-weight:500;color:var(--muted);transition:all .2s;white-space:nowrap;}
+.nav-logo{
+  width:40px;height:40px;border-radius:10px;
+  background:linear-gradient(135deg,var(--gold),var(--rust));
+  display:grid;place-items:center;
+  font-family:'Playfair Display',serif;font-weight:900;font-size:19px;color:#0b0c0e;
+  box-shadow:0 4px 18px rgba(212,168,67,0.28);
+}
+.nav-name{font-family:'Playfair Display',serif;font-weight:700;font-size:16px;color:var(--text);}
+.nav-links{display:flex;align-items:center;gap:1px;}
+.nav-links a{display:inline-flex;align-items:center;gap:5px;padding:7px 12px;border-radius:8px;font-size:13px;font-weight:500;color:var(--muted);transition:all .2s;white-space:nowrap;}
 .nav-links a i{font-size:11px;}
-.nav-links a:hover{color:var(--text);background:var(--card);}
-.nav-links a.active{color:var(--gold);background:rgba(212,168,67,0.08);border:1px solid rgba(212,168,67,0.15);}
+.nav-links a:hover{color:var(--text);background:rgba(255,255,255,0.04);}
+.nav-links a.active{color:var(--gold);background:rgba(212,168,67,0.08);border:1px solid rgba(212,168,67,0.14);}
+.nav-ham{display:none;background:none;border:1px solid var(--border);color:var(--muted);width:40px;height:40px;border-radius:8px;cursor:pointer;font-size:15px;transition:all .2s;place-items:center;}
+.nav-ham:hover{color:var(--gold);border-color:var(--border-g);}
 
-.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;}
+.mobile-menu{display:none;position:fixed;inset:0;top:var(--nav-h);background:rgba(11,12,14,0.98);backdrop-filter:blur(24px);z-index:400;flex-direction:column;padding:20px;gap:4px;border-top:1px solid var(--border);overflow-y:auto;}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:12px;font-size:15px;font-weight:500;color:var(--muted);border:1px solid transparent;transition:all .2s;}
+.mobile-menu a i{width:18px;text-align:center;color:var(--gold);}
+.mobile-menu a:hover,.mobile-menu a.active{color:var(--gold);border-color:var(--border-g);background:rgba(212,168,67,0.05);}
+.mob-div{height:1px;background:var(--border);margin:6px 0;}
 
-/* PAGE HERO */
-.page-hero{padding:80px 0 60px;border-bottom:1px solid var(--border2);position:relative;}
-.page-hero::after{
-  content:'LAB';
-  position:absolute;right:-20px;top:50%;transform:translateY(-50%);
+/* ── WRAP ── */
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;position:relative;z-index:1;}
+
+/* ── HERO ── */
+.hero{padding:88px 0 72px;border-bottom:1px solid var(--border);position:relative;overflow:hidden;}
+.hero-bg-text{
+  position:absolute;right:-8px;top:50%;transform:translateY(-50%);
   font-family:'Playfair Display',serif;font-weight:900;
-  font-size:clamp(100px,15vw,200px);
-  color:rgba(212,168,67,0.04);
-  pointer-events:none;line-height:1;letter-spacing:-0.04em;
+  font-size:clamp(130px,19vw,240px);
+  color:rgba(212,168,67,0.03);
+  pointer-events:none;line-height:1;letter-spacing:-0.06em;user-select:none;
 }
-.page-eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:12px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;}
-.page-eyebrow::before{content:'';width:32px;height:1px;background:var(--gold);opacity:0.6;}
-.page-h1{font-family:'Playfair Display',serif;font-size:clamp(40px,5.5vw,72px);font-weight:900;line-height:1.0;letter-spacing:-0.02em;margin-bottom:10px;}
-.page-sub{color:var(--muted);font-size:16px;max-width:55ch;line-height:1.75;}
-
-/* SECTION DIVIDER */
-.section-divider{display:flex;align-items:center;gap:16px;margin:60px 0 40px;}
-.section-divider-line{flex:1;height:1px;background:var(--border2);}
-.section-divider-label{font-size:12px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);white-space:nowrap;display:flex;align-items:center;gap:8px;}
-.section-divider-label i{color:var(--gold);}
-
-/* PROJECT GRID */
-.project-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));gap:24px;margin-bottom:48px;}
-
-.project-card{
-  position:relative;background:var(--card);border:1px solid var(--border2);
-  border-radius:24px;padding:32px;transition:all .4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  display:flex;flex-direction:column;gap:18px;overflow:hidden;
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:10px;
+  font-size:11px;font-weight:700;letter-spacing:0.26em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:18px;
 }
-.project-card:hover{border-color:var(--gold);transform:translateY(-10px);background:rgba(212,168,67,0.02);box-shadow:0 30px 60px rgba(0,0,0,0.5);}
-
-.project-icon-box{
-  width:60px;height:60px;border-radius:16px;
-  background:linear-gradient(135deg, rgba(212,168,67,0.1), rgba(192,98,42,0.1));
-  border:1px solid var(--border);display:grid;place-items:center;
-  color:var(--gold);font-size:24px;margin-bottom:4px;
+.hero-eyebrow::before{content:'';width:28px;height:1px;background:var(--gold);opacity:0.7;}
+.hero-h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(48px,7vw,88px);
+  font-weight:900;line-height:.96;
+  letter-spacing:-0.03em;margin-bottom:18px;
 }
-.project-h{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--text);}
-.project-p{font-size:14px;color:var(--muted);line-height:1.7;flex-grow:1;}
-
-.project-tags{display:flex;gap:8px;flex-wrap:wrap;}
-.tag{font-size:10px;text-transform:uppercase;letter-spacing:1px;padding:4px 10px;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;color:var(--muted);}
-
-.project-btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:10px;
-  padding:12px 20px;border-radius:12px;background:var(--bg3);
-  border:1px solid var(--border);color:var(--gold);font-weight:600;font-size:14px;
-  transition:all 0.3s;
+.hero-h1 em{font-style:italic;background:linear-gradient(135deg,var(--gold) 0%,var(--rust) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hero-sub{
+  font-size:16px;color:var(--muted);
+  max-width:50ch;line-height:1.85;margin-bottom:44px;
 }
-.project-btn:hover{background:var(--gold);color:var(--bg);transform:scale(1.02);}
 
-/* REVEAL ANIMATION */
-.reveal{opacity:0;transform:translateY(30px);transition:all 0.8s ease-out;}
+/* Stats */
+.hero-stats{display:flex;align-items:center;gap:0;flex-wrap:wrap;}
+.stat{padding:0 28px;text-align:center;}
+.stat:first-child{padding-left:0;}
+.stat-n{
+  font-family:'Playfair Display',serif;font-size:36px;font-weight:900;
+  background:linear-gradient(135deg,var(--gold),var(--rust));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;
+}
+.stat-l{font-size:11px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-top:4px;}
+.stat-sep{width:1px;height:40px;background:var(--border);}
+
+/* ── SECTION LABEL ── */
+.sec-label{
+  display:flex;align-items:center;gap:16px;
+  margin:64px 0 32px;
+}
+.sec-label-text{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:11px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;
+  color:var(--gold);
+  padding:7px 18px;border-radius:20px;
+  border:1px solid var(--border-g);
+  background:rgba(212,168,67,0.05);
+  white-space:nowrap;
+}
+.sec-label-line{flex:1;height:1px;background:var(--border);}
+
+/* ══════════════════════════════════════
+   WEBSITE CARDS
+══════════════════════════════════════ */
+
+/* Featured (large) */
+.site-featured{
+  position:relative;
+  border-radius:24px;
+  overflow:hidden;
+  border:1px solid var(--border);
+  background:var(--bg2);
+  display:grid;
+  grid-template-columns:340px 1fr;
+  min-height:280px;
+  transition:all .4s var(--ease);
+  margin-bottom:20px;
+}
+.site-featured:hover{
+  border-color:rgba(212,168,67,0.28);
+  box-shadow:0 40px 100px rgba(0,0,0,0.55), 0 0 0 1px rgba(212,168,67,0.1);
+  transform:translateY(-6px);
+}
+.sf-visual{
+  position:relative;overflow:hidden;
+  background:linear-gradient(135deg, #0f1a12, #132215);
+  display:flex;align-items:center;justify-content:center;
+}
+.sf-visual::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to right,transparent 50%, rgba(11,12,14,0.6));
+}
+.sf-emoji{font-size:72px;filter:drop-shadow(0 8px 32px rgba(39,174,116,0.4));z-index:1;animation:float 5s ease-in-out infinite;}
+.sf-glow{position:absolute;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(39,174,116,0.18),transparent 70%);}
+.sf-body{padding:40px 36px;display:flex;flex-direction:column;justify-content:center;gap:14px;}
+.sf-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;
+  color:var(--emerald);padding:4px 12px;border-radius:20px;
+  border:1px solid rgba(39,174,116,0.25);background:rgba(39,174,116,0.07);
+  width:fit-content;
+}
+.sf-h{font-family:'Playfair Display',serif;font-size:28px;font-weight:900;line-height:1.1;color:var(--text);}
+.sf-p{font-size:14.5px;color:var(--muted);line-height:1.8;max-width:44ch;}
+.sf-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;}
+
+/* Regular site cards */
+.sites-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+.site-card{
+  position:relative;border-radius:20px;overflow:hidden;
+  border:1px solid var(--border);background:var(--bg2);
+  display:flex;flex-direction:column;
+  transition:all .4s var(--ease);
+}
+.site-card:hover{border-color:rgba(74,127,165,0.35);box-shadow:0 32px 80px rgba(0,0,0,0.5);transform:translateY(-7px);}
+.site-card.em:hover{border-color:rgba(39,174,116,0.3);}
+
+/* Top shimmer line */
+.site-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--steel),#6ab0d4);
+  transform:scaleX(0);transform-origin:left;
+  transition:transform .4s var(--ease);
+}
+.site-card.em::before{background:linear-gradient(90deg,var(--emerald),#5dd4a0);}
+.site-card:hover::before{transform:scaleX(1);}
+
+.sc-visual{
+  height:160px;position:relative;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  border-bottom:1px solid var(--border);
+}
+.sc-emoji{font-size:56px;z-index:1;filter:drop-shadow(0 4px 20px rgba(74,127,165,0.5));transition:transform .4s;}
+.site-card.em .sc-emoji{filter:drop-shadow(0 4px 20px rgba(39,174,116,0.5));}
+.site-card:hover .sc-emoji{transform:scale(1.15);}
+.sc-glow{position:absolute;width:160px;height:160px;border-radius:50%;}
+.sc-body{padding:24px;display:flex;flex-direction:column;gap:10px;flex:1;}
+.sc-tag{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:10px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;
+  color:var(--steel);padding:3px 10px;border-radius:20px;
+  border:1px solid rgba(74,127,165,0.2);background:rgba(74,127,165,0.07);
+  width:fit-content;
+}
+.site-card.em .sc-tag{color:var(--emerald);border-color:rgba(39,174,116,0.2);background:rgba(39,174,116,0.07);}
+.sc-h{font-family:'Playfair Display',serif;font-size:20px;font-weight:800;color:var(--text);line-height:1.2;}
+.sc-p{font-size:13px;color:var(--muted);line-height:1.75;flex:1;}
+.sc-actions{display:flex;gap:8px;margin-top:8px;}
+
+/* ══════════════════════════════════════
+   BUTTONS
+══════════════════════════════════════ */
+/* Gold primary */
+.btn-gold{
+  display:inline-flex;align-items:center;gap:9px;
+  padding:13px 26px;border-radius:11px;
+  background:linear-gradient(135deg,var(--gold) 0%,var(--rust) 100%);
+  color:#0b0c0e;font-size:13px;font-weight:700;
+  transition:all .28s var(--ease);cursor:pointer;border:none;
+  box-shadow:0 4px 20px rgba(212,168,67,0.2);
+}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(212,168,67,0.35);}
+
+/* Emerald */
+.btn-emerald{
+  display:inline-flex;align-items:center;gap:9px;
+  padding:13px 26px;border-radius:11px;
+  background:linear-gradient(135deg,var(--emerald),#1a9a60);
+  color:#fff;font-size:13px;font-weight:700;
+  transition:all .28s var(--ease);
+  box-shadow:0 4px 20px rgba(39,174,116,0.2);
+}
+.btn-emerald:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(39,174,116,0.35);}
+
+/* Steel */
+.btn-steel{
+  display:inline-flex;align-items:center;gap:9px;
+  padding:13px 26px;border-radius:11px;
+  background:linear-gradient(135deg,var(--steel),#3669a0);
+  color:#fff;font-size:13px;font-weight:700;
+  transition:all .28s var(--ease);
+  box-shadow:0 4px 20px rgba(74,127,165,0.2);
+}
+.btn-steel:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(74,127,165,0.35);}
+
+/* Ghost outline */
+.btn-ghost{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:12px 20px;border-radius:11px;
+  border:1px solid var(--border);
+  color:var(--muted);font-size:13px;font-weight:600;
+  background:rgba(255,255,255,0.02);
+  transition:all .25s;
+}
+.btn-ghost:hover{color:var(--gold);border-color:var(--border-g);background:rgba(212,168,67,0.04);}
+
+/* Icon-only round */
+.btn-icon{
+  width:42px;height:42px;border-radius:10px;
+  border:1px solid var(--border);
+  display:grid;place-items:center;
+  color:var(--muted);font-size:14px;
+  background:rgba(255,255,255,0.02);
+  transition:all .25s;cursor:pointer;
+  flex-shrink:0;
+}
+.btn-icon:hover{color:var(--gold);border-color:var(--border-g);}
+
+/* ══════════════════════════════════════
+   GAME SECTION
+══════════════════════════════════════ */
+.game-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:16px;}
+.game-card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:20px;overflow:hidden;
+  display:flex;flex-direction:column;
+  transition:all .4s var(--ease);position:relative;
+}
+.game-card:hover{border-color:rgba(192,98,42,0.3);box-shadow:0 28px 70px rgba(0,0,0,0.5);transform:translateY(-6px);}
+.game-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--rust),var(--gold));
+  transform:scaleX(0);transform-origin:left;transition:transform .4s var(--ease);
+}
+.game-card:hover::before{transform:scaleX(1);}
+.gc-visual{
+  height:130px;background:linear-gradient(135deg,#180e08,#251610);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;border-bottom:1px solid var(--border);
+}
+.gc-emoji{font-size:52px;z-index:1;transition:transform .4s;filter:drop-shadow(0 4px 20px rgba(192,98,42,0.5));}
+.game-card:hover .gc-emoji{transform:scale(1.2) rotate(-5deg);}
+.gc-glow{position:absolute;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(192,98,42,0.2),transparent 70%);}
+.gc-body{padding:24px;flex:1;display:flex;flex-direction:column;gap:10px;}
+.gc-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:10px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;
+  color:var(--rust);padding:3px 10px;border-radius:20px;
+  border:1px solid rgba(192,98,42,0.22);background:rgba(192,98,42,0.07);
+  width:fit-content;
+}
+.gc-h{font-family:'Playfair Display',serif;font-size:20px;font-weight:800;line-height:1.2;}
+.gc-p{font-size:13px;color:var(--muted);line-height:1.75;flex:1;}
+.gc-actions{display:flex;gap:8px;margin-top:8px;}
+.btn-play{
+  display:inline-flex;align-items:center;gap:9px;
+  padding:12px 22px;border-radius:11px;
+  background:linear-gradient(135deg,var(--rust),#d4742a);
+  color:#fff;font-size:13px;font-weight:700;
+  transition:all .28s var(--ease);
+  box-shadow:0 4px 16px rgba(192,98,42,0.25);
+}
+.btn-play:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(192,98,42,0.4);}
+.btn-play-soon{
+  display:inline-flex;align-items:center;gap:9px;
+  padding:12px 22px;border-radius:11px;
+  border:1px solid var(--border);
+  color:var(--muted);font-size:13px;font-weight:600;
+  background:var(--bg3);cursor:not-allowed;
+}
+
+/* ══════════════════════════════════════
+   PORTFOLIO (self-reference) card
+══════════════════════════════════════ */
+.portfolio-card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:20px;padding:32px;
+  display:flex;align-items:center;gap:28px;
+  transition:all .4s var(--ease);
+  margin-bottom:20px;
+}
+.portfolio-card:hover{border-color:var(--border-g);box-shadow:0 28px 70px rgba(0,0,0,0.5);transform:translateY(-4px);}
+.pc-icon{
+  width:72px;height:72px;border-radius:18px;flex-shrink:0;
+  background:linear-gradient(135deg,rgba(212,168,67,0.12),rgba(192,98,42,0.08));
+  border:1px solid rgba(212,168,67,0.18);
+  display:grid;place-items:center;
+  font-size:30px;color:var(--gold);
+}
+.pc-body{flex:1;}
+.pc-tag{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold);padding:3px 10px;border-radius:20px;border:1px solid var(--border-g);background:var(--gold-dim);width:fit-content;margin-bottom:8px;}
+.pc-h{font-family:'Playfair Display',serif;font-size:22px;font-weight:800;margin-bottom:6px;}
+.pc-p{font-size:13.5px;color:var(--muted);line-height:1.75;}
+.pc-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;}
+
+/* ══════════════════════════════════════
+   COMING SOON ROW
+══════════════════════════════════════ */
+.coming-row{
+  display:flex;gap:12px;flex-wrap:wrap;
+  padding:24px;
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:18px;
+  margin-bottom:60px;
+  align-items:center;
+}
+.coming-row-label{font-size:12px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);margin-right:4px;}
+.coming-pill{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:8px 16px;border-radius:20px;
+  border:1px solid var(--border);
+  background:var(--bg3);
+  font-size:12px;font-weight:600;color:var(--muted);
+}
+.coming-pill i{font-size:11px;color:var(--subtle);}
+.pulse{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:0.3;transform:scale(0.8);}50%{opacity:1;transform:scale(1.2);}}
+
+/* ══════════════════════════════════════
+   CTA
+══════════════════════════════════════ */
+.cta-card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:24px;padding:56px 48px;
+  text-align:center;position:relative;overflow:hidden;
+  margin-bottom:64px;
+}
+.cta-card::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 60% at 50% 50%,rgba(212,168,67,0.04),transparent 70%);
+  pointer-events:none;
+}
+.cta-h{font-family:'Playfair Display',serif;font-size:clamp(26px,3.5vw,40px);font-weight:900;margin-bottom:12px;}
+.cta-p{font-size:15px;color:var(--muted);max-width:44ch;margin:0 auto 28px;line-height:1.85;}
+.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+
+/* ══════════════════════════════════════
+   FOOTER
+══════════════════════════════════════ */
+.footer{padding:40px 0 28px;border-top:1px solid var(--border);text-align:center;}
+.footer span{color:var(--gold);}
+.footer-links{display:flex;justify-content:center;gap:4px;flex-wrap:wrap;margin-bottom:16px;}
+.footer-links a{font-size:13px;padding:6px 14px;border-radius:8px;color:var(--muted);transition:all .2s;}
+.footer-links a:hover{color:var(--gold);}
+.footer-copy{font-size:12px;color:rgba(138,141,150,0.5);}
+
+/* ══════════════════════════════════════
+   ANIMATIONS
+══════════════════════════════════════ */
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s var(--ease),transform .7s var(--ease);}
 .reveal.visible{opacity:1;transform:translateY(0);}
+.rd1{transition-delay:.1s;}.rd2{transition-delay:.2s;}.rd3{transition-delay:.3s;}
 
-@media(max-width:600px){.project-grid{grid-template-columns:1fr;}.wrap{padding:0 20px;}}
+/* ══════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════ */
+@media(max-width:1024px){
+  .site-featured{grid-template-columns:1fr;min-height:auto;}
+  .sf-visual{height:180px;}
+  .sf-visual::after{background:linear-gradient(to top,rgba(11,12,14,0.6),transparent);}
+}
+@media(max-width:900px){
+  .sites-grid{grid-template-columns:1fr;}
+  .game-grid{grid-template-columns:1fr;}
+  .portfolio-card{flex-direction:column;text-align:center;}
+  .pc-tag{margin:0 auto 8px;}
+}
+@media(max-width:840px){
+  .wrap{padding:0 18px;}
+  .nav-links{display:none;}
+  .nav-ham{display:grid;}
+  .hero-stats{justify-content:flex-start;}
+  .stat:first-child{padding-left:0;}
+}
+@media(max-width:600px){
+  .hero{padding:56px 0 48px;}
+  .sf-actions{flex-direction:column;}
+  .cta-card{padding:36px 20px;}
+  .coming-row{flex-direction:column;align-items:flex-start;}
+}
 </style>
 </head>
 <body>
+<div class="ambient"></div>
 
+<!-- ── NAV ── -->
 <nav class="navbar">
   <div class="nav-inner">
     <div class="nav-brand">
@@ -102,91 +487,243 @@ a{color:inherit;text-decoration:none;}
       <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
       <a href="about.html"><i class="fa-solid fa-user"></i> About</a>
       <a href="skills.html"><i class="fa-solid fa-code"></i> Skills</a>
+      <a href="blog.html"><i class="fa-solid fa-pen-nib"></i> Blog</a>
       <a href="lab.html" class="active"><i class="fa-solid fa-rocket"></i> Lab</a>
       <a href="contact.html"><i class="fa-solid fa-envelope"></i> Contact</a>
     </div>
+    <button class="nav-ham" id="hamBtn" aria-label="Menu"><i class="fa-solid fa-bars" id="hamIcon"></i></button>
   </div>
 </nav>
 
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+  <a href="about.html"><i class="fa-solid fa-user"></i> About</a>
+  <a href="skills.html"><i class="fa-solid fa-code"></i> Skills</a>
+  <a href="blog.html"><i class="fa-solid fa-pen-nib"></i> Blog</a>
+  <div class="mob-div"></div>
+  <a href="lab.html" class="active"><i class="fa-solid fa-rocket"></i> Lab — My Creations</a>
+  <div class="mob-div"></div>
+  <a href="contact.html"><i class="fa-solid fa-envelope"></i> Contact</a>
+</div>
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
 <div class="wrap">
-  <section class="page-hero">
-    <div class="page-eyebrow reveal">Portfolio & Experiments</div>
-    <h1 class="page-h1 reveal">Digital Lab</h1>
-    <p class="page-sub reveal">স্বাগতম আমার ল্যাবে। এখানে আমার তৈরি করা সেরা প্রজেক্টগুলো এবং ডিজিটাল এক্সপেরিমেন্টগুলো সাজানো রয়েছে।</p>
-  </section>
+  <section class="hero">
+    <div class="hero-bg-text">LAB</div>
 
-  <section class="lab-section">
-    <div class="section-divider reveal">
-      <div class="section-divider-line"></div>
-      <div class="section-divider-label"><i class="fa-solid fa-layer-group"></i> My Featured Projects</div>
-      <div class="section-divider-line"></div>
-    </div>
+    <div class="hero-eyebrow reveal">My Creations</div>
+    <h1 class="hero-h1 reveal rd1">
+      Where ideas<br>become <em>reality</em>
+    </h1>
+    <p class="hero-sub reveal rd2">
+      Websites I built from scratch, games I designed, and experiments I ran —
+      each one a story of curiosity turned into code.
+    </p>
 
-    <div class="project-grid">
-
-      <div class="project-card reveal">
-        <div class="project-icon-box"><i class="fa-solid fa-shield-halved"></i></div>
-        <div class="project-h">Military Memories</div>
-        <p class="project-p">একটি গ্যালারি এবং মেমোরিয়াল ওয়েবসাইট যা বীরত্ব ও ইতিহাসের স্মরণে তৈরি করা হয়েছে। এতে রয়েছে স্মুথ স্ক্রলিং এবং ইউনিক কার্ড ডিজাইন।</p>
-        <div class="project-tags">
-          <span class="tag">HTML5</span><span class="tag">CSS3</span><span class="tag">History</span>
-        </div>
-        <a href="https://riyadbinalom78-ai.github.io/military-memories/" target="_blank" class="project-btn">
-          Explore Project <i class="fa-solid fa-arrow-up-right-from-square"></i>
-        </a>
+    <div class="hero-stats reveal rd3">
+      <div class="stat">
+        <div class="stat-n">3</div>
+        <div class="stat-l">Live Sites</div>
       </div>
-
-      <div class="project-card reveal">
-        <div class="project-icon-box"><i class="fa-solid fa-moon"></i></div>
-        <div class="project-h">Eid Mubarak Greeting</div>
-        <p class="project-p">ঈদ উপলক্ষে তৈরি একটি ইন্টারঅ্যাক্টিভ উইশিং প্ল্যাটফর্ম। এতে সুন্দর এনিমেশন এবং অডিও ইফেক্ট ব্যবহার করে উৎসবের আবহ ফুটিয়ে তোলা হয়েছে।</p>
-        <div class="project-tags">
-          <span class="tag">Animation</span><span class="tag">Interactive</span><span class="tag">Festival</span>
-        </div>
-        <a href="https://riyadbinalom78-ai.github.io/eid-mubarak-/" target="_blank" class="project-btn">
-          Celebrate Now <i class="fa-solid fa-face-smile"></i>
-        </a>
+      <div class="stat-sep"></div>
+      <div class="stat">
+        <div class="stat-n">1+</div>
+        <div class="stat-l">Games</div>
       </div>
-
-      <div class="project-card reveal">
-        <div class="project-icon-box"><i class="fa-solid fa-database"></i></div>
-        <div class="project-h">Digital Profile Archive</div>
-        <p class="project-p">এটি আমার নিজের একটি বিশেষ প্রোফাইল এবং আর্কাইভ সাইট যেখানে আমার কাজের সংকলন এবং ব্যক্তিগত মাইলফলকগুলো সাজানো আছে।</p>
-        <div class="project-tags">
-          <span class="tag">Portfolio</span><span class="tag">Responsive</span><span class="tag">Modern</span>
-        </div>
-        <a href="https://riyadbinalom78-ai.github.io/riyadbinalom/" target="_blank" class="project-btn">
-          View Archive <i class="fa-solid fa-link"></i>
-        </a>
+      <div class="stat-sep"></div>
+      <div class="stat">
+        <div class="stat-n">∞</div>
+        <div class="stat-l">Ideas Left</div>
       </div>
-
-      <div class="project-card reveal" style="opacity: 0.6;">
-        <div class="project-icon-box"><i class="fa-solid fa-flask-vial"></i></div>
-        <div class="project-h">Next Big Thing</div>
-        <p class="project-p">নতুন একটি প্রজেক্টের কাজ চলছে। খুব শীঘ্রই এখানে একটি এআই বেজড টুলস যুক্ত করা হবে। চোখ রাখুন!</p>
-        <div class="project-btn" style="cursor: not-allowed; opacity: 0.5;">
-          Under Construction <i class="fa-solid fa-hammer"></i>
-        </div>
-      </div>
-
     </div>
   </section>
 </div>
 
-<footer class="footer" style="padding:60px 0; border-top:1px solid var(--border2); text-align:center; margin-top:40px;">
-    <p style="color:var(--muted); font-size:14px;">© 2026 · <span style="color:var(--gold)">Riyad Bin Alom</span> · Crafting Digital Experiences</p>
+<!-- ═══════════════════ WEBSITES ═══════════════════ -->
+<div class="wrap">
+
+  <div class="sec-label reveal">
+    <div class="sec-label-text"><i class="fa-solid fa-globe"></i> Live Websites</div>
+    <div class="sec-label-line"></div>
+  </div>
+
+  <!-- ── FEATURED: EID MUBARAK ── -->
+  <a href="https://riyadbinalom78-ai.github.io/eid-mubarak-/" target="_blank" class="site-featured reveal">
+    <div class="sf-visual">
+      <div class="sf-glow"></div>
+      <div class="sf-emoji">🌙</div>
+    </div>
+    <div class="sf-body">
+      <div class="sf-tag"><i class="fa-solid fa-star"></i> Featured Project</div>
+      <div class="sf-h">Eid Mubarak — A Celebration of Faith</div>
+      <p class="sf-p">
+        A beautiful animated greeting website built to celebrate Eid ul-Fitr.
+        Crafted with love for the Muslim community — pure HTML, CSS &amp; heartfelt design.
+      </p>
+      <div class="sf-actions">
+        <span class="btn-emerald"><i class="fa-solid fa-arrow-up-right-from-square"></i> Visit Site</span>
+        <span class="btn-ghost"><i class="fa-solid fa-eye"></i> Preview</span>
+      </div>
+    </div>
+  </a>
+
+  <!-- ── GRID: 2 MORE SITES ── -->
+  <div class="sites-grid">
+
+    <!-- Military Memories -->
+    <a href="https://riyadbinalom78-ai.github.io/military-memories/" target="_blank" class="site-card reveal">
+      <div class="sc-visual" style="background:linear-gradient(135deg,#0b120e,#121e14);">
+        <div class="sc-glow" style="background:radial-gradient(circle,rgba(74,127,165,0.2),transparent 70%);"></div>
+        <div class="sc-emoji">🎖️</div>
+      </div>
+      <div class="sc-body">
+        <div class="sc-tag"><i class="fa-solid fa-shield-halved"></i> Memorial</div>
+        <div class="sc-h">Military Memories</div>
+        <p class="sc-p">
+          A tribute website honouring the courage, sacrifice, and stories of soldiers.
+          Built with respect, dignity, and historical purpose.
+        </p>
+        <div class="sc-actions">
+          <span class="btn-steel"><i class="fa-solid fa-arrow-up-right-from-square"></i> Visit Site</span>
+          <span class="btn-icon"><i class="fa-solid fa-link"></i></span>
+        </div>
+      </div>
+    </a>
+
+    <!-- Personal Portfolio (on GitHub) -->
+    <a href="https://riyadbinalom78-ai.github.io/riyadbinalom/" target="_blank" class="site-card em reveal rd1">
+      <div class="sc-visual" style="background:linear-gradient(135deg,#0e150b,#16200e);">
+        <div class="sc-glow" style="background:radial-gradient(circle,rgba(39,174,116,0.2),transparent 70%);"></div>
+        <div class="sc-emoji">🧑‍💻</div>
+      </div>
+      <div class="sc-body">
+        <div class="sc-tag em" style="color:var(--emerald);border-color:rgba(39,174,116,0.22);background:rgba(39,174,116,0.07);"><i class="fa-solid fa-user-pen"></i> Portfolio</div>
+        <div class="sc-h">Riyad Bin Alom — GitHub Page</div>
+        <p class="sc-p">
+          My earlier personal portfolio hosted on GitHub Pages.
+          A snapshot of where the journey began — simple, honest, mine.
+        </p>
+        <div class="sc-actions">
+          <span class="btn-emerald"><i class="fa-solid fa-arrow-up-right-from-square"></i> Visit Site</span>
+          <span class="btn-icon"><i class="fa-brands fa-github"></i></span>
+        </div>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- Self portfolio reference -->
+  <div class="portfolio-card reveal">
+    <div class="pc-icon"><i class="fa-solid fa-layer-group"></i></div>
+    <div class="pc-body">
+      <div class="pc-tag"><i class="fa-solid fa-star"></i> You are here</div>
+      <div class="pc-h">This Portfolio Website</div>
+      <p class="pc-p">The site you're on right now. Built with pure HTML, CSS &amp; JS — no frameworks, no shortcuts. Just intention, craft, and a lot of late-night editing.</p>
+      <div class="pc-actions">
+        <a href="index.html" class="btn-gold"><i class="fa-solid fa-house"></i> View Home</a>
+        <a href="skills.html" class="btn-ghost"><i class="fa-solid fa-code"></i> See My Skills</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ GAMES ═══════════════════ -->
+  <div class="sec-label reveal">
+    <div class="sec-label-text"><i class="fa-solid fa-gamepad"></i> Games</div>
+    <div class="sec-label-line"></div>
+  </div>
+
+  <div class="game-grid">
+
+    <!-- Game 1 -->
+    <div class="game-card reveal">
+      <div class="gc-visual">
+        <div class="gc-glow"></div>
+        <div class="gc-emoji">🎮</div>
+      </div>
+      <div class="gc-body">
+        <div class="gc-badge"><i class="fa-solid fa-circle-play"></i> Game</div>
+        <div class="gc-h">Game One</div>
+        <p class="gc-p">
+          Add the name and description of your game here.
+          What's the objective? What makes it unique? Tell the player what to expect.
+        </p>
+        <div class="gc-actions">
+          <a href="#" class="btn-play"><i class="fa-solid fa-play"></i> Play Now</a>
+          <span class="btn-ghost"><i class="fa-solid fa-circle-info"></i> Info</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Game 2 placeholder -->
+    <div class="game-card reveal rd1" style="opacity:0.5;">
+      <div class="gc-visual" style="background:linear-gradient(135deg,#130c18,#1d1028);">
+        <div class="gc-glow" style="background:radial-gradient(circle,rgba(124,92,191,0.2),transparent 70%);"></div>
+        <div class="gc-emoji" style="filter:drop-shadow(0 4px 20px rgba(124,92,191,0.5));">🧩</div>
+      </div>
+      <div class="gc-body">
+        <div class="gc-badge" style="color:var(--violet);border-color:rgba(124,92,191,0.22);background:rgba(124,92,191,0.07);"><i class="fa-solid fa-wand-magic-sparkles"></i> Coming Soon</div>
+        <div class="gc-h">Next Game</div>
+        <p class="gc-p">
+          Something new is being built in the lab.
+          A new challenge, a new experience. Stay tuned.
+        </p>
+        <div class="gc-actions">
+          <span class="btn-play-soon"><i class="fa-solid fa-clock"></i> Not Yet Available</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── COMING SOON ── -->
+  <div class="coming-row reveal">
+    <span class="coming-row-label"><span class="pulse"></span> &nbsp;In the pipeline</span>
+    <div class="coming-pill"><i class="fa-solid fa-mobile-screen"></i> Mobile App</div>
+    <div class="coming-pill"><i class="fa-solid fa-brain"></i> AI Project</div>
+    <div class="coming-pill"><i class="fa-solid fa-store"></i> Business Tool</div>
+    <div class="coming-pill"><i class="fa-solid fa-scroll"></i> Bangla Blog Platform</div>
+    <div class="coming-pill"><i class="fa-solid fa-ellipsis"></i> More</div>
+  </div>
+
+  <!-- ── CTA ── -->
+  <div class="cta-card reveal">
+    <h2 class="cta-h">Want to build something together?</h2>
+    <p class="cta-p">
+      I'm always open to collaboration, feedback, or just a conversation about an idea.
+      Let's make something worth clicking on.
+    </p>
+    <div class="cta-btns">
+      <a href="contact.html" class="btn-gold"><i class="fa-solid fa-envelope"></i> Get in Touch</a>
+      <a href="blog.html" class="btn-ghost"><i class="fa-solid fa-pen-nib"></i> Read My Blog</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── FOOTER ── -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="skills.html">Skills</a>
+      <a href="blog.html">Blog</a>
+      <a href="lab.html" style="color:var(--gold)">Lab</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="footer-copy">© 2026 · <span>Riyad Bin Alom</span> · Built with intention.</div>
+  </div>
 </footer>
 
 <script>
-// Scroll Reveal Logic
-const io = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) e.target.classList.add('visible');
-  });
-}, { threshold: 0.1 });
+// Hamburger
+var h=document.getElementById('hamBtn'),hi=document.getElementById('hamIcon'),mm=document.getElementById('mobileMenu'),op=false;
+h.addEventListener('click',function(){op=!op;mm.classList.toggle('open',op);hi.className=op?'fa-solid fa-xmark':'fa-solid fa-bars';});
+mm.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){op=false;mm.classList.remove('open');hi.className='fa-solid fa-bars';});});
 
-document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+// Scroll reveal
+var io=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting)x.target.classList.add('visible');});},{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(function(r){io.observe(r);});
 </script>
-
 </body>
 </html>
