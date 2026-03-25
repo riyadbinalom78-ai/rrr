@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Lab — Riyad Bin Alom</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+<style>
+:root{
+  --bg:#0e0d0b;--bg2:#141210;--bg3:#1a1713;
+  --text:#e8e0d0;--muted:#a09080;--gold:#d4a843;--rust:#c0622a;
+  --border:rgba(212,168,67,0.12);--border2:rgba(232,224,208,0.06);
+  --card:rgba(255,255,255,0.025);--maxw:1280px;--nav-h:72px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:0.35;}
+a{color:inherit;text-decoration:none;}
+
+.navbar{position:sticky;top:0;z-index:200;height:var(--nav-h);display:flex;align-items:center;background:rgba(14,13,11,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+.nav-inner{max-width:var(--maxw);margin:0 auto;padding:0 28px;width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.nav-brand{display:flex;align-items:center;gap:12px;flex-shrink:0;}
+.nav-logo{width:42px;height:42px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--rust));display:grid;place-items:center;font-family:'Playfair Display',serif;font-weight:900;font-size:20px;color:#0e0d0b;box-shadow:0 4px 20px rgba(212,168,67,0.25);}
+.nav-name{font-family:'Playfair Display',serif;font-weight:600;font-size:17px;white-space:nowrap;}
+.nav-links{display:flex;align-items:center;gap:2px;}
+.nav-links a{display:inline-flex;align-items:center;gap:6px;padding:8px 13px;border-radius:8px;font-size:13px;font-weight:500;color:var(--muted);transition:all .2s;white-space:nowrap;}
+.nav-links a i{font-size:11px;}
+.nav-links a:hover{color:var(--text);background:var(--card);}
+.nav-links a.active{color:var(--gold);background:rgba(212,168,67,0.08);border:1px solid rgba(212,168,67,0.15);}
+
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;}
+
+/* PAGE HERO */
+.page-hero{padding:80px 0 60px;border-bottom:1px solid var(--border2);position:relative;}
+.page-hero::after{
+  content:'LAB';
+  position:absolute;right:-20px;top:50%;transform:translateY(-50%);
+  font-family:'Playfair Display',serif;font-weight:900;
+  font-size:clamp(100px,15vw,200px);
+  color:rgba(212,168,67,0.04);
+  pointer-events:none;line-height:1;letter-spacing:-0.04em;
+}
+.page-eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:12px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;}
+.page-eyebrow::before{content:'';width:32px;height:1px;background:var(--gold);opacity:0.6;}
+.page-h1{font-family:'Playfair Display',serif;font-size:clamp(40px,5.5vw,72px);font-weight:900;line-height:1.0;letter-spacing:-0.02em;margin-bottom:10px;}
+.page-sub{color:var(--muted);font-size:16px;max-width:55ch;line-height:1.75;}
+
+/* SECTION DIVIDER */
+.section-divider{display:flex;align-items:center;gap:16px;margin:60px 0 40px;}
+.section-divider-line{flex:1;height:1px;background:var(--border2);}
+.section-divider-label{font-size:12px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);white-space:nowrap;display:flex;align-items:center;gap:8px;}
+.section-divider-label i{color:var(--gold);}
+
+/* PROJECT GRID */
+.project-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));gap:24px;margin-bottom:48px;}
+
+.project-card{
+  position:relative;background:var(--card);border:1px solid var(--border2);
+  border-radius:24px;padding:32px;transition:all .4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display:flex;flex-direction:column;gap:18px;overflow:hidden;
+}
+.project-card:hover{border-color:var(--gold);transform:translateY(-10px);background:rgba(212,168,67,0.02);box-shadow:0 30px 60px rgba(0,0,0,0.5);}
+
+.project-icon-box{
+  width:60px;height:60px;border-radius:16px;
+  background:linear-gradient(135deg, rgba(212,168,67,0.1), rgba(192,98,42,0.1));
+  border:1px solid var(--border);display:grid;place-items:center;
+  color:var(--gold);font-size:24px;margin-bottom:4px;
+}
+.project-h{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--text);}
+.project-p{font-size:14px;color:var(--muted);line-height:1.7;flex-grow:1;}
+
+.project-tags{display:flex;gap:8px;flex-wrap:wrap;}
+.tag{font-size:10px;text-transform:uppercase;letter-spacing:1px;padding:4px 10px;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;color:var(--muted);}
+
+.project-btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  padding:12px 20px;border-radius:12px;background:var(--bg3);
+  border:1px solid var(--border);color:var(--gold);font-weight:600;font-size:14px;
+  transition:all 0.3s;
+}
+.project-btn:hover{background:var(--gold);color:var(--bg);transform:scale(1.02);}
+
+/* REVEAL ANIMATION */
+.reveal{opacity:0;transform:translateY(30px);transition:all 0.8s ease-out;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+@media(max-width:600px){.project-grid{grid-template-columns:1fr;}.wrap{padding:0 20px;}}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-inner">
+    <div class="nav-brand">
+      <div class="nav-logo">R</div>
+      <div class="nav-name">Riyad Bin Alom</div>
+    </div>
+    <div class="nav-links">
+      <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+      <a href="about.html"><i class="fa-solid fa-user"></i> About</a>
+      <a href="skills.html"><i class="fa-solid fa-code"></i> Skills</a>
+      <a href="lab.html" class="active"><i class="fa-solid fa-rocket"></i> Lab</a>
+      <a href="contact.html"><i class="fa-solid fa-envelope"></i> Contact</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+  <section class="page-hero">
+    <div class="page-eyebrow reveal">Portfolio & Experiments</div>
+    <h1 class="page-h1 reveal">Digital Lab</h1>
+    <p class="page-sub reveal">স্বাগতম আমার ল্যাবে। এখানে আমার তৈরি করা সেরা প্রজেক্টগুলো এবং ডিজিটাল এক্সপেরিমেন্টগুলো সাজানো রয়েছে।</p>
+  </section>
+
+  <section class="lab-section">
+    <div class="section-divider reveal">
+      <div class="section-divider-line"></div>
+      <div class="section-divider-label"><i class="fa-solid fa-layer-group"></i> My Featured Projects</div>
+      <div class="section-divider-line"></div>
+    </div>
+
+    <div class="project-grid">
+
+      <div class="project-card reveal">
+        <div class="project-icon-box"><i class="fa-solid fa-shield-halved"></i></div>
+        <div class="project-h">Military Memories</div>
+        <p class="project-p">একটি গ্যালারি এবং মেমোরিয়াল ওয়েবসাইট যা বীরত্ব ও ইতিহাসের স্মরণে তৈরি করা হয়েছে। এতে রয়েছে স্মুথ স্ক্রলিং এবং ইউনিক কার্ড ডিজাইন।</p>
+        <div class="project-tags">
+          <span class="tag">HTML5</span><span class="tag">CSS3</span><span class="tag">History</span>
+        </div>
+        <a href="https://riyadbinalom78-ai.github.io/military-memories/" target="_blank" class="project-btn">
+          Explore Project <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </a>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-icon-box"><i class="fa-solid fa-moon"></i></div>
+        <div class="project-h">Eid Mubarak Greeting</div>
+        <p class="project-p">ঈদ উপলক্ষে তৈরি একটি ইন্টারঅ্যাক্টিভ উইশিং প্ল্যাটফর্ম। এতে সুন্দর এনিমেশন এবং অডিও ইফেক্ট ব্যবহার করে উৎসবের আবহ ফুটিয়ে তোলা হয়েছে।</p>
+        <div class="project-tags">
+          <span class="tag">Animation</span><span class="tag">Interactive</span><span class="tag">Festival</span>
+        </div>
+        <a href="https://riyadbinalom78-ai.github.io/eid-mubarak-/" target="_blank" class="project-btn">
+          Celebrate Now <i class="fa-solid fa-face-smile"></i>
+        </a>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-icon-box"><i class="fa-solid fa-database"></i></div>
+        <div class="project-h">Digital Profile Archive</div>
+        <p class="project-p">এটি আমার নিজের একটি বিশেষ প্রোফাইল এবং আর্কাইভ সাইট যেখানে আমার কাজের সংকলন এবং ব্যক্তিগত মাইলফলকগুলো সাজানো আছে।</p>
+        <div class="project-tags">
+          <span class="tag">Portfolio</span><span class="tag">Responsive</span><span class="tag">Modern</span>
+        </div>
+        <a href="https://riyadbinalom78-ai.github.io/riyadbinalom/" target="_blank" class="project-btn">
+          View Archive <i class="fa-solid fa-link"></i>
+        </a>
+      </div>
+
+      <div class="project-card reveal" style="opacity: 0.6;">
+        <div class="project-icon-box"><i class="fa-solid fa-flask-vial"></i></div>
+        <div class="project-h">Next Big Thing</div>
+        <p class="project-p">নতুন একটি প্রজেক্টের কাজ চলছে। খুব শীঘ্রই এখানে একটি এআই বেজড টুলস যুক্ত করা হবে। চোখ রাখুন!</p>
+        <div class="project-btn" style="cursor: not-allowed; opacity: 0.5;">
+          Under Construction <i class="fa-solid fa-hammer"></i>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<footer class="footer" style="padding:60px 0; border-top:1px solid var(--border2); text-align:center; margin-top:40px;">
+    <p style="color:var(--muted); font-size:14px;">© 2026 · <span style="color:var(--gold)">Riyad Bin Alom</span> · Crafting Digital Experiences</p>
+</footer>
+
+<script>
+// Scroll Reveal Logic
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) e.target.classList.add('visible');
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
