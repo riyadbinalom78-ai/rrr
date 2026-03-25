@@ -26,7 +26,7 @@ a{color:inherit;text-decoration:none;}
 .nav-logo{width:42px;height:42px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--rust));display:grid;place-items:center;font-family:'Playfair Display',serif;font-weight:900;font-size:20px;color:#0e0d0b;box-shadow:0 4px 20px rgba(212,168,67,0.25);}
 .nav-name{font-family:'Playfair Display',serif;font-weight:600;font-size:17px;}
 .nav-links{display:flex;align-items:center;gap:4px;}
-.nav-links a{display:inline-flex;align-items:center;gap:7px;padding:8px 16px;border-radius:8px;font-size:14px;font-weight:500;color:var(--muted);transition:all .2s ease;}
+.nav-links a{display:inline-flex;align-items:center;gap:7px;padding:8px 12px;border-radius:8px;font-size:13px;font-weight:500;color:var(--muted);transition:all .2s ease;}
 .nav-links a i{font-size:12px;}
 .nav-links a:hover{color:var(--text);background:var(--card);}
 .nav-links a.active{color:var(--gold);background:rgba(212,168,67,0.08);border:1px solid rgba(212,168,67,0.15);}
@@ -157,10 +157,11 @@ aside{display:flex;flex-direction:column;gap:20px;position:sticky;top:90px;}
       <div class="nav-name">Riyad Bin Alom</div>
     </div>
     <div class="nav-links">
-      <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+            <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
       <a href="about.html"><i class="fa-solid fa-user"></i> About</a>
       <a href="skills.html" class="active"><i class="fa-solid fa-code"></i> Skills</a>
       <a href="blog.html"><i class="fa-solid fa-pen-nib"></i> Blog</a>
+      <a href="lab.html"><i class="fa-solid fa-rocket"></i> Lab</a>
       <a href="contact.html"><i class="fa-solid fa-envelope"></i> Contact</a>
     </div>
     <button class="nav-ham" id="hamBtn" aria-label="Menu"><i class="fa-solid fa-bars" id="hamIcon"></i></button>
@@ -172,6 +173,8 @@ aside{display:flex;flex-direction:column;gap:20px;position:sticky;top:90px;}
   <a href="about.html"><i class="fa-solid fa-user"></i> About</a>
   <a href="skills.html" class="active"><i class="fa-solid fa-code"></i> Skills</a>
   <a href="blog.html"><i class="fa-solid fa-pen-nib"></i> Blog</a>
+  <a href="lab.html"><i class="fa-solid fa-rocket"></i> Lab — My Creations</a>
+  <div style="height:1px;background:rgba(232,224,208,0.06);margin:8px 0;"></div>
   <a href="contact.html"><i class="fa-solid fa-envelope"></i> Contact</a>
 </div>
 
@@ -342,7 +345,17 @@ aside{display:flex;flex-direction:column;gap:20px;position:sticky;top:90px;}
 </div>
 
 <footer class="footer">
-  <div class="wrap">© 2026 · <span>Riyad Bin Alom</span> · All rights reserved</div>
+  <div class="wrap">
+    <div style="display:flex;justify-content:center;gap:4px;flex-wrap:wrap;margin-bottom:16px;">
+      <a href="index.html" style="font-size:13px;padding:6px 14px;border-radius:8px;color:var(--muted);">Home</a>
+      <a href="about.html" style="font-size:13px;padding:6px 14px;border-radius:8px;color:var(--muted);">About</a>
+      <a href="skills.html" style="font-size:13px;padding:6px 14px;border-radius:8px;color:var(--gold);">Skills</a>
+      <a href="blog.html" style="font-size:13px;padding:6px 14px;border-radius:8px;color:var(--muted);">Blog</a>
+      <a href="lab.html" style="font-size:13px;padding:6px 14px;border-radius:8px;color:var(--muted);">Lab</a>
+      <a href="contact.html" style="font-size:13px;padding:6px 14px;border-radius:8px;color:var(--muted);">Contact</a>
+    </div>
+    © 2026 · <span>Riyad Bin Alom</span> · All rights reserved
+  </div>
 </footer>
 
 <script>
@@ -350,11 +363,8 @@ const hamBtn = document.getElementById('hamBtn');
 const hamIcon = document.getElementById('hamIcon');
 const mobileMenu = document.getElementById('mobileMenu');
 let menuOpen = false;
-hamBtn.addEventListener('click', () => {
-  menuOpen = !menuOpen;
-  mobileMenu.classList.toggle('open', menuOpen);
-  hamIcon.className = menuOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
-});
+hamBtn.addEventListener('click',()=>{menuOpen=!menuOpen;mobileMenu.classList.toggle('open',menuOpen);hamIcon.className=menuOpen?'fa-solid fa-xmark':'fa-solid fa-bars';});
+mobileMenu.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{menuOpen=false;mobileMenu.classList.remove('open');hamIcon.className='fa-solid fa-bars';}));
 const reveals = document.querySelectorAll('.reveal');
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
