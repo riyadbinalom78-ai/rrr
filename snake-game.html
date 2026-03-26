@@ -1,255 +1,565 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Snake – by Riyad Bin Alom</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>Snake — Riyad Bin Alom</title>
+
+  <!-- ════════════════════════════════════════════════
+       FONTS
+  ════════════════════════════════════════════════ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&family=Orbitron:wght@600;700&display=swap" rel="stylesheet"/>
+
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&family=Orbitron:wght@700&display=swap');
+  /* ══════════════════════════════════════════════════
+     RESET & BODY
+  ══════════════════════════════════════════════════ */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #06090a;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 0 24px;
+    font-family: 'VT323', monospace;
 
-    body {
-      background: #080c08;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 0;
-      font-family: 'VT323', monospace;
-      background-image:
-        radial-gradient(ellipse 60% 40% at 50% 0%, #0d200d 0%, transparent 70%),
-        radial-gradient(ellipse 40% 30% at 50% 100%, #0a1a0a 0%, transparent 60%);
-    }
+    /* subtle scanline bg + glow */
+    background-image:
+      radial-gradient(ellipse 70% 50% at 50% -5%, #0a1f0a 0%, transparent 65%),
+      repeating-linear-gradient(0deg,
+        transparent, transparent 3px,
+        rgba(0,255,0,0.012) 3px, rgba(0,255,0,0.012) 4px);
+  }
 
-    /* ════ PHONE SHELL ════ */
-    .phone {
-      background: linear-gradient(168deg, #25253200 0%, #1d1d26 20%, #12121a 100%);
-      background: linear-gradient(168deg, #252532 0%, #1a1a22 40%, #0f0f16 100%);
-      border-radius: 28px 28px 52px 52px;
-      padding: 15px 18px 26px;
-      width: 292px;
-      position: relative;
-      box-shadow:
-        0 0 0 1px #2c2c3a,
-        0 0 0 2.5px #111118,
-        8px 16px 48px rgba(0,0,0,0.92),
-        inset 0 1px 0 rgba(255,255,255,0.07),
-        inset 2px 0 4px rgba(255,255,255,0.02),
-        inset -2px 0 4px rgba(0,0,0,0.3);
-    }
+  /* ══════════════════════════════════════════════════
+     PHONE SHELL
+  ══════════════════════════════════════════════════ */
+  .phone {
+    position: relative;
+    width: 300px;
+    background: linear-gradient(168deg, #28283a 0%, #1b1b26 38%, #111119 100%);
+    border-radius: 32px 32px 58px 58px;
+    padding: 16px 18px 28px;
 
-    .phone::before {
-      content:''; position:absolute;
-      left:-5px; top:50px; bottom:70px; width:5px;
-      background:linear-gradient(180deg,#1c1c28,#0e0e16,#1c1c28);
-      border-radius:4px 0 0 4px;
-    }
-    .phone::after {
-      content:''; position:absolute;
-      right:-5px; top:50px; bottom:70px; width:5px;
-      background:linear-gradient(180deg,#1c1c28,#0e0e16,#1c1c28);
-      border-radius:0 4px 4px 0;
-    }
+    /* layered shadow for depth */
+    box-shadow:
+      0 0 0 1px #31313f,
+      0 0 0 3px #0d0d12,
+      10px 20px 60px rgba(0,0,0,0.95),
+      -2px -2px 0 0 #1e1e2a,
+      inset 0 1px 0 rgba(255,255,255,0.07),
+      inset 0 -3px 10px rgba(0,0,0,0.55);
+  }
 
-    /* Brand bar */
-    .brand-row {
-      display:flex; justify-content:space-between; align-items:center;
-      margin-bottom:12px; padding:0 3px;
-    }
-    .brand-name {
-      font-family:'Orbitron',sans-serif; font-size:14px; font-weight:700;
-      letter-spacing:4px; color:rgba(255,255,255,0.18);
-    }
-    .brand-model {
-      font-family:'Share Tech Mono',monospace; font-size:9px;
-      color:rgba(255,255,255,0.1); letter-spacing:2px;
-    }
+  /* Side volume ridges */
+  .phone::before {
+    content: '';
+    position: absolute;
+    left: -5px; top: 55px; bottom: 80px; width: 5px;
+    background: linear-gradient(180deg, #1e1e2a, #0e0e16 50%, #1e1e2a);
+    border-radius: 4px 0 0 4px;
+    box-shadow: -2px 0 4px rgba(0,0,0,0.4);
+  }
+  .phone::after {
+    content: '';
+    position: absolute;
+    right: -5px; top: 55px; bottom: 80px; width: 5px;
+    background: linear-gradient(180deg, #1e1e2a, #0e0e16 50%, #1e1e2a);
+    border-radius: 0 4px 4px 0;
+    box-shadow: 2px 0 4px rgba(0,0,0,0.4);
+  }
 
-    /* ════ SCREEN ════ */
-    .screen-outer {
-      background:#040607; border-radius:8px 8px 5px 5px;
-      padding:7px;
-      box-shadow:
-        inset 0 3px 12px rgba(0,0,0,0.98),
-        inset 0 0 30px rgba(0,0,0,0.5),
-        0 0 18px rgba(100,155,10,0.07);
-      position:relative;
-    }
-    .screen-inner {
-      background:#9bbc0f; border-radius:3px;
-      overflow:hidden; position:relative;
-    }
-    .screen-inner::after {
-      content:''; position:absolute; inset:0;
-      background:linear-gradient(135deg, rgba(255,255,255,0.06) 0%, transparent 42%,
-        transparent 58%, rgba(0,0,0,0.05) 100%);
-      pointer-events:none; z-index:20; border-radius:3px;
-    }
-    .hud {
-      display:flex; justify-content:space-between; align-items:center;
-      padding:3px 7px; background:#7a9c00;
-      border-bottom:1px solid #668500;
-      color:#0f380f; font-size:13px; letter-spacing:0.5px;
-    }
-    #gameCanvas { display:block; image-rendering:pixelated; }
-    .scanlines {
-      position:absolute; inset:0;
-      background:repeating-linear-gradient(0deg,
-        transparent, transparent 1px,
-        rgba(0,0,0,0.11) 1px, rgba(0,0,0,0.11) 2px);
-      pointer-events:none; z-index:10; border-radius:3px;
-    }
+  /* ── Brand row ── */
+  .brand-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 13px;
+    padding: 0 4px;
+  }
+  .brand-logo {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 5px;
+    color: rgba(255,255,255,0.16);
+    text-shadow: 0 0 8px rgba(140,200,40,0.05);
+  }
+  .brand-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .brand-model {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    color: rgba(255,255,255,0.1);
+    letter-spacing: 2px;
+  }
 
-    /* Speaker */
-    .speaker {
-      display:flex; justify-content:center; gap:3px; margin:10px 0 10px;
-    }
-    .speaker span { width:2px; height:7px; background:rgba(255,255,255,0.07); border-radius:1px; }
+  /* ── Sound toggle ── */
+  #soundToggle {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    border: 1px solid rgba(139,200,15,0.2);
+    background: rgba(139,200,15,0.06);
+    color: rgba(139,200,15,0.5);
+    font-size: 11px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  #soundToggle:hover { border-color: rgba(139,200,15,0.5); color: rgba(139,200,15,0.9); }
+  #soundToggle.muted { opacity: 0.4; }
 
-    /* ════ CONTROLS ════ */
-    .controls-area {
-      display:flex; flex-direction:column; align-items:center; gap:18px;
-    }
+  /* ══════════════════════════════════════════════════
+     SCREEN
+  ══════════════════════════════════════════════════ */
+  .screen-bezel {
+    background: #030506;
+    border-radius: 10px 10px 6px 6px;
+    padding: 7px 7px 6px;
+    box-shadow:
+      inset 0 4px 14px rgba(0,0,0,0.98),
+      inset 0 0 40px rgba(0,0,0,0.5),
+      0 0 24px rgba(90,150,10,0.06);
+    position: relative;
+  }
 
-    /* ── D-Pad ── */
-    .dpad {
-      position:relative; width:148px; height:148px; margin-bottom:8px;
-    }
+  .screen-inner {
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+    /* LCD green tint bg while canvas loads */
+    background: #9bbc0f;
+  }
 
-    /* Big circular base */
-    .dpad-ring {
-      position:absolute; inset:0; border-radius:50%;
-      background:linear-gradient(145deg, #23232f 0%, #141420 60%, #0e0e18 100%);
-      box-shadow:
-        0 5px 16px rgba(0,0,0,0.75),
-        0 2px 4px rgba(0,0,0,0.5),
-        inset 0 1px 0 rgba(255,255,255,0.05),
-        inset 0 -2px 5px rgba(0,0,0,0.5);
-    }
+  /* Glass glare */
+  .screen-inner::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(
+      130deg,
+      rgba(255,255,255,0.06) 0%,
+      transparent 40%,
+      transparent 60%,
+      rgba(0,0,0,0.04) 100%
+    );
+    pointer-events: none;
+    z-index: 30;
+  }
 
-    /* Arms */
-    .dpad-arm {
-      position:absolute;
-      display:flex; align-items:center; justify-content:center;
-      cursor:pointer; user-select:none;
-      -webkit-tap-highlight-color:transparent;
-      transition:filter .06s;
-    }
-    .dpad-arm svg { width:18px; height:18px; fill:rgba(180,195,220,0.55); pointer-events:none; }
+  /* HUD bar */
+  .hud {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 3px 7px 2px;
+    background: #72960a;
+    border-bottom: 2px solid #5e7c08;
+    color: #0f380f;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    position: relative;
+    z-index: 5;
+  }
+  .hud span { min-width: 58px; }
+  .hud span:nth-child(2) { text-align: center; }
+  .hud span:nth-child(3) { text-align: right; }
 
-    /* Up / Down: tall pill */
-    .dpad-up, .dpad-down {
-      width:44px; height:52px;
-      left:50%; transform:translateX(-50%);
-      border-radius:8px;
-    }
-    .dpad-up   { top:6px;    background:linear-gradient(180deg,#2c2c3c,#1a1a26); box-shadow:0 4px 8px rgba(0,0,0,0.55),inset 0 1px 0 rgba(255,255,255,0.08); }
-    .dpad-down { bottom:6px; background:linear-gradient(0deg,  #2c2c3c,#1a1a26); box-shadow:0 -3px 8px rgba(0,0,0,0.45); }
+  /* Canvas */
+  #gameCanvas {
+    display: block;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    position: relative;
+    z-index: 2;
+  }
 
-    /* Left / Right: wide pill */
-    .dpad-left, .dpad-right {
-      width:52px; height:44px;
-      top:50%; transform:translateY(-50%);
-      border-radius:8px;
-    }
-    .dpad-left  { left:6px;   background:linear-gradient(90deg, #2c2c3c,#1a1a26); box-shadow:4px 0 8px rgba(0,0,0,0.5); }
-    .dpad-right { right:6px;  background:linear-gradient(270deg,#2c2c3c,#1a1a26); box-shadow:-4px 0 8px rgba(0,0,0,0.5); }
+  /* LCD scanlines */
+  .scanlines {
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent 0px, transparent 1px,
+      rgba(0,0,0,0.1) 1px, rgba(0,0,0,0.1) 2px
+    );
+    pointer-events: none;
+    z-index: 20;
+    border-radius: 4px;
+  }
 
-    /* Press feedback */
-    .dpad-arm:active, .dpad-arm.pressed { filter:brightness(1.4); }
-    .dpad-up:active,    .dpad-up.pressed    { transform:translateX(-50%) translateY(1px); }
-    .dpad-down:active,  .dpad-down.pressed  { transform:translateX(-50%) translateY(-1px); }
-    .dpad-left:active,  .dpad-left.pressed  { transform:translateY(-50%) translateX(1px); }
-    .dpad-right:active, .dpad-right.pressed { transform:translateY(-50%) translateX(-1px); }
+  /* ── Speaker grille ── */
+  .speaker {
+    display: flex;
+    justify-content: center;
+    gap: 3px;
+    margin: 9px 0 8px;
+  }
+  .speaker span {
+    width: 2px; height: 8px;
+    background: rgba(255,255,255,0.07);
+    border-radius: 1px;
+  }
 
-    /* ── Bottom Pill Buttons ── */
-    .bottom-btns {
-      display:flex; gap:18px; width:100%; justify-content:center; margin-top:6px;
-    }
-    .pill-btn {
-      flex:1; max-width:112px; height:36px; border:none;
-      border-radius:18px; cursor:pointer;
-      font-family:'Share Tech Mono',monospace; font-size:10px;
-      letter-spacing:1.5px; text-transform:uppercase;
-      display:flex; align-items:center; justify-content:center; gap:6px;
-      -webkit-tap-highlight-color:transparent;
-      transition:transform .08s, box-shadow .08s;
-      position:relative; overflow:hidden;
-    }
-    .pill-btn::before {
-      content:''; position:absolute;
-      top:0; left:0; right:0; height:48%;
-      background:rgba(255,255,255,0.06); border-radius:18px 18px 0 0;
-    }
-    .pill-start {
-      background:linear-gradient(180deg,#5c1f1f,#321010);
-      color:#e08585;
-      box-shadow:0 4px 10px rgba(0,0,0,0.55), 0 0 0 1px #501a1a, inset 0 1px 0 rgba(255,255,255,0.06);
-    }
-    .pill-pause {
-      background:linear-gradient(180deg,#1f3a5c,#102232);
-      color:#85b8e0;
-      box-shadow:0 4px 10px rgba(0,0,0,0.55), 0 0 0 1px #1a3050, inset 0 1px 0 rgba(255,255,255,0.06);
-    }
-    .pill-new {
-      background:linear-gradient(180deg,#1a3d22,#0d2012);
-      color:#72cc7e;
-      box-shadow:0 4px 10px rgba(0,0,0,0.55), 0 0 0 1px #153020, inset 0 1px 0 rgba(255,255,255,0.06);
-    }
-    .pill-btn:active { transform:translateY(1px) scale(0.96); box-shadow:0 1px 4px rgba(0,0,0,0.6); }
-    .pill-icon { font-size:14px; }
+  /* ══════════════════════════════════════════════════
+     CONTROLS AREA
+  ══════════════════════════════════════════════════ */
+  .controls-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+
+  /* ────────────────────────────────────────────────
+     CROSS D-PAD  (grid-based proper Nokia cross)
+  ──────────────────────────────────────────────── */
+  .dpad-wrap {
+    position: relative;
+    width: 152px;
+    height: 152px;
+  }
+
+  /* Large ring beneath */
+  .dpad-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 35%, #22222e, #141420 55%, #0c0c14);
+    box-shadow:
+      0 6px 20px rgba(0,0,0,0.8),
+      0 2px 5px rgba(0,0,0,0.5),
+      inset 0 1px 0 rgba(255,255,255,0.05),
+      inset 0 -2px 5px rgba(0,0,0,0.5),
+      /* subtle green inner glow */
+      inset 0 0 30px rgba(80,200,20,0.03);
+  }
+
+  /* Cross grid layout */
+  .dpad-cross {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: 46px 1fr 46px;
+    grid-template-rows: 46px 1fr 46px;
+    /* shift to center of ring */
+    left: 50%; top: 50%;
+    transform: translate(-50%,-50%);
+    width: 138px;
+    height: 138px;
+    gap: 2px;
+  }
+
+  /* Directional button base */
+  .dpad-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    position: relative;
+    overflow: hidden;
+    transition: filter .06s;
+  }
+
+  /* Corner cells are invisible (cross shape) */
+  .dpad-corner {
+    /* occupies grid space but invisible */
+    pointer-events: none;
+  }
+
+  /* SVG arrow icons */
+  .dpad-btn svg {
+    width: 16px; height: 16px;
+    fill: rgba(190,210,240,0.6);
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.6));
+    pointer-events: none;
+    position: relative; z-index: 2;
+  }
+
+  /* Up button */
+  .dpad-up {
+    grid-column: 2; grid-row: 1;
+    border-radius: 6px 6px 0 0;
+    background: linear-gradient(180deg, #30304a 0%, #1e1e30 100%);
+    box-shadow:
+      0 -2px 0 #0a0a12 inset,
+      0 4px 8px rgba(0,0,0,0.6),
+      inset 0 1px 0 rgba(255,255,255,0.09);
+  }
+  /* Down button */
+  .dpad-down {
+    grid-column: 2; grid-row: 3;
+    border-radius: 0 0 6px 6px;
+    background: linear-gradient(0deg, #30304a 0%, #1e1e30 100%);
+    box-shadow:
+      0 2px 0 #0a0a12 inset,
+      0 -3px 8px rgba(0,0,0,0.5);
+  }
+  /* Left button */
+  .dpad-left {
+    grid-column: 1; grid-row: 2;
+    border-radius: 6px 0 0 6px;
+    background: linear-gradient(90deg, #30304a 0%, #1e1e30 100%);
+    box-shadow:
+      -2px 0 0 #0a0a12 inset,
+      4px 0 8px rgba(0,0,0,0.6);
+  }
+  /* Right button */
+  .dpad-right {
+    grid-column: 3; grid-row: 2;
+    border-radius: 0 6px 6px 0;
+    background: linear-gradient(270deg, #30304a 0%, #1e1e30 100%);
+    box-shadow:
+      2px 0 0 #0a0a12 inset,
+      -4px 0 8px rgba(0,0,0,0.5);
+  }
+
+  /* Center OK button — circular red */
+  .dpad-center {
+    grid-column: 2; grid-row: 2;
+    border-radius: 50%;
+    background: radial-gradient(circle at 36% 30%, #e03030, #8a0f0f 70%);
+    box-shadow:
+      0 3px 10px rgba(0,0,0,0.7),
+      0 0 0 2px #6a0a0a,
+      0 0 0 4px rgba(160,20,20,0.2),
+      inset 0 1px 0 rgba(255,120,120,0.3);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    color: rgba(255,255,255,0.92);
+    text-shadow: 0 1px 3px rgba(0,0,0,0.7);
+    transition: transform .08s, box-shadow .08s;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .dpad-center:active, .dpad-center.pressed {
+    transform: scale(0.91);
+    box-shadow:
+      0 1px 5px rgba(0,0,0,0.8),
+      0 0 0 2px #500808,
+      inset 0 2px 4px rgba(0,0,0,0.4);
+  }
+
+  /* Shimmer on dpad buttons */
+  .dpad-btn::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(255,255,255,0.07) 0%, transparent 50%);
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
+  /* Press animations — translate toward center */
+  .dpad-up:active,    .dpad-up.pressed    { filter: brightness(1.45); transform: translateY(1px);  }
+  .dpad-down:active,  .dpad-down.pressed  { filter: brightness(1.45); transform: translateY(-1px); }
+  .dpad-left:active,  .dpad-left.pressed  { filter: brightness(1.45); transform: translateX(1px);  }
+  .dpad-right:active, .dpad-right.pressed { filter: brightness(1.45); transform: translateX(-1px); }
+
+  /* ────────────────────────────────────────────────
+     BOTTOM PILL BUTTONS
+  ──────────────────────────────────────────────── */
+  .bottom-btns {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .pill-btn {
+    flex: 1;
+    max-width: 116px;
+    height: 38px;
+    border: none;
+    border-radius: 19px;
+    cursor: pointer;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform .08s, box-shadow .08s, filter .08s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Top sheen */
+  .pill-btn::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 10%; right: 10%;
+    height: 50%;
+    background: rgba(255,255,255,0.07);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .pill-pause {
+    background: linear-gradient(180deg, #1e3c60 0%, #0f2030 100%);
+    color: #80b8e8;
+    box-shadow:
+      0 5px 12px rgba(0,0,0,0.6),
+      0 0 0 1px #182840,
+      inset 0 1px 0 rgba(100,160,255,0.08);
+  }
+  .pill-new {
+    background: linear-gradient(180deg, #1a3f24 0%, #0e2014 100%);
+    color: #6ed878;
+    box-shadow:
+      0 5px 12px rgba(0,0,0,0.6),
+      0 0 0 1px #143018,
+      inset 0 1px 0 rgba(80,200,80,0.08);
+  }
+
+  .pill-btn:active {
+    transform: translateY(1px) scale(0.96);
+    filter: brightness(1.2);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+  }
+
+  .pill-icon { font-size: 14px; line-height: 1; }
+
+  /* ══════════════════════════════════════════════════
+     CREATOR CREDIT STRIP
+  ══════════════════════════════════════════════════ */
+  .credit-strip {
+    margin-top: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .credit-by {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 3px;
+    color: rgba(139,180,15,0.28);
+    text-transform: uppercase;
+  }
+  .credit-name {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    color: rgba(139,180,15,0.62);
+    text-shadow: 0 0 16px rgba(139,200,15,0.22);
+  }
+  .credit-handles {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 1px;
+    color: rgba(139,180,15,0.28);
+  }
+  .credit-hint {
+    margin-top: 2px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 7.5px;
+    letter-spacing: 1px;
+    color: rgba(139,180,15,0.16);
+  }
+
+  /* ══════════════════════════════════════════════════
+     SCORE POPUP ANIMATION
+  ══════════════════════════════════════════════════ */
+  @keyframes scoreFloat {
+    0%   { opacity: 1; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(-28px) scale(1.4); }
+  }
+  .score-popup {
+    position: absolute;
+    font-family: 'VT323', monospace;
+    font-size: 16px;
+    color: #0f380f;
+    pointer-events: none;
+    animation: scoreFloat .7s ease-out forwards;
+    z-index: 50;
+  }
   </style>
 </head>
 <body>
 
+<!-- ══════════════════════════════════════════════
+     PHONE BODY
+══════════════════════════════════════════════ -->
 <div class="phone">
+
+  <!-- Brand Row -->
   <div class="brand-row">
-    <span class="brand-name">NOKIA</span>
-    <span class="brand-model">3310</span>
+    <span class="brand-logo">NOKIA</span>
+    <div class="brand-right">
+      <span class="brand-model">3310</span>
+      <!-- Sound toggle button -->
+      <div id="soundToggle" title="Toggle Sound">🔊</div>
+    </div>
   </div>
 
-  <div class="screen-outer">
-    <div class="screen-inner">
+  <!-- Screen -->
+  <div class="screen-bezel">
+    <div class="screen-inner" id="screenInner">
+      <!-- HUD -->
       <div class="hud">
-        <span id="scoreDisplay">SCR:0</span>
-        <span id="levelDisplay">LVL:1</span>
-        <span id="hiDisplay">HI:0</span>
+        <span id="hudScore">SCR:0</span>
+        <span id="hudLevel">LVL:1</span>
+        <span id="hudHi">HI:0</span>
       </div>
-      <canvas id="gameCanvas" width="254" height="180"></canvas>
+      <!-- Game Canvas: 252px wide / 21 cols = 12px cell -->
+      <canvas id="gameCanvas" width="252" height="180"></canvas>
       <div class="scanlines"></div>
     </div>
   </div>
 
+  <!-- Speaker -->
   <div class="speaker">
     <span></span><span></span><span></span><span></span>
     <span></span><span></span><span></span><span></span>
   </div>
 
+  <!-- Controls -->
   <div class="controls-area">
 
-    <div class="dpad">
+    <!-- D-Pad -->
+    <div class="dpad-wrap">
       <div class="dpad-ring"></div>
 
-      <div class="dpad-arm dpad-up" id="btn-up">
-        <svg viewBox="0 0 24 24"><path d="M12 4 L20 16 H4 Z"/></svg>
-      </div>
-      <div class="dpad-arm dpad-down" id="btn-down">
-        <svg viewBox="0 0 24 24"><path d="M12 20 L4 8 H20 Z"/></svg>
-      </div>
-      <div class="dpad-arm dpad-left" id="btn-left">
-        <svg viewBox="0 0 24 24"><path d="M4 12 L16 4 V20 Z"/></svg>
-      </div>
-      <div class="dpad-arm dpad-right" id="btn-right">
-        <svg viewBox="0 0 24 24"><path d="M20 12 L8 4 V20 Z"/></svg>
-      </div>
-    </div>
+      <div class="dpad-cross">
+        <!-- Row 1 -->
+        <div class="dpad-corner"></div>
+        <div class="dpad-btn dpad-up" id="btn-up">
+          <svg viewBox="0 0 24 24"><path d="M12 5 L20 17 H4 Z"/></svg>
+        </div>
+        <div class="dpad-corner"></div>
 
+        <!-- Row 2 -->
+        <div class="dpad-btn dpad-left" id="btn-left">
+          <svg viewBox="0 0 24 24"><path d="M5 12 L17 4 V20 Z"/></svg>
+        </div>
+        <div class="dpad-btn dpad-center" id="btn-ok">OK</div>
+        <div class="dpad-btn dpad-right" id="btn-right">
+          <svg viewBox="0 0 24 24"><path d="M19 12 L7 4 V20 Z"/></svg>
+        </div>
+
+        <!-- Row 3 -->
+        <div class="dpad-corner"></div>
+        <div class="dpad-btn dpad-down" id="btn-down">
+          <svg viewBox="0 0 24 24"><path d="M12 19 L4 7 H20 Z"/></svg>
+        </div>
+        <div class="dpad-corner"></div>
+      </div>
+    </div><!-- /dpad-wrap -->
+
+    <!-- Pause & New Game -->
     <div class="bottom-btns">
-      <button class="pill-btn pill-start" id="btn-start">
-        <span class="pill-icon">▶</span>START
-      </button>
       <button class="pill-btn pill-pause" id="btn-pause">
         <span class="pill-icon">⏸</span>PAUSE
       </button>
@@ -258,210 +568,720 @@
       </button>
     </div>
 
-  </div>
+  </div><!-- /controls-area -->
+</div><!-- /phone -->
+
+<!-- Creator Credit -->
+<div class="credit-strip">
+  <span class="credit-by">crafted by</span>
+  <span class="credit-name">RIYAD BIN ALOM</span>
+  <span class="credit-handles">@Riyad_Bin_Alom &nbsp;·&nbsp; riyadbinal0m</span>
+  <span class="credit-hint">↑ ↓ ← → or WASD &nbsp;·&nbsp; SPACE/ENTER to start &nbsp;·&nbsp; M to mute</span>
 </div>
 
-<!-- ════ CREATOR CREDIT ════ -->
-<div style="margin-top:20px;display:flex;flex-direction:column;align-items:center;gap:5px;">
-  <span style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2.5px;color:rgba(139,172,15,0.3);text-transform:uppercase;">crafted by</span>
-  <span style="font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700;letter-spacing:4px;color:rgba(139,172,15,0.65);text-shadow:0 0 14px rgba(139,172,15,0.25);">RIYAD BIN ALOM</span>
-  <span style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;color:rgba(139,172,15,0.3);">@Riyad_Bin_Alom &nbsp;·&nbsp; riyadbinal0m</span>
-  <span style="font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1px;color:rgba(139,172,15,0.18);margin-top:3px;">↑↓←→ or WASD &nbsp;·&nbsp; SPACE to start/pause</span>
-</div>
 
 <script>
-  const C = {
-    bg:'#9bbc0f', grid:'#8aab0a',
-    snake:'#0f380f', snakeM:'#1e4a1e',
-    food:'#0f380f', text:'#0f380f',
-    overlay:'rgba(130,162,6,0.89)',
-  };
-  const COLS=21, ROWS=15;
-  const canvas=document.getElementById('gameCanvas');
-  const ctx=canvas.getContext('2d');
-  const CELL=canvas.width/COLS;
+/* ══════════════════════════════════════════════════════════════════
+   SNAKE GAME — ARCADE EDITION
+   Author  : Riyad Bin Alom
+   Engine  : requestAnimationFrame + timestamp delta (no setInterval lag)
+   Audio   : Web Audio API — fully procedural chiptune (no external files)
+   Controls: Keyboard, D-Pad, Swipe
+══════════════════════════════════════════════════════════════════ */
 
-  let snake,dir,nextDir,food,score,hiScore=parseInt(localStorage.getItem('riyad_snakeHi')||'0'),level,speed;
-  let gameLoop, state='idle';
-  updateHUD();
+/* ──────────────────────────────────────────────────────────────
+   1. CANVAS & CONSTANTS
+────────────────────────────────────────────────────────────── */
+const canvas  = document.getElementById('gameCanvas');
+const ctx     = canvas.getContext('2d');
+const COLS    = 21;          // grid columns
+const ROWS    = 15;          // grid rows
+const CELL    = canvas.width / COLS;  // 12 px per cell
 
-  function initGame(){
-    clearInterval(gameLoop);
-    snake=[{x:10,y:7},{x:9,y:7},{x:8,y:7}];
-    dir={x:1,y:0}; nextDir={x:1,y:0};
-    score=0; level=1; speed=175;
-    placeFood(); updateHUD(); state='idle'; renderIdle();
+// LCD color palette — Nokia greenish monochrome
+const PAL = {
+  bg:       '#9bbc0f',   // lightest green (background)
+  gridLine: '#8aab0a',   // grid dots
+  dark:     '#0f380f',   // darkest (snake, food, text)
+  mid:      '#1e4a1e',   // snake body inner shade
+  overlay:  'rgba(126,158,5,0.9)',  // pause/game-over overlay
+};
+
+
+/* ──────────────────────────────────────────────────────────────
+   2. GAME STATE
+────────────────────────────────────────────────────────────── */
+let snake;      // Array of {x,y} — index 0 = head
+let dir;        // current direction {x,y}
+let nextDir;    // buffered direction (prevents 180 flip)
+let food;       // {x,y}
+let score;
+let level;
+let speed;      // ms per tick
+let hiScore = parseInt(localStorage.getItem('rba_snakeHi') || '0');
+
+// state machine: 'idle' | 'running' | 'paused' | 'dying' | 'dead'
+let gameState = 'idle';
+
+// rAF-based loop variables
+let rafId     = null;   // requestAnimationFrame handle
+let lastTick  = 0;      // timestamp of last game tick
+
+// Death flash animation
+let deathFlash = 0;     // countdown frames
+
+// Score popup DOM nodes
+const screenInner = document.getElementById('screenInner');
+
+
+/* ──────────────────────────────────────────────────────────────
+   3. WEB AUDIO ENGINE — pure procedural chiptune
+────────────────────────────────────────────────────────────── */
+const Audio = (() => {
+  let ctx;           // AudioContext
+  let master;        // master GainNode
+  let muted = false;
+  let bgmTimeout = null;
+  let bgmActive  = false;
+
+  /**
+   * Lazily initialise AudioContext on first user gesture.
+   * Browsers block audio until a user interaction.
+   */
+  function init() {
+    if (ctx) return;
+    ctx    = new (window.AudioContext || window.webkitAudioContext)();
+    master = ctx.createGain();
+    master.gain.value = 0.22;
+    master.connect(ctx.destination);
   }
 
-  function placeFood(){
-    const emptyCells=[];
-    for(let x=0;x<COLS;x++){
-      for(let y=0;y<ROWS;y++){
-        if(!snake.some(s=>s.x===x&&s.y===y)){
-          emptyCells.push({x,y});
-        }
-      }
-    }
-    if(emptyCells.length>0){
-      const idx=Math.floor(Math.random()*emptyCells.length);
-      food=emptyCells[idx];
-    }
+  function resumeCtx() {
+    if (ctx && ctx.state === 'suspended') ctx.resume();
   }
 
-  function updateHUD(){
-    document.getElementById('scoreDisplay').textContent='SCR:'+(score||0);
-    document.getElementById('levelDisplay').textContent='LVL:'+(level||1);
-    document.getElementById('hiDisplay').textContent='HI:'+hiScore;
+  /**
+   * Low-level tone generator.
+   * @param {number} freq   - frequency in Hz
+   * @param {number} dur    - duration in seconds
+   * @param {string} type   - oscillator type (square|sawtooth|triangle|sine)
+   * @param {number} vol    - peak gain (0–1)
+   * @param {number} delay  - start offset from now (seconds)
+   * @param {number} [decay]- optional extra decay multiplier
+   */
+  function tone(freq, dur, type = 'square', vol = 0.5, delay = 0, decay) {
+    if (!ctx || muted) return;
+    const osc  = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(master);
+    osc.type = type;
+    osc.frequency.value = freq;
+    const t0 = ctx.currentTime + delay;
+    const t1 = t0 + dur;
+    gain.gain.setValueAtTime(vol, t0);
+    gain.gain.exponentialRampToValueAtTime(0.001, t1);
+    osc.start(t0);
+    osc.stop(t1 + 0.01);
   }
 
-  function drawBg(){
-    ctx.fillStyle=C.bg; ctx.fillRect(0,0,canvas.width,canvas.height);
-    ctx.fillStyle=C.grid;
-    for(let x=0;x<COLS;x++) for(let y=0;y<ROWS;y++){
-      ctx.fillRect(x*CELL+CELL-1,y*CELL,1,CELL);
-      ctx.fillRect(x*CELL,y*CELL+CELL-1,CELL,1);
-    }
-  }
-
-  function drawFood(){
-    const px=food.x*CELL,py=food.y*CELL,s=CELL;
-    ctx.fillStyle=C.food;
-    ctx.fillRect(px+3,py+1,2,2);
-    ctx.fillRect(px+2,py+3,s-4,s-5);
-    ctx.fillRect(px+1,py+4,s-2,s-7);
-    ctx.fillRect(px+2,py+s-4,s-4,2);
-    ctx.fillStyle=C.bg; ctx.fillRect(px+3,py+4,2,2);
-  }
-
-  function drawSnake(){
-    snake.forEach((seg,i)=>{
-      const px=seg.x*CELL,py=seg.y*CELL;
-      ctx.fillStyle=C.snake;
-      ctx.fillRect(px+1,py+1,CELL-2,CELL-2);
-      if(i===0){
-        ctx.fillStyle=C.bg;
-        let eyes;
-        if(dir.x===1)        eyes=[{ex:CELL-4,ey:2},{ex:CELL-4,ey:CELL-5}];
-        else if(dir.x===-1)  eyes=[{ex:2,ey:2},{ex:2,ey:CELL-5}];
-        else if(dir.y===-1)  eyes=[{ex:2,ey:2},{ex:CELL-4,ey:2}];
-        else                  eyes=[{ex:2,ey:CELL-4},{ex:CELL-4,ey:CELL-4}];
-        eyes.forEach(e=>ctx.fillRect(px+e.ex,py+e.ey,2,2));
-      } else {
-        ctx.fillStyle=C.snakeM;
-        ctx.fillRect(px+2,py+2,CELL-4,CELL-4);
-      }
+  // ── Nokia-style 4-bar intro jingle ──────────────────────────
+  function playIntro() {
+    if (!ctx || muted) return;
+    resumeCtx();
+    // Classic ascending Nokia-ish melody (approximate)
+    const notes = [659,587,392,440,  494,330,392,330];
+    const beats = [0.12,0.12,0.24,0.12, 0.24,0.24,0.24,0.48];
+    let t = 0.05;
+    notes.forEach((f, i) => {
+      tone(f, beats[i] * 0.88, 'square', 0.45, t);
+      t += beats[i];
     });
   }
 
-  function overlay(title,sub1,sub2=''){
-    ctx.fillStyle=C.overlay; ctx.fillRect(0,0,canvas.width,canvas.height);
-    ctx.fillStyle=C.text; ctx.textAlign='center';
-    ctx.font='bold 26px VT323,monospace';
-    ctx.fillText(title,canvas.width/2,canvas.height/2-18);
-    ctx.font='15px VT323,monospace';
-    ctx.fillText(sub1,canvas.width/2,canvas.height/2+2);
-    if(sub2) ctx.fillText(sub2,canvas.width/2,canvas.height/2+18);
-    ctx.save();
-    ctx.font='9px Share Tech Mono,monospace';
-    ctx.fillStyle='rgba(15,56,15,0.4)';
-    ctx.textAlign='left';
-    ctx.fillText('by RIYAD BIN ALOM',4,canvas.height-4);
-    ctx.restore();
+  // ── Eat sound: bright 2-step ascending chip ──────────────────
+  function playEat() {
+    if (!ctx || muted) return;
+    resumeCtx();
+    tone(523, 0.04, 'square', 0.5, 0);
+    tone(1046, 0.07, 'square', 0.35, 0.04);
   }
 
-  function renderIdle()  { drawBg(); drawFood(); drawSnake(); overlay('SNAKE','PRESS START'); }
-  function renderPause() { drawBg(); drawFood(); drawSnake(); overlay('PAUSED','START to resume'); }
-  function renderDead()  { drawBg(); drawFood(); drawSnake(); overlay('GAME OVER','SCORE:'+score,'START to restart'); }
-  function render()      { drawBg(); drawFood(); drawSnake(); }
-
-  function tick(){
-    dir={...nextDir};
-    const head={x:(snake[0].x+dir.x+COLS)%COLS,y:(snake[0].y+dir.y+ROWS)%ROWS};
-    if(snake.some(s=>s.x===head.x&&s.y===head.y)){ die(); return; }
-    snake.unshift(head);
-    if(head.x===food.x&&head.y===food.y){
-      score+=10*level;
-      if(score>hiScore){ hiScore=score; localStorage.setItem('riyad_snakeHi',hiScore); }
-      level=Math.floor(snake.length/5)+1;
-      speed=Math.max(65,175-(level-1)*16);
-      placeFood(); updateHUD();
-      clearInterval(gameLoop); gameLoop=setInterval(tick,speed);
-    } else { snake.pop(); }
-    render();
+  // ── Move tick: very subtle short blip ────────────────────────
+  function playTick() {
+    if (!ctx || muted) return;
+    resumeCtx();
+    tone(120, 0.018, 'square', 0.08, 0);
   }
 
-  function die(){
-    clearInterval(gameLoop); state='dead';
-    let f=0;
-    const fl=setInterval(()=>{
-      if(f%2===0){ ctx.fillStyle=C.snake; ctx.fillRect(0,0,canvas.width,canvas.height); }
-      else render();
-      if(++f>=6){ clearInterval(fl); renderDead(); }
-    },90);
+  // ── Level up: ascending fanfare ──────────────────────────────
+  function playLevelUp() {
+    if (!ctx || muted) return;
+    resumeCtx();
+    [523,659,784,1046].forEach((f,i) => tone(f, 0.1, 'square', 0.4, i*0.08));
   }
 
-  function startGame(){
-    clearInterval(gameLoop); initGame();
-    state='running'; gameLoop=setInterval(tick,speed);
+  // ── Game over: dramatic descending crash ─────────────────────
+  function playGameOver() {
+    if (!ctx || muted) return;
+    resumeCtx();
+    stopBGM();
+    // descending sweep
+    [494,440,392,330,262,196].forEach((f,i) => tone(f, 0.18, 'square', 0.55, i*0.1));
+    // final low boom
+    tone(55, 0.5, 'sawtooth', 0.6, 0.62);
   }
 
-  function togglePause(){
-    if(state==='running'){ clearInterval(gameLoop); state='paused'; renderPause(); }
-    else if(state==='paused'){ state='running'; gameLoop=setInterval(tick,speed); }
+  // ── Background Music: looping 8-bar chiptune ─────────────────
+  // Builds a repeating pattern using scheduled tones.
+  // Each "bar" schedules a set of notes then recurses.
+  const BGM_TEMPO = 0.14;  // seconds per 16th note
+
+  // A simple 8-bar melody pattern (note index into scale, -1=rest)
+  const BGM_MELODY = [4,4,7,4, 5,3,5,3, 4,4,7,9, 8,7,-1,-1,
+                      4,4,7,4, 5,3,5,3, 6,6,8,6, 5,4,-1,-1];
+  const BGM_BASS   = [0,-1,0,-1, 3,-1,3,-1, 0,-1,0,-1, 5,-1,5,-1,
+                      0,-1,0,-1, 3,-1,3,-1, 0,-1,4,-1, 5,-1,-1,-1];
+
+  // C major pentatonic root = C4 (262 Hz)
+  const SCALE = [262,294,330,349,392,440,494,523,587,659,698,784];
+
+  let bgmScheduleTimeout = null;
+  let bgmStopFlag = false;
+
+  function scheduleBGMBar(startTime, barIndex) {
+    if (bgmStopFlag || muted) return;
+    const totalBars = BGM_MELODY.length / 16; // 2 bars
+    const bar = barIndex % totalBars;
+    for (let i = 0; i < 16; i++) {
+      const t = startTime + i * BGM_TEMPO;
+      const mNote = BGM_MELODY[bar * 16 + i];
+      const bNote = BGM_BASS[bar * 16 + i];
+      if (mNote >= 0) tone(SCALE[mNote], BGM_TEMPO * 0.7, 'square', 0.18, t - ctx.currentTime);
+      if (bNote >= 0) tone(SCALE[bNote] / 2, BGM_TEMPO * 0.5, 'triangle', 0.12, t - ctx.currentTime);
+    }
+    // Schedule next bar ~1 beat before it starts
+    const nextBarTime = startTime + 16 * BGM_TEMPO;
+    const schedIn = Math.max(0, (nextBarTime - ctx.currentTime - BGM_TEMPO) * 1000);
+    bgmScheduleTimeout = setTimeout(() => scheduleBGMBar(nextBarTime, barIndex + 1), schedIn);
   }
 
-  function handleStart(){
-    if(state==='idle'||state==='dead') startGame();
-    else togglePause();
+  function startBGM() {
+    if (!ctx || muted || bgmActive) return;
+    bgmActive   = true;
+    bgmStopFlag = false;
+    resumeCtx();
+    scheduleBGMBar(ctx.currentTime + 0.1, 0);
   }
 
-  const KEY_DIR={
-    ArrowUp:{x:0,y:-1},ArrowDown:{x:0,y:1},ArrowLeft:{x:-1,y:0},ArrowRight:{x:1,y:0},
-    w:{x:0,y:-1},s:{x:0,y:1},a:{x:-1,y:0},d:{x:1,y:0},
-  };
-  document.addEventListener('keydown',e=>{
-    if(e.key===' '||e.key==='Enter'){ handleStart(); return; }
-    const d=KEY_DIR[e.key];
-    if(d&&state==='running'){
-      if(d.x!=-dir.x||d.y!=-dir.y) nextDir=d;
-      e.preventDefault();
+  function stopBGM() {
+    bgmActive   = false;
+    bgmStopFlag = true;
+    clearTimeout(bgmScheduleTimeout);
+  }
+
+  function toggleMute() {
+    if (!ctx) init();
+    muted = !muted;
+    if (muted) {
+      master.gain.value = 0;
+      stopBGM();
+    } else {
+      master.gain.value = 0.22;
+      if (gameState === 'running') startBGM();
+    }
+    document.getElementById('soundToggle').textContent = muted ? '🔇' : '🔊';
+    document.getElementById('soundToggle').classList.toggle('muted', muted);
+  }
+
+  return { init, startBGM, stopBGM, playIntro, playEat, playTick, playLevelUp, playGameOver, toggleMute };
+})();
+
+
+/* ──────────────────────────────────────────────────────────────
+   4. HUD UPDATE
+────────────────────────────────────────────────────────────── */
+function updateHUD() {
+  document.getElementById('hudScore').textContent = 'SCR:' + (score || 0);
+  document.getElementById('hudLevel').textContent = 'LVL:' + (level || 1);
+  document.getElementById('hudHi').textContent    = 'HI:'  + hiScore;
+}
+
+
+/* ──────────────────────────────────────────────────────────────
+   5. FOOD PLACEMENT — guaranteed no overlap with snake
+────────────────────────────────────────────────────────────── */
+function placeFood() {
+  // Build a set of occupied cells
+  const occupied = new Set(snake.map(s => s.x + ',' + s.y));
+  const freeCells = [];
+
+  for (let x = 0; x < COLS; x++) {
+    for (let y = 0; y < ROWS; y++) {
+      if (!occupied.has(x + ',' + y)) freeCells.push({ x, y });
+    }
+  }
+
+  // If somehow completely filled (won!), put food anywhere
+  if (freeCells.length === 0) {
+    food = { x: 0, y: 0 };
+    return;
+  }
+
+  // Pick a random free cell
+  food = freeCells[Math.floor(Math.random() * freeCells.length)];
+}
+
+
+/* ──────────────────────────────────────────────────────────────
+   6. INITIALISE / RESET GAME
+────────────────────────────────────────────────────────────── */
+function initGame() {
+  cancelAnimationFrame(rafId);
+  Audio.stopBGM();
+
+  // Start snake in middle, 3 cells long, moving right
+  snake   = [{ x: 12, y: 7 }, { x: 11, y: 7 }, { x: 10, y: 7 }];
+  dir     = { x: 1, y: 0 };
+  nextDir = { x: 1, y: 0 };
+
+  score  = 0;
+  level  = 1;
+  speed  = 175;   // ms between ticks
+
+  placeFood();
+  updateHUD();
+
+  gameState = 'idle';
+  lastTick  = 0;
+  deathFlash = 0;
+
+  renderIdle();
+}
+
+
+/* ──────────────────────────────────────────────────────────────
+   7. DRAWING FUNCTIONS
+────────────────────────────────────────────────────────────── */
+
+/** Fill entire canvas with LCD background + pixel grid lines */
+function drawBackground() {
+  ctx.fillStyle = PAL.bg;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Pixel grid — single px dots at cell corners
+  ctx.fillStyle = PAL.gridLine;
+  for (let x = 0; x < COLS; x++) {
+    for (let y = 0; y < ROWS; y++) {
+      ctx.fillRect(x * CELL + CELL - 1, y * CELL, 1, CELL);
+      ctx.fillRect(x * CELL, y * CELL + CELL - 1, CELL, 1);
+    }
+  }
+}
+
+/** Draw pixel-art apple/cherry as food */
+function drawFood() {
+  if (!food) return;
+  const px = food.x * CELL, py = food.y * CELL, s = CELL;
+  ctx.fillStyle = PAL.dark;
+
+  // stem pixel
+  ctx.fillRect(px + 5, py + 1, 2, 2);
+  // body — rounded square in pixel art style
+  ctx.fillRect(px + 2, py + 3, s - 4, s - 4);
+  ctx.fillRect(px + 1, py + 4, s - 2, s - 6);
+  // bottom round
+  ctx.fillRect(px + 2, py + s - 3, s - 4, 1);
+
+  // shine pixel (light reflection)
+  ctx.fillStyle = PAL.bg;
+  ctx.fillRect(px + 3, py + 4, 2, 2);
+}
+
+/** Draw the snake — head has eyes, body has inner shade */
+function drawSnake() {
+  snake.forEach((seg, i) => {
+    const px = seg.x * CELL, py = seg.y * CELL;
+
+    // Outer block
+    ctx.fillStyle = PAL.dark;
+    ctx.fillRect(px + 1, py + 1, CELL - 2, CELL - 2);
+
+    if (i === 0) {
+      // HEAD — draw directional eyes
+      ctx.fillStyle = PAL.bg;
+      let eyes;
+      if      (dir.x ===  1) eyes = [{ ex: CELL-4, ey: 2 }, { ex: CELL-4, ey: CELL-5 }]; // right
+      else if (dir.x === -1) eyes = [{ ex: 2,       ey: 2 }, { ex: 2,       ey: CELL-5 }]; // left
+      else if (dir.y === -1) eyes = [{ ex: 2,       ey: 2 }, { ex: CELL-4, ey: 2       }]; // up
+      else                   eyes = [{ ex: 2,       ey: CELL-4 }, { ex: CELL-4, ey: CELL-4 }]; // down
+      eyes.forEach(e => ctx.fillRect(px + e.ex, py + e.ey, 2, 2));
+    } else {
+      // BODY — inner shade for scale texture
+      ctx.fillStyle = PAL.mid;
+      ctx.fillRect(px + 2, py + 2, CELL - 4, CELL - 4);
     }
   });
+}
 
-  function bindBtn(id,fn){
-    const el=document.getElementById(id);
-    const on=ev=>{ ev.preventDefault(); fn(); el.classList.add('pressed'); };
-    const off=()=>el.classList.remove('pressed');
-    el.addEventListener('mousedown',on);
-    el.addEventListener('touchstart',on,{passive:false});
-    ['mouseup','mouseleave','touchend'].forEach(ev=>el.addEventListener(ev,off));
+/** Draw a semi-transparent overlay for menus */
+function drawOverlay(title, line1, line2 = '') {
+  ctx.fillStyle = PAL.overlay;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.fillStyle = PAL.dark;
+  ctx.textAlign = 'center';
+
+  // Title
+  ctx.font = 'bold 28px VT323, monospace';
+  ctx.fillText(title, canvas.width / 2, canvas.height / 2 - 20);
+
+  // Sub-lines
+  ctx.font = '16px VT323, monospace';
+  ctx.fillText(line1, canvas.width / 2, canvas.height / 2 + 2);
+  if (line2) ctx.fillText(line2, canvas.width / 2, canvas.height / 2 + 20);
+
+  // Persistent watermark — always visible
+  ctx.save();
+  ctx.font = '9px Share Tech Mono, monospace';
+  ctx.fillStyle = 'rgba(15,56,15,0.35)';
+  ctx.textAlign = 'left';
+  ctx.fillText('by RIYAD BIN ALOM', 4, canvas.height - 4);
+  ctx.restore();
+}
+
+/** Main render — called every rAF tick or state change */
+function render() {
+  drawBackground();
+  drawFood();
+  drawSnake();
+}
+
+function renderIdle()  {
+  render();
+  drawOverlay('🐍 SNAKE', 'PRESS OK TO START');
+}
+
+function renderPause() {
+  render();
+  drawOverlay('⏸  PAUSED', 'OK to resume');
+}
+
+function renderDead()  {
+  render();
+  drawOverlay('GAME OVER', 'SCORE: ' + score, 'OK to restart');
+}
+
+
+/* ──────────────────────────────────────────────────────────────
+   8. SCORE POPUP (floating "+10" text over screen)
+────────────────────────────────────────────────────────────── */
+function showScorePopup(points, gridX, gridY) {
+  const popup = document.createElement('div');
+  popup.className   = 'score-popup';
+  popup.textContent = '+' + points;
+
+  // Position relative to screenInner
+  const rect = canvas.getBoundingClientRect();
+  const par  = screenInner.getBoundingClientRect();
+  popup.style.left = ((gridX * CELL + CELL / 2) + (rect.left - par.left)) + 'px';
+  popup.style.top  = ((gridY * CELL) + (rect.top  - par.top))  + 'px';
+
+  screenInner.style.position = 'relative';
+  screenInner.appendChild(popup);
+  popup.addEventListener('animationend', () => popup.remove());
+}
+
+
+/* ──────────────────────────────────────────────────────────────
+   9. GAME TICK — called on each step of the snake
+────────────────────────────────────────────────────────────── */
+function tick() {
+  // Apply buffered direction (prevent reversing into self)
+  dir = { ...nextDir };
+
+  // Compute new head position with wrap-around
+  const head = {
+    x: (snake[0].x + dir.x + COLS) % COLS,
+    y: (snake[0].y + dir.y + ROWS) % ROWS,
+  };
+
+  // ── Self-collision check ──
+  // Skip index 0 (current head) and last segment (it moves away this tick)
+  for (let i = 0; i < snake.length - 1; i++) {
+    if (snake[i].x === head.x && snake[i].y === head.y) {
+      triggerDeath();
+      return;
+    }
   }
 
-  bindBtn('btn-up',   ()=>{ if(state==='running'&&dir.y!==1)  nextDir={x:0,y:-1}; });
-  bindBtn('btn-down', ()=>{ if(state==='running'&&dir.y!==-1) nextDir={x:0,y:1};  });
-  bindBtn('btn-left', ()=>{ if(state==='running'&&dir.x!==1)  nextDir={x:-1,y:0}; });
-  bindBtn('btn-right',()=>{ if(state==='running'&&dir.x!==-1) nextDir={x:1,y:0};  });
+  // Push new head
+  snake.unshift(head);
 
-  document.getElementById('btn-start').addEventListener('click',handleStart);
-  document.getElementById('btn-pause').addEventListener('click',togglePause);
-  document.getElementById('btn-restart').addEventListener('click',()=>{ clearInterval(gameLoop); initGame(); });
+  // ── Food check ──
+  if (head.x === food.x && head.y === food.y) {
+    // Grow — do NOT pop tail
+    const pts = 10 * level;
+    score += pts;
 
-  let tx=0,ty=0;
-  canvas.addEventListener('touchstart',e=>{ tx=e.touches[0].clientX; ty=e.touches[0].clientY; e.preventDefault(); },{passive:false});
-  canvas.addEventListener('touchend',e=>{
-    const dx=e.changedTouches[0].clientX-tx, dy=e.changedTouches[0].clientY-ty;
-    if(Math.abs(dx)<12&&Math.abs(dy)<12){ handleStart(); return; }
-    if(Math.abs(dx)>Math.abs(dy)){
-      if(dx>0&&dir.x!==-1) nextDir={x:1,y:0};
-      else if(dx<0&&dir.x!==1) nextDir={x:-1,y:0};
-    } else {
-      if(dy>0&&dir.y!==-1) nextDir={x:0,y:1};
-      else if(dy<0&&dir.y!==1) nextDir={x:0,y:-1};
+    if (score > hiScore) {
+      hiScore = score;
+      localStorage.setItem('rba_snakeHi', hiScore);
     }
-    e.preventDefault();
-  },{passive:false});
 
+    // Level up every 5 food collected (snake length = 3 start + level*5)
+    const prevLevel = level;
+    level = Math.floor((snake.length - 3) / 5) + 1;
+    speed = Math.max(65, 175 - (level - 1) * 14);
+
+    placeFood();    // guaranteed placement
+    updateHUD();
+
+    Audio.playEat();
+    showScorePopup(pts, head.x, head.y);
+
+    if (level > prevLevel) Audio.playLevelUp();
+
+  } else {
+    // Normal move — remove tail
+    snake.pop();
+  }
+}
+
+
+/* ──────────────────────────────────────────────────────────────
+   10. DEATH SEQUENCE — flash then show game over
+────────────────────────────────────────────────────────────── */
+function triggerDeath() {
+  gameState  = 'dying';
+  deathFlash = 8;   // number of flash frames
+  Audio.playGameOver();
+}
+
+function processDeath() {
+  if (deathFlash <= 0) {
+    gameState = 'dead';
+    renderDead();
+    return;
+  }
+  // Alternate between dark fill and normal render
+  if (deathFlash % 2 === 0) {
+    ctx.fillStyle = PAL.dark;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  } else {
+    render();
+  }
+  deathFlash--;
+}
+
+
+/* ──────────────────────────────────────────────────────────────
+   11. RAF GAME LOOP — timestamp-based, no setInterval drift
+────────────────────────────────────────────────────────────── */
+function loop(timestamp) {
+  rafId = requestAnimationFrame(loop);
+
+  if (gameState === 'dying') {
+    // Death flash runs on every other rAF frame (every ~16ms)
+    if (timestamp - lastTick > 80) {
+      lastTick = timestamp;
+      processDeath();
+    }
+    return;
+  }
+
+  if (gameState !== 'running') return;
+
+  // Tick the snake when enough time has passed
+  if (timestamp - lastTick >= speed) {
+    lastTick = timestamp;
+    tick();
+    render();
+    // Play move tick every step
+    Audio.playTick();
+  }
+}
+
+
+/* ──────────────────────────────────────────────────────────────
+   12. GAME FLOW ACTIONS
+────────────────────────────────────────────────────────────── */
+function startGame() {
+  Audio.init();
+  cancelAnimationFrame(rafId);
   initGame();
+  gameState = 'running';
+  lastTick  = 0;
+  Audio.playIntro();
+  // Start BGM after intro finishes (~1.7s)
+  setTimeout(() => Audio.startBGM(), 1800);
+  rafId = requestAnimationFrame(loop);
+}
+
+function togglePause() {
+  Audio.init();
+  if (gameState === 'running') {
+    gameState = 'paused';
+    Audio.stopBGM();
+    renderPause();
+  } else if (gameState === 'paused') {
+    gameState = 'running';
+    lastTick  = 0;
+    Audio.startBGM();
+  }
+}
+
+function handleOK() {
+  Audio.init();
+  if (gameState === 'idle' || gameState === 'dead') {
+    startGame();
+  } else {
+    togglePause();
+  }
+}
+
+
+/* ──────────────────────────────────────────────────────────────
+   13. KEYBOARD INPUT
+────────────────────────────────────────────────────────────── */
+const KEY_MAP = {
+  ArrowUp:    { x:  0, y: -1 },
+  ArrowDown:  { x:  0, y:  1 },
+  ArrowLeft:  { x: -1, y:  0 },
+  ArrowRight: { x:  1, y:  0 },
+  w: { x: 0, y: -1 }, W: { x: 0, y: -1 },
+  s: { x: 0, y:  1 }, S: { x: 0, y:  1 },
+  a: { x: -1, y: 0 }, A: { x: -1, y: 0 },
+  d: { x:  1, y: 0 }, D: { x:  1, y: 0 },
+};
+
+document.addEventListener('keydown', e => {
+  // Start / pause on space or enter
+  if (e.key === ' ' || e.key === 'Enter') {
+    e.preventDefault();
+    handleOK();
+    return;
+  }
+  // Mute toggle
+  if (e.key === 'm' || e.key === 'M') {
+    Audio.init();
+    Audio.toggleMute();
+    return;
+  }
+  // Direction
+  const d = KEY_MAP[e.key];
+  if (d && gameState === 'running') {
+    // Prevent reversing
+    if (!(d.x === -dir.x && d.y === -dir.y)) {
+      nextDir = d;
+    }
+    // Prevent page scroll on arrow keys
+    if (e.key.startsWith('Arrow')) e.preventDefault();
+  }
+});
+
+
+/* ──────────────────────────────────────────────────────────────
+   14. D-PAD BUTTON BINDING
+────────────────────────────────────────────────────────────── */
+/**
+ * Bind a D-pad element to a callback.
+ * Handles mousedown/touchstart for response, with visual 'pressed' class.
+ */
+function bindDpad(id, callback) {
+  const el = document.getElementById(id);
+  if (!el) return;
+
+  const press = ev => {
+    ev.preventDefault();
+    el.classList.add('pressed');
+    Audio.init();
+    callback();
+  };
+  const release = () => el.classList.remove('pressed');
+
+  el.addEventListener('mousedown',  press);
+  el.addEventListener('touchstart', press, { passive: false });
+  el.addEventListener('mouseup',    release);
+  el.addEventListener('mouseleave', release);
+  el.addEventListener('touchend',   release);
+  el.addEventListener('touchcancel',release);
+}
+
+bindDpad('btn-up',    () => {
+  if (gameState === 'running' && !(dir.x === 0 && dir.y === 1)) nextDir = { x: 0, y: -1 };
+});
+bindDpad('btn-down',  () => {
+  if (gameState === 'running' && !(dir.x === 0 && dir.y === -1)) nextDir = { x: 0, y: 1 };
+});
+bindDpad('btn-left',  () => {
+  if (gameState === 'running' && !(dir.x === 1 && dir.y === 0)) nextDir = { x: -1, y: 0 };
+});
+bindDpad('btn-right', () => {
+  if (gameState === 'running' && !(dir.x === -1 && dir.y === 0)) nextDir = { x: 1, y: 0 };
+});
+bindDpad('btn-ok', handleOK);
+
+// Bottom pill buttons
+document.getElementById('btn-pause').addEventListener('click', () => {
+  Audio.init(); togglePause();
+});
+document.getElementById('btn-restart').addEventListener('click', () => {
+  Audio.init(); startGame();
+});
+
+// Sound toggle button
+document.getElementById('soundToggle').addEventListener('click', () => {
+  Audio.toggleMute();
+});
+
+
+/* ──────────────────────────────────────────────────────────────
+   15. TOUCH SWIPE on CANVAS
+────────────────────────────────────────────────────────────── */
+let touchStartX = 0, touchStartY = 0;
+
+canvas.addEventListener('touchstart', e => {
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
+  e.preventDefault();
+}, { passive: false });
+
+canvas.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  const dy = e.changedTouches[0].clientY - touchStartY;
+  const absDx = Math.abs(dx), absDy = Math.abs(dy);
+
+  // Tap (no movement) = OK
+  if (absDx < 12 && absDy < 12) {
+    handleOK();
+    return;
+  }
+
+  if (gameState !== 'running') return;
+
+  // Determine swipe direction
+  if (absDx > absDy) {
+    // Horizontal
+    if (dx > 0 && !(dir.x === -1)) nextDir = { x: 1,  y: 0 };
+    else if (dx < 0 && !(dir.x === 1))  nextDir = { x: -1, y: 0 };
+  } else {
+    // Vertical
+    if (dy > 0 && !(dir.y === -1)) nextDir = { x: 0, y: 1  };
+    else if (dy < 0 && !(dir.y === 1))  nextDir = { x: 0, y: -1 };
+  }
+
+  e.preventDefault();
+}, { passive: false });
+
+
+/* ──────────────────────────────────────────────────────────────
+   16. BOOT
+────────────────────────────────────────────────────────────── */
+initGame();
+// Start rAF loop so idle screen renders properly
+rafId = requestAnimationFrame(loop);
+
 </script>
 </body>
 </html>
