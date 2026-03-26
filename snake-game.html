@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Snake – by Riyad Bin Alom</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&family=Orbitron:wght@700&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #080c08;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      font-family: 'VT323', monospace;
+      background-image:
+        radial-gradient(ellipse 60% 40% at 50% 0%, #0d200d 0%, transparent 70%),
+        radial-gradient(ellipse 40% 30% at 50% 100%, #0a1a0a 0%, transparent 60%);
+    }
+
+    /* ════ PHONE SHELL ════ */
+    .phone {
+      background: linear-gradient(168deg, #25253200 0%, #1d1d26 20%, #12121a 100%);
+      background: linear-gradient(168deg, #252532 0%, #1a1a22 40%, #0f0f16 100%);
+      border-radius: 28px 28px 52px 52px;
+      padding: 15px 18px 26px;
+      width: 292px;
+      position: relative;
+      box-shadow:
+        0 0 0 1px #2c2c3a,
+        0 0 0 2.5px #111118,
+        8px 16px 48px rgba(0,0,0,0.92),
+        inset 0 1px 0 rgba(255,255,255,0.07),
+        inset 2px 0 4px rgba(255,255,255,0.02),
+        inset -2px 0 4px rgba(0,0,0,0.3);
+    }
+
+    .phone::before {
+      content:''; position:absolute;
+      left:-5px; top:50px; bottom:70px; width:5px;
+      background:linear-gradient(180deg,#1c1c28,#0e0e16,#1c1c28);
+      border-radius:4px 0 0 4px;
+    }
+    .phone::after {
+      content:''; position:absolute;
+      right:-5px; top:50px; bottom:70px; width:5px;
+      background:linear-gradient(180deg,#1c1c28,#0e0e16,#1c1c28);
+      border-radius:0 4px 4px 0;
+    }
+
+    /* Brand bar */
+    .brand-row {
+      display:flex; justify-content:space-between; align-items:center;
+      margin-bottom:12px; padding:0 3px;
+    }
+    .brand-name {
+      font-family:'Orbitron',sans-serif; font-size:14px; font-weight:700;
+      letter-spacing:4px; color:rgba(255,255,255,0.18);
+    }
+    .brand-model {
+      font-family:'Share Tech Mono',monospace; font-size:9px;
+      color:rgba(255,255,255,0.1); letter-spacing:2px;
+    }
+
+    /* ════ SCREEN ════ */
+    .screen-outer {
+      background:#040607; border-radius:8px 8px 5px 5px;
+      padding:7px;
+      box-shadow:
+        inset 0 3px 12px rgba(0,0,0,0.98),
+        inset 0 0 30px rgba(0,0,0,0.5),
+        0 0 18px rgba(100,155,10,0.07);
+      position:relative;
+    }
+    .screen-inner {
+      background:#9bbc0f; border-radius:3px;
+      overflow:hidden; position:relative;
+    }
+    .screen-inner::after {
+      content:''; position:absolute; inset:0;
+      background:linear-gradient(135deg, rgba(255,255,255,0.06) 0%, transparent 42%,
+        transparent 58%, rgba(0,0,0,0.05) 100%);
+      pointer-events:none; z-index:20; border-radius:3px;
+    }
+    .hud {
+      display:flex; justify-content:space-between; align-items:center;
+      padding:3px 7px; background:#7a9c00;
+      border-bottom:1px solid #668500;
+      color:#0f380f; font-size:13px; letter-spacing:0.5px;
+    }
+    #gameCanvas { display:block; image-rendering:pixelated; }
+    .scanlines {
+      position:absolute; inset:0;
+      background:repeating-linear-gradient(0deg,
+        transparent, transparent 1px,
+        rgba(0,0,0,0.11) 1px, rgba(0,0,0,0.11) 2px);
+      pointer-events:none; z-index:10; border-radius:3px;
+    }
+
+    /* Speaker */
+    .speaker {
+      display:flex; justify-content:center; gap:3px; margin:10px 0 10px;
+    }
+    .speaker span { width:2px; height:7px; background:rgba(255,255,255,0.07); border-radius:1px; }
+
+    /* ════ CONTROLS ════ */
+    .controls-area {
+      display:flex; flex-direction:column; align-items:center; gap:18px;
+    }
+
+    /* ── D-Pad ── */
+    .dpad {
+      position:relative; width:148px; height:148px; margin-bottom:8px;
+    }
+
+    /* Big circular base */
+    .dpad-ring {
+      position:absolute; inset:0; border-radius:50%;
+      background:linear-gradient(145deg, #23232f 0%, #141420 60%, #0e0e18 100%);
+      box-shadow:
+        0 5px 16px rgba(0,0,0,0.75),
+        0 2px 4px rgba(0,0,0,0.5),
+        inset 0 1px 0 rgba(255,255,255,0.05),
+        inset 0 -2px 5px rgba(0,0,0,0.5);
+    }
+
+    /* Arms */
+    .dpad-arm {
+      position:absolute;
+      display:flex; align-items:center; justify-content:center;
+      cursor:pointer; user-select:none;
+      -webkit-tap-highlight-color:transparent;
+      transition:filter .06s;
+    }
+    .dpad-arm svg { width:18px; height:18px; fill:rgba(180,195,220,0.55); pointer-events:none; }
+
+    /* Up / Down: tall pill */
+    .dpad-up, .dpad-down {
+      width:44px; height:52px;
+      left:50%; transform:translateX(-50%);
+      border-radius:8px;
+    }
+    .dpad-up   { top:6px;    background:linear-gradient(180deg,#2c2c3c,#1a1a26); box-shadow:0 4px 8px rgba(0,0,0,0.55),inset 0 1px 0 rgba(255,255,255,0.08); }
+    .dpad-down { bottom:6px; background:linear-gradient(0deg,  #2c2c3c,#1a1a26); box-shadow:0 -3px 8px rgba(0,0,0,0.45); }
+
+    /* Left / Right: wide pill */
+    .dpad-left, .dpad-right {
+      width:52px; height:44px;
+      top:50%; transform:translateY(-50%);
+      border-radius:8px;
+    }
+    .dpad-left  { left:6px;   background:linear-gradient(90deg, #2c2c3c,#1a1a26); box-shadow:4px 0 8px rgba(0,0,0,0.5); }
+    .dpad-right { right:6px;  background:linear-gradient(270deg,#2c2c3c,#1a1a26); box-shadow:-4px 0 8px rgba(0,0,0,0.5); }
+
+    /* Press feedback */
+    .dpad-arm:active, .dpad-arm.pressed { filter:brightness(1.4); }
+    .dpad-up:active,    .dpad-up.pressed    { transform:translateX(-50%) translateY(1px); }
+    .dpad-down:active,  .dpad-down.pressed  { transform:translateX(-50%) translateY(-1px); }
+    .dpad-left:active,  .dpad-left.pressed  { transform:translateY(-50%) translateX(1px); }
+    .dpad-right:active, .dpad-right.pressed { transform:translateY(-50%) translateX(-1px); }
+
+    /* ── Bottom Pill Buttons ── */
+    .bottom-btns {
+      display:flex; gap:18px; width:100%; justify-content:center; margin-top:6px;
+    }
+    .pill-btn {
+      flex:1; max-width:112px; height:36px; border:none;
+      border-radius:18px; cursor:pointer;
+      font-family:'Share Tech Mono',monospace; font-size:10px;
+      letter-spacing:1.5px; text-transform:uppercase;
+      display:flex; align-items:center; justify-content:center; gap:6px;
+      -webkit-tap-highlight-color:transparent;
+      transition:transform .08s, box-shadow .08s;
+      position:relative; overflow:hidden;
+    }
+    .pill-btn::before {
+      content:''; position:absolute;
+      top:0; left:0; right:0; height:48%;
+      background:rgba(255,255,255,0.06); border-radius:18px 18px 0 0;
+    }
+    .pill-start {
+      background:linear-gradient(180deg,#5c1f1f,#321010);
+      color:#e08585;
+      box-shadow:0 4px 10px rgba(0,0,0,0.55), 0 0 0 1px #501a1a, inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+    .pill-pause {
+      background:linear-gradient(180deg,#1f3a5c,#102232);
+      color:#85b8e0;
+      box-shadow:0 4px 10px rgba(0,0,0,0.55), 0 0 0 1px #1a3050, inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+    .pill-new {
+      background:linear-gradient(180deg,#1a3d22,#0d2012);
+      color:#72cc7e;
+      box-shadow:0 4px 10px rgba(0,0,0,0.55), 0 0 0 1px #153020, inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+    .pill-btn:active { transform:translateY(1px) scale(0.96); box-shadow:0 1px 4px rgba(0,0,0,0.6); }
+    .pill-icon { font-size:14px; }
+  </style>
+</head>
+<body>
+
+<div class="phone">
+  <div class="brand-row">
+    <span class="brand-name">NOKIA</span>
+    <span class="brand-model">3310</span>
+  </div>
+
+  <div class="screen-outer">
+    <div class="screen-inner">
+      <div class="hud">
+        <span id="scoreDisplay">SCR:0</span>
+        <span id="levelDisplay">LVL:1</span>
+        <span id="hiDisplay">HI:0</span>
+      </div>
+      <canvas id="gameCanvas" width="254" height="180"></canvas>
+      <div class="scanlines"></div>
+    </div>
+  </div>
+
+  <div class="speaker">
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+  </div>
+
+  <div class="controls-area">
+
+    <div class="dpad">
+      <div class="dpad-ring"></div>
+
+      <div class="dpad-arm dpad-up" id="btn-up">
+        <svg viewBox="0 0 24 24"><path d="M12 4 L20 16 H4 Z"/></svg>
+      </div>
+      <div class="dpad-arm dpad-down" id="btn-down">
+        <svg viewBox="0 0 24 24"><path d="M12 20 L4 8 H20 Z"/></svg>
+      </div>
+      <div class="dpad-arm dpad-left" id="btn-left">
+        <svg viewBox="0 0 24 24"><path d="M4 12 L16 4 V20 Z"/></svg>
+      </div>
+      <div class="dpad-arm dpad-right" id="btn-right">
+        <svg viewBox="0 0 24 24"><path d="M20 12 L8 4 V20 Z"/></svg>
+      </div>
+    </div>
+
+    <div class="bottom-btns">
+      <button class="pill-btn pill-start" id="btn-start">
+        <span class="pill-icon">▶</span>START
+      </button>
+      <button class="pill-btn pill-pause" id="btn-pause">
+        <span class="pill-icon">⏸</span>PAUSE
+      </button>
+      <button class="pill-btn pill-new" id="btn-restart">
+        <span class="pill-icon">↺</span>NEW
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════ CREATOR CREDIT ════ -->
+<div style="margin-top:20px;display:flex;flex-direction:column;align-items:center;gap:5px;">
+  <span style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2.5px;color:rgba(139,172,15,0.3);text-transform:uppercase;">crafted by</span>
+  <span style="font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700;letter-spacing:4px;color:rgba(139,172,15,0.65);text-shadow:0 0 14px rgba(139,172,15,0.25);">RIYAD BIN ALOM</span>
+  <span style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;color:rgba(139,172,15,0.3);">@Riyad_Bin_Alom &nbsp;·&nbsp; riyadbinal0m</span>
+  <span style="font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1px;color:rgba(139,172,15,0.18);margin-top:3px;">↑↓←→ or WASD &nbsp;·&nbsp; SPACE to start/pause</span>
+</div>
+
+<script>
+  const C = {
+    bg:'#9bbc0f', grid:'#8aab0a',
+    snake:'#0f380f', snakeM:'#1e4a1e',
+    food:'#0f380f', text:'#0f380f',
+    overlay:'rgba(130,162,6,0.89)',
+  };
+  const COLS=21, ROWS=15;
+  const canvas=document.getElementById('gameCanvas');
+  const ctx=canvas.getContext('2d');
+  const CELL=canvas.width/COLS;
+
+  let snake,dir,nextDir,food,score,hiScore=parseInt(localStorage.getItem('riyad_snakeHi')||'0'),level,speed;
+  let gameLoop, state='idle';
+  updateHUD();
+
+  function initGame(){
+    clearInterval(gameLoop);
+    snake=[{x:10,y:7},{x:9,y:7},{x:8,y:7}];
+    dir={x:1,y:0}; nextDir={x:1,y:0};
+    score=0; level=1; speed=175;
+    placeFood(); updateHUD(); state='idle'; renderIdle();
+  }
+
+  function placeFood(){
+    const emptyCells=[];
+    for(let x=0;x<COLS;x++){
+      for(let y=0;y<ROWS;y++){
+        if(!snake.some(s=>s.x===x&&s.y===y)){
+          emptyCells.push({x,y});
+        }
+      }
+    }
+    if(emptyCells.length>0){
+      const idx=Math.floor(Math.random()*emptyCells.length);
+      food=emptyCells[idx];
+    }
+  }
+
+  function updateHUD(){
+    document.getElementById('scoreDisplay').textContent='SCR:'+(score||0);
+    document.getElementById('levelDisplay').textContent='LVL:'+(level||1);
+    document.getElementById('hiDisplay').textContent='HI:'+hiScore;
+  }
+
+  function drawBg(){
+    ctx.fillStyle=C.bg; ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle=C.grid;
+    for(let x=0;x<COLS;x++) for(let y=0;y<ROWS;y++){
+      ctx.fillRect(x*CELL+CELL-1,y*CELL,1,CELL);
+      ctx.fillRect(x*CELL,y*CELL+CELL-1,CELL,1);
+    }
+  }
+
+  function drawFood(){
+    const px=food.x*CELL,py=food.y*CELL,s=CELL;
+    ctx.fillStyle=C.food;
+    ctx.fillRect(px+3,py+1,2,2);
+    ctx.fillRect(px+2,py+3,s-4,s-5);
+    ctx.fillRect(px+1,py+4,s-2,s-7);
+    ctx.fillRect(px+2,py+s-4,s-4,2);
+    ctx.fillStyle=C.bg; ctx.fillRect(px+3,py+4,2,2);
+  }
+
+  function drawSnake(){
+    snake.forEach((seg,i)=>{
+      const px=seg.x*CELL,py=seg.y*CELL;
+      ctx.fillStyle=C.snake;
+      ctx.fillRect(px+1,py+1,CELL-2,CELL-2);
+      if(i===0){
+        ctx.fillStyle=C.bg;
+        let eyes;
+        if(dir.x===1)        eyes=[{ex:CELL-4,ey:2},{ex:CELL-4,ey:CELL-5}];
+        else if(dir.x===-1)  eyes=[{ex:2,ey:2},{ex:2,ey:CELL-5}];
+        else if(dir.y===-1)  eyes=[{ex:2,ey:2},{ex:CELL-4,ey:2}];
+        else                  eyes=[{ex:2,ey:CELL-4},{ex:CELL-4,ey:CELL-4}];
+        eyes.forEach(e=>ctx.fillRect(px+e.ex,py+e.ey,2,2));
+      } else {
+        ctx.fillStyle=C.snakeM;
+        ctx.fillRect(px+2,py+2,CELL-4,CELL-4);
+      }
+    });
+  }
+
+  function overlay(title,sub1,sub2=''){
+    ctx.fillStyle=C.overlay; ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle=C.text; ctx.textAlign='center';
+    ctx.font='bold 26px VT323,monospace';
+    ctx.fillText(title,canvas.width/2,canvas.height/2-18);
+    ctx.font='15px VT323,monospace';
+    ctx.fillText(sub1,canvas.width/2,canvas.height/2+2);
+    if(sub2) ctx.fillText(sub2,canvas.width/2,canvas.height/2+18);
+    ctx.save();
+    ctx.font='9px Share Tech Mono,monospace';
+    ctx.fillStyle='rgba(15,56,15,0.4)';
+    ctx.textAlign='left';
+    ctx.fillText('by RIYAD BIN ALOM',4,canvas.height-4);
+    ctx.restore();
+  }
+
+  function renderIdle()  { drawBg(); drawFood(); drawSnake(); overlay('SNAKE','PRESS START'); }
+  function renderPause() { drawBg(); drawFood(); drawSnake(); overlay('PAUSED','START to resume'); }
+  function renderDead()  { drawBg(); drawFood(); drawSnake(); overlay('GAME OVER','SCORE:'+score,'START to restart'); }
+  function render()      { drawBg(); drawFood(); drawSnake(); }
+
+  function tick(){
+    dir={...nextDir};
+    const head={x:(snake[0].x+dir.x+COLS)%COLS,y:(snake[0].y+dir.y+ROWS)%ROWS};
+    if(snake.some(s=>s.x===head.x&&s.y===head.y)){ die(); return; }
+    snake.unshift(head);
+    if(head.x===food.x&&head.y===food.y){
+      score+=10*level;
+      if(score>hiScore){ hiScore=score; localStorage.setItem('riyad_snakeHi',hiScore); }
+      level=Math.floor(snake.length/5)+1;
+      speed=Math.max(65,175-(level-1)*16);
+      placeFood(); updateHUD();
+      clearInterval(gameLoop); gameLoop=setInterval(tick,speed);
+    } else { snake.pop(); }
+    render();
+  }
+
+  function die(){
+    clearInterval(gameLoop); state='dead';
+    let f=0;
+    const fl=setInterval(()=>{
+      if(f%2===0){ ctx.fillStyle=C.snake; ctx.fillRect(0,0,canvas.width,canvas.height); }
+      else render();
+      if(++f>=6){ clearInterval(fl); renderDead(); }
+    },90);
+  }
+
+  function startGame(){
+    clearInterval(gameLoop); initGame();
+    state='running'; gameLoop=setInterval(tick,speed);
+  }
+
+  function togglePause(){
+    if(state==='running'){ clearInterval(gameLoop); state='paused'; renderPause(); }
+    else if(state==='paused'){ state='running'; gameLoop=setInterval(tick,speed); }
+  }
+
+  function handleStart(){
+    if(state==='idle'||state==='dead') startGame();
+    else togglePause();
+  }
+
+  const KEY_DIR={
+    ArrowUp:{x:0,y:-1},ArrowDown:{x:0,y:1},ArrowLeft:{x:-1,y:0},ArrowRight:{x:1,y:0},
+    w:{x:0,y:-1},s:{x:0,y:1},a:{x:-1,y:0},d:{x:1,y:0},
+  };
+  document.addEventListener('keydown',e=>{
+    if(e.key===' '||e.key==='Enter'){ handleStart(); return; }
+    const d=KEY_DIR[e.key];
+    if(d&&state==='running'){
+      if(d.x!=-dir.x||d.y!=-dir.y) nextDir=d;
+      e.preventDefault();
+    }
+  });
+
+  function bindBtn(id,fn){
+    const el=document.getElementById(id);
+    const on=ev=>{ ev.preventDefault(); fn(); el.classList.add('pressed'); };
+    const off=()=>el.classList.remove('pressed');
+    el.addEventListener('mousedown',on);
+    el.addEventListener('touchstart',on,{passive:false});
+    ['mouseup','mouseleave','touchend'].forEach(ev=>el.addEventListener(ev,off));
+  }
+
+  bindBtn('btn-up',   ()=>{ if(state==='running'&&dir.y!==1)  nextDir={x:0,y:-1}; });
+  bindBtn('btn-down', ()=>{ if(state==='running'&&dir.y!==-1) nextDir={x:0,y:1};  });
+  bindBtn('btn-left', ()=>{ if(state==='running'&&dir.x!==1)  nextDir={x:-1,y:0}; });
+  bindBtn('btn-right',()=>{ if(state==='running'&&dir.x!==-1) nextDir={x:1,y:0};  });
+
+  document.getElementById('btn-start').addEventListener('click',handleStart);
+  document.getElementById('btn-pause').addEventListener('click',togglePause);
+  document.getElementById('btn-restart').addEventListener('click',()=>{ clearInterval(gameLoop); initGame(); });
+
+  let tx=0,ty=0;
+  canvas.addEventListener('touchstart',e=>{ tx=e.touches[0].clientX; ty=e.touches[0].clientY; e.preventDefault(); },{passive:false});
+  canvas.addEventListener('touchend',e=>{
+    const dx=e.changedTouches[0].clientX-tx, dy=e.changedTouches[0].clientY-ty;
+    if(Math.abs(dx)<12&&Math.abs(dy)<12){ handleStart(); return; }
+    if(Math.abs(dx)>Math.abs(dy)){
+      if(dx>0&&dir.x!==-1) nextDir={x:1,y:0};
+      else if(dx<0&&dir.x!==1) nextDir={x:-1,y:0};
+    } else {
+      if(dy>0&&dir.y!==-1) nextDir={x:0,y:1};
+      else if(dy<0&&dir.y!==1) nextDir={x:0,y:-1};
+    }
+    e.preventDefault();
+  },{passive:false});
+
+  initGame();
+</script>
+</body>
+</html>
