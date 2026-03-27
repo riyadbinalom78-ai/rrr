@@ -5,13 +5,18 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
   <title>Snake — Riyad Bin Alom</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&family=Orbitron:wght@600;700&display=swap" rel="stylesheet"/>
-<style>
-/* ══════════════════════════════════════════════════
-   BASE RESET
-══════════════════════════════════════════════════ */
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&family=Orbitron:wght@600;700;900&display=swap" rel="stylesheet"/>
 
+<style>
+/* ════════════════════════════════════════════════════════
+   RESET
+════════════════════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+button{font-family:inherit;cursor:pointer;border:none;background:none;}
+
+/* ════════════════════════════════════════════════════════
+   PAGE BODY
+════════════════════════════════════════════════════════ */
 body{
   background:#060a06;
   min-height:100vh;
@@ -22,59 +27,118 @@ body{
   background-image:
     radial-gradient(ellipse 70% 45% at 50% -5%,#091809 0%,transparent 70%),
     repeating-linear-gradient(0deg,transparent,transparent 3px,
-      rgba(0,255,0,0.009) 3px,rgba(0,255,0,0.009) 4px);
+      rgba(0,255,0,0.008) 3px,rgba(0,255,0,0.008) 4px);
 }
 
-/* ══════════════════════════════════════════════════
+/* ════════════════════════════════════════════════════════
+   HAMBURGER MENU
+════════════════════════════════════════════════════════ */
+#hamburger-btn{
+  position:fixed;top:16px;right:16px;z-index:1000;
+  width:44px;height:44px;border-radius:10px;
+  background:rgba(10,30,10,0.75);
+  border:1px solid rgba(100,200,30,0.25);
+  backdrop-filter:blur(8px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
+  cursor:pointer;transition:background .2s,border-color .2s;
+  -webkit-tap-highlight-color:transparent;
+}
+#hamburger-btn:hover{background:rgba(20,50,20,0.9);border-color:rgba(100,200,30,0.5);}
+#hamburger-btn .bar{
+  width:20px;height:2px;border-radius:1px;
+  background:rgba(140,200,30,0.85);
+  transition:transform .3s ease,opacity .3s ease;
+}
+/* X state */
+#hamburger-btn.open .bar:nth-child(1){transform:translateY(7px) rotate(45deg);}
+#hamburger-btn.open .bar:nth-child(2){opacity:0;}
+#hamburger-btn.open .bar:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+
+/* Menu overlay */
+#nav-overlay{
+  position:fixed;inset:0;z-index:900;
+  background:rgba(0,0,0,0.55);backdrop-filter:blur(4px);
+  opacity:0;pointer-events:none;
+  transition:opacity .3s ease;
+}
+#nav-overlay.open{opacity:1;pointer-events:all;}
+
+/* Slide-in panel */
+#nav-panel{
+  position:fixed;top:0;right:0;z-index:950;
+  width:240px;height:100vh;
+  background:linear-gradient(180deg,#0a1a0a 0%,#060e06 100%);
+  border-left:1px solid rgba(80,180,20,0.15);
+  box-shadow:-8px 0 40px rgba(0,0,0,0.8);
+  padding:72px 0 24px;
+  transform:translateX(100%);
+  transition:transform .35s cubic-bezier(.22,.68,0,1.2);
+  display:flex;flex-direction:column;gap:0;
+}
+#nav-panel.open{transform:translateX(0);}
+
+.nav-header{
+  padding:0 24px 20px;
+  border-bottom:1px solid rgba(80,180,20,0.12);
+  margin-bottom:8px;
+}
+.nav-header-name{
+  font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;
+  letter-spacing:3px;color:rgba(120,200,30,0.55);
+}
+
+.nav-item{
+  display:flex;align-items:center;gap:12px;
+  padding:13px 24px;
+  color:rgba(200,230,180,0.75);
+  font-family:'Share Tech Mono',monospace;font-size:13px;
+  letter-spacing:1px;text-decoration:none;
+  cursor:pointer;transition:background .18s,color .18s,padding-left .18s;
+  border-left:3px solid transparent;
+  -webkit-tap-highlight-color:transparent;
+}
+.nav-item:hover,.nav-item:active{
+  background:rgba(80,180,20,0.08);
+  color:rgba(140,220,60,0.95);
+  padding-left:28px;
+  border-left-color:rgba(100,200,30,0.6);
+}
+.nav-icon{font-size:15px;width:20px;text-align:center;}
+
+.nav-footer{
+  margin-top:auto;padding:16px 24px;
+  font-family:'Share Tech Mono',monospace;font-size:9px;
+  color:rgba(100,150,60,0.35);letter-spacing:1px;
+  border-top:1px solid rgba(80,180,20,0.08);
+}
+
+/* ════════════════════════════════════════════════════════
    PHONE SHELL
-══════════════════════════════════════════════════ */
+════════════════════════════════════════════════════════ */
 .phone{
-  position:relative;
-  width:300px;
+  position:relative;width:300px;
   background:linear-gradient(168deg,#272737 0%,#1a1a24 38%,#101018 100%);
   border-radius:32px 32px 56px 56px;
   padding:15px 18px 26px;
   box-shadow:
-    0 0 0 1px #2f2f3c,
-    0 0 0 3px #0c0c11,
+    0 0 0 1px #2f2f3c,0 0 0 3px #0c0c11,
     10px 22px 60px rgba(0,0,0,0.96),
     inset 0 1px 0 rgba(255,255,255,0.07),
     inset 0 -3px 10px rgba(0,0,0,0.55);
 }
-/* Left ridge */
-.phone::before{
-  content:'';position:absolute;
-  left:-5px;top:55px;bottom:78px;width:5px;
-  background:linear-gradient(180deg,#1d1d29,#0d0d15 50%,#1d1d29);
-  border-radius:4px 0 0 4px;
-}
-/* Right ridge */
-.phone::after{
-  content:'';position:absolute;
-  right:-5px;top:55px;bottom:78px;width:5px;
-  background:linear-gradient(180deg,#1d1d29,#0d0d15 50%,#1d1d29);
-  border-radius:0 4px 4px 0;
-}
+.phone::before{content:'';position:absolute;left:-5px;top:55px;bottom:78px;width:5px;
+  background:linear-gradient(180deg,#1d1d29,#0d0d15 50%,#1d1d29);border-radius:4px 0 0 4px;}
+.phone::after{content:'';position:absolute;right:-5px;top:55px;bottom:78px;width:5px;
+  background:linear-gradient(180deg,#1d1d29,#0d0d15 50%,#1d1d29);border-radius:0 4px 4px 0;}
 
-/* ── Brand bar ── */
-.brand-row{
-  display:flex;justify-content:space-between;align-items:center;
-  margin-bottom:12px;padding:0 4px;
-}
-.brand-logo{
-  font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;
-  letter-spacing:5px;color:rgba(255,255,255,0.15);
-}
+/* Brand */
+.brand-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding:0 4px;}
+.brand-logo{font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;letter-spacing:5px;color:rgba(255,255,255,0.15);}
 .brand-right{display:flex;align-items:center;gap:8px;}
-.brand-model{
-  font-family:'Share Tech Mono',monospace;font-size:9px;
-  color:rgba(255,255,255,0.09);letter-spacing:2px;
-}
-/* Mute toggle */
+.brand-model{font-family:'Share Tech Mono',monospace;font-size:9px;color:rgba(255,255,255,0.09);letter-spacing:2px;}
 #soundToggle{
   width:22px;height:22px;border-radius:50%;
-  border:1px solid rgba(140,200,15,0.2);
-  background:rgba(140,200,15,0.05);
+  border:1px solid rgba(140,200,15,0.2);background:rgba(140,200,15,0.05);
   color:rgba(140,200,15,0.45);font-size:11px;cursor:pointer;
   display:flex;align-items:center;justify-content:center;
   transition:all .15s;-webkit-tap-highlight-color:transparent;
@@ -82,163 +146,111 @@ body{
 #soundToggle:hover{border-color:rgba(140,200,15,0.5);color:rgba(140,200,15,0.9);}
 #soundToggle.muted{opacity:0.4;}
 
-/* ══════════════════════════════════════════════════
+/* ════════════════════════════════════════════════════════
    SCREEN
-══════════════════════════════════════════════════ */
+════════════════════════════════════════════════════════ */
 .screen-bezel{
-  background:#030506;border-radius:10px 10px 5px 5px;
-  padding:6px 6px 5px;
-  box-shadow:
-    inset 0 4px 14px rgba(0,0,0,0.99),
-    inset 0 0 40px rgba(0,0,0,0.5),
-    0 0 22px rgba(85,145,8,0.06);
+  background:#030506;border-radius:10px 10px 5px 5px;padding:6px 6px 5px;
+  box-shadow:inset 0 4px 14px rgba(0,0,0,0.99),inset 0 0 40px rgba(0,0,0,0.5),0 0 22px rgba(85,145,8,0.06);
   position:relative;
 }
-.screen-inner{
-  border-radius:4px;overflow:hidden;
-  position:relative;background:#9bbc0f;
-}
-/* Glass glare */
+.screen-inner{border-radius:4px;overflow:hidden;position:relative;background:#9bbc0f;}
 .screen-inner::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(130deg,
-    rgba(255,255,255,0.055) 0%,transparent 42%,
-    transparent 60%,rgba(0,0,0,0.04) 100%);
-  pointer-events:none;z-index:30;border-radius:4px;
+  content:'';position:absolute;inset:0;border-radius:4px;
+  background:linear-gradient(130deg,rgba(255,255,255,0.055) 0%,transparent 42%,transparent 60%,rgba(0,0,0,0.04) 100%);
+  pointer-events:none;z-index:30;
 }
-/* HUD bar */
 .hud{
   display:flex;justify-content:space-between;align-items:center;
-  padding:3px 7px 2px;
-  background:#70940a;border-bottom:2px solid #5c7c07;
-  color:#0f380f;font-size:14px;letter-spacing:0.5px;
-  position:relative;z-index:5;
+  padding:3px 7px 2px;background:#70940a;border-bottom:2px solid #5c7c07;
+  color:#0f380f;font-size:14px;letter-spacing:0.5px;position:relative;z-index:5;
 }
-.hud span{min-width:56px;}
+.hud span{min-width:54px;}
 .hud span:nth-child(2){text-align:center;}
 .hud span:nth-child(3){text-align:right;}
-/* Heart HUD indicator */
-#hudHeart{
-  position:absolute;right:4px;top:50%;transform:translateY(-50%);
-  font-size:10px;display:none;
-}
 
-#gameCanvas{
-  display:block;image-rendering:pixelated;
-  image-rendering:crisp-edges;position:relative;z-index:2;
-}
-/* LCD scanlines */
+#gameCanvas{display:block;image-rendering:pixelated;image-rendering:crisp-edges;position:relative;z-index:2;}
 .scanlines{
   position:absolute;inset:0;
-  background:repeating-linear-gradient(0deg,
-    transparent 0px,transparent 1px,
-    rgba(0,0,0,0.10) 1px,rgba(0,0,0,0.10) 2px);
+  background:repeating-linear-gradient(0deg,transparent 0px,transparent 1px,rgba(0,0,0,0.10) 1px,rgba(0,0,0,0.10) 2px);
   pointer-events:none;z-index:20;border-radius:4px;
 }
 
 /* Speaker */
-.speaker{display:flex;justify-content:center;gap:3px;margin:8px 0 8px;}
+.speaker{display:flex;justify-content:center;gap:3px;margin:8px 0;}
 .speaker span{width:2px;height:7px;background:rgba(255,255,255,0.07);border-radius:1px;}
 
-/* ══════════════════════════════════════════════════
-   CONTROLS
-══════════════════════════════════════════════════ */
-.controls-area{
-  display:flex;flex-direction:column;align-items:center;gap:13px;
-}
-
-/* ── D-PAD ── */
+/* ════════════════════════════════════════════════════════
+   D-PAD
+════════════════════════════════════════════════════════ */
+.controls-area{display:flex;flex-direction:column;align-items:center;gap:13px;}
 .dpad-wrap{position:relative;width:150px;height:150px;}
 
 .dpad-ring{
   position:absolute;inset:0;border-radius:50%;
   background:radial-gradient(circle at 38% 34%,#202030,#13131e 55%,#0b0b13);
-  box-shadow:
-    0 6px 22px rgba(0,0,0,0.82),
-    0 2px 5px rgba(0,0,0,0.5),
-    inset 0 1px 0 rgba(255,255,255,0.05),
-    inset 0 -2px 6px rgba(0,0,0,0.55);
+  box-shadow:0 6px 22px rgba(0,0,0,0.82),0 2px 5px rgba(0,0,0,0.5),
+    inset 0 1px 0 rgba(255,255,255,0.05),inset 0 -2px 6px rgba(0,0,0,0.55);
 }
-
-/* 3×3 grid cross — corners transparent */
 .dpad-cross{
-  position:absolute;
-  left:50%;top:50%;transform:translate(-50%,-50%);
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
   width:136px;height:136px;
-  display:grid;
-  grid-template-columns:45px 46px 45px;
-  grid-template-rows:45px 46px 45px;
-  gap:0;
+  display:grid;grid-template-columns:45px 46px 45px;grid-template-rows:45px 46px 45px;
 }
-.dpad-corner{pointer-events:none;}/* invisible spacer */
+.dpad-corner{pointer-events:none;}
 
 .dpad-btn{
   display:flex;align-items:center;justify-content:center;
-  cursor:pointer;user-select:none;
-  -webkit-tap-highlight-color:transparent;
-  position:relative;overflow:hidden;
-  transition:filter .05s;
+  cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;
+  position:relative;overflow:hidden;transition:filter .05s;
 }
+/* Neon-glow arrows */
 .dpad-btn svg{
-  width:15px;height:15px;
-  fill:rgba(185,210,240,0.62);
-  filter:drop-shadow(0 1px 2px rgba(0,0,0,0.7));
+  width:16px;height:16px;
+  fill:rgba(100,220,80,0.70);
+  filter:drop-shadow(0 0 4px rgba(80,200,40,0.55)) drop-shadow(0 1px 2px rgba(0,0,0,0.8));
   pointer-events:none;position:relative;z-index:2;
+  transition:filter .1s;
 }
-/* Top sheen */
 .dpad-btn::after{
   content:'';position:absolute;inset:0;
   background:linear-gradient(180deg,rgba(255,255,255,0.07) 0%,transparent 55%);
   pointer-events:none;border-radius:inherit;
 }
 
-.dpad-up{
-  grid-column:2;grid-row:1;
-  border-radius:8px 8px 0 0;
-  background:linear-gradient(180deg,#2e2e46,#1c1c2e);
-  box-shadow:0 5px 10px rgba(0,0,0,0.65),inset 0 1px 0 rgba(255,255,255,0.09);
-}
-.dpad-down{
-  grid-column:2;grid-row:3;
-  border-radius:0 0 8px 8px;
-  background:linear-gradient(0deg,#2e2e46,#1c1c2e);
-  box-shadow:0 -3px 8px rgba(0,0,0,0.5);
-}
-.dpad-left{
-  grid-column:1;grid-row:2;
-  border-radius:8px 0 0 8px;
-  background:linear-gradient(90deg,#2e2e46,#1c1c2e);
-  box-shadow:5px 0 10px rgba(0,0,0,0.65);
-}
-.dpad-right{
-  grid-column:3;grid-row:2;
-  border-radius:0 8px 8px 0;
-  background:linear-gradient(270deg,#2e2e46,#1c1c2e);
-  box-shadow:-5px 0 10px rgba(0,0,0,0.5);
-}
+.dpad-up{grid-column:2;grid-row:1;border-radius:8px 8px 0 0;
+  background:linear-gradient(180deg,#1e2e18,#141e10);
+  box-shadow:0 5px 10px rgba(0,0,0,0.65),inset 0 1px 0 rgba(100,220,60,0.10);}
+.dpad-down{grid-column:2;grid-row:3;border-radius:0 0 8px 8px;
+  background:linear-gradient(0deg,#1e2e18,#141e10);box-shadow:0 -3px 8px rgba(0,0,0,0.5);}
+.dpad-left{grid-column:1;grid-row:2;border-radius:8px 0 0 8px;
+  background:linear-gradient(90deg,#1e2e18,#141e10);box-shadow:5px 0 10px rgba(0,0,0,0.65);}
+.dpad-right{grid-column:3;grid-row:2;border-radius:0 8px 8px 0;
+  background:linear-gradient(270deg,#1e2e18,#141e10);box-shadow:-5px 0 10px rgba(0,0,0,0.5);}
 
-/* Decorative blank center disc (no OK button) */
 .dpad-center-disc{
   grid-column:2;grid-row:2;
-  background:radial-gradient(circle at 40% 38%,#1a1a28,#0c0c16);
-  border-radius:50%;margin:6px;
-  box-shadow:inset 0 2px 6px rgba(0,0,0,0.7),0 1px 0 rgba(255,255,255,0.03);
+  background:radial-gradient(circle at 40% 38%,#141e10,#0a100a);
+  border-radius:50%;margin:7px;
+  box-shadow:inset 0 2px 6px rgba(0,0,0,0.7);
 }
 
-/* Press feedback */
-.dpad-up:active,.dpad-up.pressed       {filter:brightness(1.55);transform:translateY(1.5px);}
-.dpad-down:active,.dpad-down.pressed   {filter:brightness(1.55);transform:translateY(-1.5px);}
-.dpad-left:active,.dpad-left.pressed   {filter:brightness(1.55);transform:translateX(1.5px);}
-.dpad-right:active,.dpad-right.pressed {filter:brightness(1.55);transform:translateX(-1.5px);}
+/* Press: neon brighten + push */
+.dpad-up:active,.dpad-up.pressed{filter:brightness(1.6);transform:translateY(1.5px);}
+.dpad-up:active svg,.dpad-up.pressed svg{filter:drop-shadow(0 0 7px rgba(80,255,40,0.9));}
+.dpad-down:active,.dpad-down.pressed{filter:brightness(1.6);transform:translateY(-1.5px);}
+.dpad-down:active svg,.dpad-down.pressed svg{filter:drop-shadow(0 0 7px rgba(80,255,40,0.9));}
+.dpad-left:active,.dpad-left.pressed{filter:brightness(1.6);transform:translateX(1.5px);}
+.dpad-left:active svg,.dpad-left.pressed svg{filter:drop-shadow(0 0 7px rgba(80,255,40,0.9));}
+.dpad-right:active,.dpad-right.pressed{filter:brightness(1.6);transform:translateX(-1.5px);}
+.dpad-right:active svg,.dpad-right.pressed svg{filter:drop-shadow(0 0 7px rgba(80,255,40,0.9));}
 
-/* ══════════════════════════════════════════════════
-   BOTTOM BUTTONS  [ PAUSE ]  [ ▶ START ]  [ NEW ]
-══════════════════════════════════════════════════ */
-.bottom-btns{
-  display:flex;gap:8px;width:100%;justify-content:center;align-items:center;
-}
+/* ════════════════════════════════════════════════════════
+   BOTTOM BUTTONS
+════════════════════════════════════════════════════════ */
+.bottom-btns{display:flex;gap:8px;width:100%;justify-content:center;align-items:center;}
 
-/* Small utility buttons */
+/* Small pills */
 .pill-btn{
   height:36px;border:none;border-radius:18px;cursor:pointer;
   font-family:'Share Tech Mono',monospace;font-size:9px;
@@ -246,109 +258,214 @@ body{
   display:flex;align-items:center;justify-content:center;gap:5px;
   -webkit-tap-highlight-color:transparent;
   transition:transform .08s,filter .08s;
-  position:relative;overflow:hidden;padding:0 12px;
-  flex-shrink:0;
+  position:relative;overflow:hidden;padding:0 12px;flex-shrink:0;
 }
 .pill-btn::before{
-  content:'';position:absolute;
-  top:0;left:10%;right:10%;height:50%;
-  background:rgba(255,255,255,0.07);border-radius:50%;
-  pointer-events:none;
+  content:'';position:absolute;top:0;left:10%;right:10%;height:50%;
+  background:rgba(255,255,255,0.07);border-radius:50%;pointer-events:none;
 }
 .pill-pause{
-  background:linear-gradient(180deg,#1d3b5e,#0e2030);color:#7fb6e8;
-  box-shadow:0 4px 10px rgba(0,0,0,0.62),0 0 0 1px #172838;
+  background:linear-gradient(180deg,#1a3050,#0d1e30);
+  color:#60a8e0;
+  box-shadow:0 4px 10px rgba(0,0,0,0.65),0 0 0 1px #14243e,
+    inset 0 0 8px rgba(50,120,220,0.08);
 }
+.pill-pause:hover{box-shadow:0 4px 12px rgba(0,0,0,0.65),0 0 10px rgba(50,120,220,0.25),0 0 0 1px #1e3860;}
 .pill-new{
-  background:linear-gradient(180deg,#193d22,#0d2014);color:#6bd678;
-  box-shadow:0 4px 10px rgba(0,0,0,0.62),0 0 0 1px #122e18;
+  background:linear-gradient(180deg,#162e18,#0c1c0e);
+  color:#58cc68;
+  box-shadow:0 4px 10px rgba(0,0,0,0.65),0 0 0 1px #102614,
+    inset 0 0 8px rgba(50,200,60,0.08);
 }
-.pill-btn:active{transform:translateY(1px) scale(0.96);filter:brightness(1.25);}
+.pill-new:hover{box-shadow:0 4px 12px rgba(0,0,0,0.65),0 0 10px rgba(50,200,60,0.25),0 0 0 1px #1a4020;}
+.pill-btn:active{transform:translateY(1px) scale(0.95);filter:brightness(1.3);}
 .pill-icon{font-size:13px;line-height:1;}
 
-/* ── HERO START BUTTON ── */
+/* ── Hero START button ── */
 @keyframes startGlow{
-  0%,100%{box-shadow:0 0 12px rgba(60,210,80,0.30),0 5px 14px rgba(0,0,0,0.65),0 0 0 1px #1a5022;}
-  50%    {box-shadow:0 0 26px rgba(60,210,80,0.60),0 5px 14px rgba(0,0,0,0.65),0 0 0 1px #257030;}
+  0%,100%{box-shadow:0 0 14px rgba(50,200,70,0.30),0 5px 16px rgba(0,0,0,0.70),0 0 0 1px #1a5022;}
+  50%    {box-shadow:0 0 30px rgba(50,200,70,0.65),0 5px 16px rgba(0,0,0,0.70),0 0 0 1px #236030;}
 }
-
 #btn-start{
-  flex:1;max-width:118px;height:44px;
-  border:none;border-radius:22px;cursor:pointer;
+  flex:1;max-width:118px;height:44px;border:none;border-radius:22px;cursor:pointer;
   font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;
   letter-spacing:2.5px;text-transform:uppercase;
   display:flex;align-items:center;justify-content:center;gap:7px;
   -webkit-tap-highlight-color:transparent;
   position:relative;overflow:hidden;
-  background:linear-gradient(180deg,#28aa3c 0%,#157028 50%,#0d4e1e 100%);
-  color:#d0ffda;
-  text-shadow:0 1px 3px rgba(0,0,0,0.55);
+  background:linear-gradient(180deg,#28a83a 0%,#147026 50%,#0c4e1c 100%);
+  color:#d0ffdc;text-shadow:0 1px 3px rgba(0,0,0,0.55);
   animation:startGlow 2.4s ease-in-out infinite;
   transition:transform .1s,filter .1s;
 }
-/* Inner shine arc */
 #btn-start::before{
-  content:'';position:absolute;
-  top:3px;left:15%;right:15%;height:44%;
-  background:rgba(255,255,255,0.13);border-radius:50%;
-  pointer-events:none;
+  content:'';position:absolute;top:3px;left:15%;right:15%;height:44%;
+  background:rgba(255,255,255,0.14);border-radius:50%;pointer-events:none;
 }
-/* Press state */
 #btn-start:active,#btn-start.pressed{
   transform:translateY(2px) scale(0.94);filter:brightness(1.3);
-  animation:none;
-  box-shadow:0 1px 5px rgba(0,0,0,0.7) !important;
+  animation:none;box-shadow:0 1px 5px rgba(0,0,0,0.7) !important;
 }
-/* Resume mode — blue */
 #btn-start.resume-mode{
-  background:linear-gradient(180deg,#2e5ee0,#183890);
-  color:#d5e8ff;animation:none;
-  box-shadow:0 0 20px rgba(50,100,255,0.40),0 5px 14px rgba(0,0,0,0.65);
+  background:linear-gradient(180deg,#2a5ad8,#152e8a);color:#d5e8ff;
+  animation:none;box-shadow:0 0 22px rgba(50,100,255,0.42),0 5px 16px rgba(0,0,0,0.68);
 }
 .start-icon{font-size:16px;line-height:1;}
 
-/* ══════════════════════════════════════════════════
+/* ════════════════════════════════════════════════════════
    CREATOR CREDIT
-══════════════════════════════════════════════════ */
-.credit-strip{
-  margin-top:17px;display:flex;flex-direction:column;
-  align-items:center;gap:4px;
-}
+════════════════════════════════════════════════════════ */
+.credit-strip{margin-top:17px;display:flex;flex-direction:column;align-items:center;gap:4px;}
 .credit-by    {font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:3px;color:rgba(139,178,15,0.26);text-transform:uppercase;}
 .credit-name  {font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;letter-spacing:4px;color:rgba(139,178,15,0.60);text-shadow:0 0 16px rgba(139,198,15,0.20);}
 .credit-handles{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1px;color:rgba(139,178,15,0.26);}
 .credit-hint  {margin-top:2px;font-family:'Share Tech Mono',monospace;font-size:7.5px;letter-spacing:1px;color:rgba(139,178,15,0.15);}
 
-/* ══════════════════════════════════════════════════
-   SCORE POPUP ANIMATIONS
-══════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════
+   SCORE POPUP / HEART POPUP
+════════════════════════════════════════════════════════ */
 @keyframes scoreFloat{
   0%  {opacity:1;transform:translateY(0) scale(1);}
   100%{opacity:0;transform:translateY(-30px) scale(1.5);}
 }
 .score-popup{
-  position:absolute;font-family:'VT323',monospace;font-size:16px;
-  color:#0f380f;pointer-events:none;z-index:50;
-  animation:scoreFloat .7s ease-out forwards;
+  position:absolute;font-family:'VT323',monospace;font-size:16px;color:#0f380f;
+  pointer-events:none;z-index:50;animation:scoreFloat .7s ease-out forwards;
   text-shadow:1px 1px 0 rgba(255,255,255,0.35);
 }
 @keyframes heartPop{
   0%  {opacity:1;transform:scale(1) translateY(0);}
-  55% {opacity:1;transform:scale(1.7) translateY(-12px);}
-  100%{opacity:0;transform:scale(1.3) translateY(-22px);}
+  55% {opacity:1;transform:scale(1.8) translateY(-14px);}
+  100%{opacity:0;transform:scale(1.3) translateY(-24px);}
 }
 .heart-popup{
   position:absolute;font-family:'VT323',monospace;font-size:18px;
-  pointer-events:none;z-index:50;color:#ff2244;
-  animation:heartPop .9s ease-out forwards;
+  pointer-events:none;z-index:50;color:#ff2244;animation:heartPop .9s ease-out forwards;
+}
+
+/* ════════════════════════════════════════════════════════
+   GAME-OVER DOM OVERLAY
+════════════════════════════════════════════════════════ */
+#go-overlay{
+  display:none;
+  position:absolute;inset:0;z-index:100;
+  background:linear-gradient(180deg,#020202 0%,#0a0302 100%);
+  border-radius:4px;
+  flex-direction:column;align-items:center;justify-content:flex-start;
+  overflow:hidden;padding:8px 6px 6px;
+}
+#go-overlay.show{display:flex;}
+
+/* Animated scanlines on GO screen */
+@keyframes scanMove{0%{background-position:0 0;}100%{background-position:0 60px;}}
+#go-overlay::before{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(0deg,transparent 0px,transparent 2px,rgba(255,0,0,0.025) 2px,rgba(255,0,0,0.025) 4px);
+  animation:scanMove 2s linear infinite;pointer-events:none;z-index:1;
+}
+
+/* Skull icon */
+@keyframes skullPulse{
+  0%,100%{text-shadow:0 0 10px #ff0000,0 0 30px #aa0000;}
+  50%    {text-shadow:0 0 20px #ff3333,0 0 55px #cc0000,0 0 80px #880000;}
+}
+#go-skull{
+  font-size:24px;margin-top:2px;
+  animation:skullPulse 1.4s ease-in-out infinite;
+  position:relative;z-index:2;line-height:1;
+}
+#go-title{
+  font-family:'Orbitron',sans-serif;font-size:14px;font-weight:900;
+  letter-spacing:3px;color:#ff2222;
+  text-shadow:0 0 16px rgba(255,40,40,0.7);
+  margin:3px 0 4px;position:relative;z-index:2;
+  animation:skullPulse 1.4s ease-in-out infinite;
+}
+#go-score-line{
+  font-family:'Share Tech Mono',monospace;font-size:10px;
+  color:rgba(255,160,160,0.65);letter-spacing:2px;margin-bottom:5px;
+  position:relative;z-index:2;
+}
+
+/* Scrolling message text */
+#go-msg{
+  position:relative;z-index:2;width:100%;
+  flex:1;overflow:hidden;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:0px;
+}
+@keyframes msgReveal{
+  0%{opacity:0;transform:translateY(6px);}
+  100%{opacity:1;transform:translateY(0);}
+}
+.go-line{
+  font-family:'VT323',monospace;font-size:12px;color:rgba(255,190,190,0.80);
+  text-align:center;line-height:1.35;
+  animation:msgReveal .5s ease-out both;
+}
+.go-line.funny{color:rgba(255,230,100,0.85);}
+.go-line.em{color:rgba(255,120,120,0.90);font-size:13px;}
+.go-line.small{font-size:10px;color:rgba(255,170,170,0.55);}
+
+/* Play again button inside GO overlay */
+@keyframes btnPulse{
+  0%,100%{box-shadow:0 0 10px rgba(255,60,60,0.35),0 3px 8px rgba(0,0,0,0.8);}
+  50%    {box-shadow:0 0 22px rgba(255,60,60,0.70),0 3px 8px rgba(0,0,0,0.8);}
+}
+#go-play-again{
+  position:relative;z-index:2;
+  margin-top:6px;padding:7px 18px;border-radius:18px;
+  background:linear-gradient(180deg,#cc1111,#880000);
+  color:#fff;font-family:'Orbitron',sans-serif;font-size:9px;font-weight:700;
+  letter-spacing:2px;cursor:pointer;
+  animation:btnPulse 1.6s ease-in-out infinite;
+  -webkit-tap-highlight-color:transparent;
+  transition:transform .1s,filter .1s;
+  border:1px solid rgba(255,100,100,0.3);
+}
+#go-play-again:hover{filter:brightness(1.2);}
+#go-play-again:active{transform:scale(0.94);filter:brightness(1.4);animation:none;}
+#go-sub{
+  position:relative;z-index:2;
+  font-family:'Share Tech Mono',monospace;font-size:8px;
+  color:rgba(255,140,140,0.40);letter-spacing:0.5px;margin-top:3px;text-align:center;
+}
+#go-footer{
+  position:relative;z-index:2;
+  margin-top:4px;font-family:'Share Tech Mono',monospace;font-size:8px;
+  color:rgba(139,178,15,0.35);letter-spacing:1px;
 }
 </style>
 </head>
 <body>
 
-<!-- ════════════════════════════════════════════════
-     PHONE
-════════════════════════════════════════════════ -->
+<!-- ══════════════════════════════════════════════════════
+     HAMBURGER MENU
+══════════════════════════════════════════════════════ -->
+<div id="hamburger-btn" aria-label="Menu" role="button" tabindex="0">
+  <span class="bar"></span>
+  <span class="bar"></span>
+  <span class="bar"></span>
+</div>
+
+<div id="nav-overlay"></div>
+
+<nav id="nav-panel">
+  <div class="nav-header">
+    <div class="nav-header-name">RIYAD BIN ALOM</div>
+  </div>
+  <a class="nav-item" href="index.html">   <span class="nav-icon">🏠</span> Home</a>
+  <a class="nav-item" href="about.html">   <span class="nav-icon">📖</span> About</a>
+  <a class="nav-item" href="blog.html">    <span class="nav-icon">📝</span> Blog</a>
+  <a class="nav-item" href="skills.html">  <span class="nav-icon">🧠</span> Skills</a>
+  <a class="nav-item" href="lab.html">     <span class="nav-icon">🧪</span> Lab</a>
+  <a class="nav-item" href="contact.html"> <span class="nav-icon">📩</span> Contact</a>
+  <div class="nav-footer">Snake Game · v3.0</div>
+</nav>
+
+<!-- ══════════════════════════════════════════════════════
+     PHONE BODY
+══════════════════════════════════════════════════════ -->
 <div class="phone">
 
   <div class="brand-row">
@@ -367,9 +484,32 @@ body{
         <span id="hudLevel">LVL:1</span>
         <span id="hudHi">HI:0</span>
       </div>
-      <!-- 252 / 21 = 12px per cell -->
       <canvas id="gameCanvas" width="252" height="180"></canvas>
       <div class="scanlines"></div>
+
+      <!-- Game Over DOM overlay (inside screen-inner) -->
+      <div id="go-overlay">
+        <div id="go-skull">💀</div>
+        <div id="go-title">GAME OVER</div>
+        <div id="go-score-line" id="go-score-line"></div>
+        <div id="go-msg">
+          <div class="go-line" style="animation-delay:.1s">Your snake hustled hard.</div>
+          <div class="go-line" style="animation-delay:.25s">Ate everything in sight.</div>
+          <div class="go-line em" style="animation-delay:.40s">Grew long. Grew powerful.</div>
+          <div class="go-line em" style="animation-delay:.52s">Grew overconfident.</div>
+          <div class="go-line" style="animation-delay:.65s">And then... walked straight</div>
+          <div class="go-line" style="animation-delay:.72s">into a wall.</div>
+          <div class="go-line funny" style="animation-delay:.85s">(Classic.)</div>
+          <div class="go-line small" style="animation-delay:1.0s">&nbsp;</div>
+          <div class="go-line small" style="animation-delay:1.1s">Like my motivation on a</div>
+          <div class="go-line funny" style="animation-delay:1.2s">Monday morning —</div>
+          <div class="go-line small" style="animation-delay:1.3s">started strong, ended tragic. 😔</div>
+        </div>
+        <button id="go-play-again">🔄 Play Again?</button>
+        <div id="go-sub">(The snake believes in second chances.)</div>
+        <div id="go-footer">Made with 🐍 by Riyad Bin Alom</div>
+      </div>
+
     </div>
   </div>
 
@@ -382,25 +522,22 @@ body{
   <!-- Controls -->
   <div class="controls-area">
 
-    <!-- D-Pad (no center OK button) -->
     <div class="dpad-wrap">
       <div class="dpad-ring"></div>
       <div class="dpad-cross">
         <div class="dpad-corner"></div>
         <div class="dpad-btn dpad-up"    id="btn-up">   <svg viewBox="0 0 24 24"><path d="M12 5 L20 17 H4 Z"/></svg></div>
         <div class="dpad-corner"></div>
-
         <div class="dpad-btn dpad-left"  id="btn-left"> <svg viewBox="0 0 24 24"><path d="M5 12 L17 4 V20 Z"/></svg></div>
         <div class="dpad-center-disc"></div>
         <div class="dpad-btn dpad-right" id="btn-right"><svg viewBox="0 0 24 24"><path d="M19 12 L7 4 V20 Z"/></svg></div>
-
         <div class="dpad-corner"></div>
         <div class="dpad-btn dpad-down"  id="btn-down"> <svg viewBox="0 0 24 24"><path d="M12 19 L4 7 H20 Z"/></svg></div>
         <div class="dpad-corner"></div>
       </div>
     </div>
 
-    <!-- [ PAUSE ] [ ▶ START ] [ NEW ] -->
+    <!-- PAUSE | ▶ START | NEW -->
     <div class="bottom-btns">
       <button class="pill-btn pill-pause" id="btn-pause">
         <span class="pill-icon">⏸</span>PAUSE
@@ -417,7 +554,6 @@ body{
   </div>
 </div>
 
-<!-- Creator credit -->
 <div class="credit-strip">
   <span class="credit-by">crafted by</span>
   <span class="credit-name">RIYAD BIN ALOM</span>
@@ -426,114 +562,169 @@ body{
 </div>
 
 
-<!-- ════════════════════════════════════════════════
-     GAME SCRIPT
-════════════════════════════════════════════════ -->
+<!-- ══════════════════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════════════════ -->
 <script>
 /* ╔══════════════════════════════════════════════════════════╗
    ║  SNAKE — ARCADE EDITION v3                              ║
    ║  Author : Riyad Bin Alom                                ║
-   ║  Engine : requestAnimationFrame + timestamp delta       ║
-   ║  Audio  : Web Audio API — procedural chiptune           ║
    ╚══════════════════════════════════════════════════════════╝ */
 
 /* ──────────────────────────────────────────────────────────
-   §1  CONSTANTS & CANVAS
+   §0  HAMBURGER MENU
+────────────────────────────────────────────────────────── */
+(function() {
+  const btn     = document.getElementById('hamburger-btn');
+  const panel   = document.getElementById('nav-panel');
+  const overlay = document.getElementById('nav-overlay');
+
+  function toggleMenu(open) {
+    btn.classList.toggle('open', open);
+    panel.classList.toggle('open', open);
+    overlay.classList.toggle('open', open);
+  }
+
+  btn.addEventListener('click', () => toggleMenu(!btn.classList.contains('open')));
+  overlay.addEventListener('click', () => toggleMenu(false));
+
+  // Close after nav item click
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', () => toggleMenu(false));
+  });
+
+  // Keyboard accessibility
+  btn.addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' ') { e.preventDefault(); toggleMenu(!btn.classList.contains('open')); }});
+})();
+
+
+/* ──────────────────────────────────────────────────────────
+   §1  CANVAS & CONSTANTS
 ────────────────────────────────────────────────────────── */
 const canvas = document.getElementById('gameCanvas');
 const ctx    = canvas.getContext('2d');
 
-const COLS = 21;          // grid columns
-const ROWS = 15;          // grid rows
-const CELL = canvas.width / COLS;   // = 12 px/cell
+const COLS = 21;
+const ROWS = 15;
+const CELL = canvas.width / COLS;   // 12 px
 
 /* Nokia LCD palette */
 const PAL = {
   bg:      '#9bbc0f',
   grid:    '#8aab0a',
-  dark:    '#0f380f',
-  mid:     '#1a481a',
+  dark:    '#0f380f',   // snake main colour
+  mid:     '#306230',   // snake inner highlight
+  head:    '#1a5a1a',   // head — slightly brighter than body
+  shadow:  '#081c08',   // shadow/edge
   overlay: 'rgba(122,155,4,0.91)',
 };
 
-/* ── Pre-render static grid onto offscreen canvas ONCE ──
-   This is the main performance fix: instead of drawing
-   315 fillRect calls per frame, we blit a single image.   */
-const bgCanvas = document.createElement('canvas');
-bgCanvas.width  = canvas.width;
-bgCanvas.height = canvas.height;
-const bgCtx = bgCanvas.getContext('2d');
-
-function prebakeGrid() {
+/* Pre-bake static grid onto offscreen canvas — major perf win */
+const bgCanvas    = document.createElement('canvas');
+bgCanvas.width    = canvas.width;
+bgCanvas.height   = canvas.height;
+const bgCtx       = bgCanvas.getContext('2d');
+(function prebakeGrid() {
   bgCtx.fillStyle = PAL.bg;
-  bgCtx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
+  bgCtx.fillRect(0,0,bgCanvas.width,bgCanvas.height);
   bgCtx.fillStyle = PAL.grid;
-  for (let x = 0; x < COLS; x++) {
-    for (let y = 0; y < ROWS; y++) {
-      bgCtx.fillRect(x*CELL + CELL-1, y*CELL,      1, CELL);
-      bgCtx.fillRect(x*CELL,          y*CELL+CELL-1, CELL, 1);
-    }
+  for(let x=0;x<COLS;x++) for(let y=0;y<ROWS;y++){
+    bgCtx.fillRect(x*CELL+CELL-1, y*CELL,      1, CELL);
+    bgCtx.fillRect(x*CELL,        y*CELL+CELL-1, CELL, 1);
   }
-}
-prebakeGrid(); // run once at startup
+})();
 
 
 /* ──────────────────────────────────────────────────────────
-   §2  GAME STATE
+   §2  LEVEL SYSTEM
+   score thresholds: 50 | 150 | 300 | 450 | 600 | 750 …
+   formula from spec:
+     level 1→2 : 50
+     level 2→3 : 150
+     level 3→4 : 300
+     level n→n+1 (n≥4): 300 + (n-3)*150
 ────────────────────────────────────────────────────────── */
-let snake;      // Array<{x,y}>  index-0 = head
-let dir;        // {x,y}  current direction
-let nextDir;    // {x,y}  buffered direction (anti-reverse)
-let food;       // {x,y}
+const LEVEL_THRESHOLDS = [0, 50, 150, 300]; // index = level-1
+
+function getThreshold(lvl) {
+  // threshold to REACH level lvl
+  if (lvl <= 1) return 0;
+  if (lvl === 2) return 50;
+  if (lvl === 3) return 150;
+  if (lvl === 4) return 300;
+  // lvl >= 5: 300 + (lvl-4)*150
+  return 300 + (lvl - 4) * 150;
+}
+
+/**
+ * Calculate what level a given score corresponds to.
+ * Iterates upward until threshold exceeds score.
+ */
+function calcLevel(sc) {
+  let lv = 1;
+  while (sc >= getThreshold(lv + 1)) lv++;
+  return lv;
+}
+
+/** Speed in ms per tick for a given level (capped at 70ms) */
+function calcSpeed(lv) {
+  return Math.max(70, 185 - (lv - 1) * 13);
+}
+
+
+/* ──────────────────────────────────────────────────────────
+   §3  GAME STATE VARIABLES
+────────────────────────────────────────────────────────── */
+let snake;       // [{x,y}]  index 0 = head
+let dir;         // current direction
+let nextDir;     // buffered direction
+let food;        // {x,y}
 let score = 0;
 let level = 1;
-let speed = 175;  // ms per game tick
+let speed = calcSpeed(1);
 let hiScore = parseInt(localStorage.getItem('rba_snakeHi') || '0');
 
-// State machine: 'idle'|'running'|'paused'|'dying'|'dead'|'scrolling'
+// State: 'idle'|'running'|'paused'|'dying'|'dead'
 let gameState = 'idle';
 
 // rAF
 let rafId    = null;
-let lastTick = 0;    // timestamp of last game tick
+let lastTick = 0;
 
 // Death flash
-let deathFlash = 0;  // counts down, alternates black/render
+let deathFlash = 0;
 
-// Mouth open animation (ticks remaining)
+// Mouth open ticks remaining
 let mouthOpen = 0;
 
-/* ── Heart Bonus state ── */
-let heart        = null;   // null | {x, y}
-let heartSpawnTS = 0;      // rAF timestamp when heart spawned
-let heartFadeTS  = 0;      // rAF timestamp when fade started (0 = not fading)
-const HEART_LIFE = 6000;   // ms the heart stays alive before fading
-const HEART_FADE = 700;    // ms of smooth fade-out after HEART_LIFE
-let heartVisible = false;  // convenience flag
+// Idle screen animation phase (for breathing glow)
+let idlePhase = 0;
 
-/* ── Cinematic scroll state ── */
-let scrollStartTS = 0;
+/* ── Heart bonus ── */
+let heart        = null;
+let heartSpawnTS = 0;
+let heartFadeTS  = 0;
+const HEART_LIFE = 7000;   // 7 seconds as per spec
+const HEART_FADE = 800;    // ms fade-out
+let heartVisible = false;
 
-/* DOM refs used by JS */
-const screenInner = document.getElementById('screenInner');
+/* DOM refs */
+const screenInner   = document.getElementById('screenInner');
+const goOverlay     = document.getElementById('go-overlay');
+const goScoreLine   = document.getElementById('go-score-line');
+const goPlayAgain   = document.getElementById('go-play-again');
 
 
 /* ──────────────────────────────────────────────────────────
-   §3  WEB AUDIO ENGINE
-   All sounds are synthesised with the Web Audio API.
-   No external audio files required.
+   §4  WEB AUDIO ENGINE
 ────────────────────────────────────────────────────────── */
 const Audio = (() => {
-  let actx;         // AudioContext (lazy-init on first gesture)
-  let master;       // Master GainNode
-  let muted = false;
+  let actx, master;
+  let muted      = false;
+  let bgmActive  = false;
+  let bgmStop    = false;
+  let bgmTO      = null;
 
-  // BGM scheduler
-  let bgmActive   = false;
-  let bgmStop     = false;
-  let bgmSchedTO  = null;
-
-  /* Initialise AudioContext after user gesture */
   function init() {
     if (actx) return;
     actx   = new (window.AudioContext || window.webkitAudioContext)();
@@ -541,636 +732,458 @@ const Audio = (() => {
     master.gain.value = 0.18;
     master.connect(actx.destination);
   }
+  function resume() { if (actx && actx.state==='suspended') actx.resume(); }
 
-  /* Resume if browser suspended the context */
-  function resume() {
-    if (actx && actx.state === 'suspended') actx.resume();
-  }
-
-  /**
-   * Schedule a single tone.
-   * @param {number} freq    Hz
-   * @param {number} dur     duration (s)
-   * @param {string} type    'square'|'sawtooth'|'triangle'|'sine'
-   * @param {number} vol     peak gain 0-1
-   * @param {number} delay   start offset from actx.currentTime (s)
-   */
   function tone(freq, dur, type, vol, delay) {
     if (!actx || muted) return;
-    const o = actx.createOscillator();
-    const g = actx.createGain();
+    const o = actx.createOscillator(), g = actx.createGain();
     o.connect(g); g.connect(master);
-    o.type = type || 'square';
-    o.frequency.value = freq;
-    const t0 = actx.currentTime + (delay || 0);
+    o.type = type||'square'; o.frequency.value = freq;
+    const t0 = actx.currentTime + (delay||0);
     g.gain.setValueAtTime(vol, t0);
-    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
-    o.start(t0); o.stop(t0 + dur + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0+dur);
+    o.start(t0); o.stop(t0+dur+0.02);
   }
 
-  /* ── Nokia-style 8-note intro jingle ── */
   function playIntro() {
-    if (!actx || muted) return; resume();
-    const notes = [659, 587, 392, 440,  494, 330, 392, 330];
-    const beats = [.12,  .12,  .24,  .12,  .24,  .24,  .24,  .50];
-    let t = 0.06;
-    notes.forEach((f, i) => { tone(f, beats[i]*.88, 'square', 0.38, t); t += beats[i]; });
+    if (!actx||muted) return; resume();
+    const n=[659,587,392,440,494,330,392,330];
+    const b=[.12,.12,.24,.12,.24,.24,.24,.50];
+    let t=0.06; n.forEach((f,i)=>{tone(f,b[i]*.88,'square',0.38,t); t+=b[i];});
   }
-
-  /* ── Apple eat: satisfying 3-step chip-crunch ── */
   function playEat() {
-    if (!actx || muted) return; resume();
-    tone(349,  0.030, 'square', 0.48, 0.000);
-    tone(698,  0.055, 'square', 0.28, 0.028);
-    tone(1047, 0.040, 'square', 0.14, 0.070);
+    if (!actx||muted) return; resume();
+    tone(349,.030,'square',0.48,0);
+    tone(698,.055,'square',0.28,.028);
+    tone(1047,.040,'square',0.14,.070);
   }
-
-  /* ── Movement tick: ultra-subtle ── */
   function playTick() {
-    if (!actx || muted) return; resume();
-    tone(95, 0.013, 'square', 0.055, 0);
+    if (!actx||muted) return; resume();
+    tone(95,.013,'square',0.05,0);
   }
-
-  /* ── Level up fanfare ── */
   function playLevelUp() {
-    if (!actx || muted) return; resume();
-    [523, 659, 784, 1047].forEach((f, i) => tone(f, .10, 'square', 0.36, i*.08));
+    if (!actx||muted) return; resume();
+    [523,659,784,1047].forEach((f,i)=>tone(f,.10,'square',0.36,i*.08));
   }
-
-  /* ── Heart spawn: magical sparkle ── */
   function playHeartSpawn() {
-    if (!actx || muted) return; resume();
-    // Soft rising arpeggio (triangle = rounder, gentler)
-    [523, 659, 784, 1047, 1319].forEach((f, i) => tone(f, 0.13, 'triangle', 0.38, i*0.068));
-    // Bell shimmer on top
-    tone(2093, 0.22, 'sine', 0.18, 0.37);
-    tone(2637, 0.16, 'sine', 0.12, 0.50);
+    if (!actx||muted) return; resume();
+    [523,659,784,1047,1319].forEach((f,i)=>tone(f,.13,'triangle',0.38,i*.068));
+    tone(2093,.22,'sine',0.18,.37);
+    tone(2637,.16,'sine',0.12,.50);
   }
-
-  /* ── Heart collect: triumphant reward ── */
   function playHeartCollect() {
-    if (!actx || muted) return; resume();
+    if (!actx||muted) return; resume();
     stopBGM();
-    // Ascending fanfare
-    [523, 659, 784, 1047, 1319, 1568].forEach((f, i) => tone(f, .13, 'square', 0.40, i*.055));
-    // Sustain note at top
-    tone(1568, .35, 'sine', 0.24, 0.34);
-    // Restart BGM after reward fanfare
-    setTimeout(() => { if (gameState === 'running') startBGM(); }, 1300);
+    [523,659,784,1047,1319,1568].forEach((f,i)=>tone(f,.13,'square',0.40,i*.055));
+    tone(1568,.35,'sine',0.24,.34);
+    setTimeout(()=>{ if(gameState==='running') startBGM(); }, 1300);
   }
-
-  /* ── Game over: emotional descent ── */
   function playGameOver() {
-    if (!actx || muted) return; resume();
+    if (!actx||muted) return; resume();
     stopBGM();
-    [440, 392, 330, 262, 196, 131].forEach((f, i) => tone(f, .22, 'square', 0.48, i*.11));
-    // Final low boom
-    tone(55, 0.60, 'sawtooth', 0.52, 0.75);
+    [440,392,330,262,196,131].forEach((f,i)=>tone(f,.22,'square',0.48,i*.11));
+    tone(55,.60,'sawtooth',0.52,.75);
   }
 
-  /* ── Background Music ────────────────────────────────────
-     32-step looping chiptune pattern.
-     Melody uses C major pentatonic; bass provides rhythm.
-     Scheduled ahead in 16-step bars to avoid glitches.    */
-  const TEMPO  = 0.130;  // seconds per 16th note
-  const SCALE  = [262, 294, 330, 349, 392, 440, 494, 523, 587, 659, 698, 784];
-  /* Pattern: -1 = rest */
-  const MELODY = [
-    4,4,7,4,  5,3,5,3,  4,4,7,9,  8,7,-1,-1,
-    4,4,7,4,  5,3,5,3,  6,6,8,6,  5,4,-1,-1,
-  ];
-  const BASS = [
-    0,-1,0,-1,  3,-1,3,-1,  0,-1,0,-1,  5,-1,5,-1,
-    0,-1,0,-1,  3,-1,3,-1,  0,-1,4,-1,  5,-1,-1,-1,
-  ];
-  const BARS_IN_PATTERN = MELODY.length / 16;
+  /* BGM */
+  const TEMPO  = 0.130;
+  const SCALE  = [262,294,330,349,392,440,494,523,587,659,698,784];
+  const MELODY = [4,4,7,4,5,3,5,3,4,4,7,9,8,7,-1,-1, 4,4,7,4,5,3,5,3,6,6,8,6,5,4,-1,-1];
+  const BASS   = [0,-1,0,-1,3,-1,3,-1,0,-1,0,-1,5,-1,5,-1, 0,-1,0,-1,3,-1,3,-1,0,-1,4,-1,5,-1,-1,-1];
+  const BARS   = MELODY.length/16;
 
-  function scheduleBGMBar(startTime, barIdx) {
-    if (bgmStop || muted) return;
-    const bar = barIdx % BARS_IN_PATTERN;
-    for (let i = 0; i < 16; i++) {
-      const t  = startTime + i * TEMPO;
-      const mn = MELODY[bar * 16 + i];
-      const bn = BASS  [bar * 16 + i];
-      if (mn >= 0) tone(SCALE[mn],     TEMPO*.70, 'square',   0.14, t - actx.currentTime);
-      if (bn >= 0) tone(SCALE[bn] / 2, TEMPO*.52, 'triangle', 0.10, t - actx.currentTime);
+  function scheduleBGMBar(st, bi) {
+    if (bgmStop||muted) return;
+    const bar = bi%BARS;
+    for(let i=0;i<16;i++){
+      const t=st+i*TEMPO, mn=MELODY[bar*16+i], bn=BASS[bar*16+i];
+      if(mn>=0) tone(SCALE[mn],  TEMPO*.70,'square',  0.14, t-actx.currentTime);
+      if(bn>=0) tone(SCALE[bn]/2,TEMPO*.52,'triangle',0.10, t-actx.currentTime);
     }
-    const nextBarStart = startTime + 16 * TEMPO;
-    // Schedule next bar slightly early to avoid gaps
-    const scheduleIn = Math.max(0, (nextBarStart - actx.currentTime - TEMPO) * 1000);
-    bgmSchedTO = setTimeout(() => scheduleBGMBar(nextBarStart, barIdx + 1), scheduleIn);
+    const nxt = st+16*TEMPO;
+    bgmTO = setTimeout(()=>scheduleBGMBar(nxt,bi+1), Math.max(0,(nxt-actx.currentTime-TEMPO)*1000));
   }
-
   function startBGM() {
-    if (!actx || muted || bgmActive) return;
-    bgmActive = true; bgmStop = false; resume();
-    scheduleBGMBar(actx.currentTime + 0.10, 0);
+    if(!actx||muted||bgmActive) return;
+    bgmActive=true; bgmStop=false; resume();
+    scheduleBGMBar(actx.currentTime+0.10, 0);
   }
-
-  function stopBGM() {
-    bgmActive = false; bgmStop = true;
-    clearTimeout(bgmSchedTO);
-  }
-
+  function stopBGM() { bgmActive=false; bgmStop=true; clearTimeout(bgmTO); }
   function toggleMute() {
-    if (!actx) init();
-    muted = !muted;
-    master.gain.value = muted ? 0 : 0.18;
-    if (muted) stopBGM();
-    else if (gameState === 'running') startBGM();
-    const el = document.getElementById('soundToggle');
-    el.textContent = muted ? '🔇' : '🔊';
-    el.classList.toggle('muted', muted);
+    if(!actx) init(); muted=!muted;
+    master.gain.value = muted?0:0.18;
+    if(muted) stopBGM(); else if(gameState==='running') startBGM();
+    const el=document.getElementById('soundToggle');
+    el.textContent=muted?'🔇':'🔊'; el.classList.toggle('muted',muted);
   }
 
-  return {
-    init, startBGM, stopBGM, toggleMute,
-    playIntro, playEat, playTick, playLevelUp,
-    playHeartSpawn, playHeartCollect, playGameOver,
-  };
+  return {init,startBGM,stopBGM,toggleMute,
+          playIntro,playEat,playTick,playLevelUp,
+          playHeartSpawn,playHeartCollect,playGameOver};
 })();
 
 
 /* ──────────────────────────────────────────────────────────
-   §4  HUD & START BUTTON HELPERS
+   §5  HUD & BUTTON HELPERS
 ────────────────────────────────────────────────────────── */
 function updateHUD() {
-  document.getElementById('hudScore').textContent = 'SCR:' + (score || 0);
-  document.getElementById('hudLevel').textContent = 'LVL:' + (level || 1);
-  document.getElementById('hudHi').textContent    = 'HI:'  + hiScore;
+  document.getElementById('hudScore').textContent = 'SCR:'+(score||0);
+  document.getElementById('hudLevel').textContent = 'LVL:'+(level||1);
+  document.getElementById('hudHi').textContent    = 'HI:' +hiScore;
 }
 
-/**
- * Update the START button's appearance and label.
- * @param {'start'|'resume'|'restart'} mode
- */
 function setStartBtn(mode) {
-  const btn   = document.getElementById('btn-start');
-  const icon  = document.getElementById('startIcon');
-  const label = document.getElementById('startLabel');
+  const btn=document.getElementById('btn-start');
+  const icon=document.getElementById('startIcon');
+  const label=document.getElementById('startLabel');
   btn.classList.remove('resume-mode');
-  if (mode === 'resume') {
-    icon.textContent  = '▶'; label.textContent = 'RESUME';
-    btn.classList.add('resume-mode');
-  } else if (mode === 'restart') {
-    icon.textContent  = '↺'; label.textContent = 'RESTART';
-  } else {
-    icon.textContent  = '▶'; label.textContent = 'START';
-  }
+  if(mode==='resume')  { icon.textContent='▶'; label.textContent='RESUME'; btn.classList.add('resume-mode'); }
+  else if(mode==='restart') { icon.textContent='↺'; label.textContent='RESTART'; }
+  else                 { icon.textContent='▶'; label.textContent='START'; }
+}
+
+function showGoOverlay() {
+  goScoreLine.textContent = 'SCORE: ' + score + '  ·  LEVEL: ' + level;
+  goOverlay.classList.add('show');
+}
+function hideGoOverlay() {
+  goOverlay.classList.remove('show');
 }
 
 
 /* ──────────────────────────────────────────────────────────
-   §5  FOOD PLACEMENT  (guaranteed no overlap)
+   §6  FOOD PLACEMENT (guaranteed no overlap)
 ────────────────────────────────────────────────────────── */
 function placeFood() {
-  /* Build a Set of occupied cells: snake + current heart (if any) */
-  const occupied = new Set();
-  snake.forEach(s => occupied.add(s.x + ',' + s.y));
-  if (heart) occupied.add(heart.x + ',' + heart.y);
-
-  /* Collect all free cells */
-  const free = [];
-  for (let x = 0; x < COLS; x++) {
-    for (let y = 0; y < ROWS; y++) {
-      if (!occupied.has(x + ',' + y)) free.push({ x, y });
-    }
-  }
-
-  /* Pick a random free cell (if board is somehow full, place at 0,0) */
-  food = free.length
-    ? free[Math.floor(Math.random() * free.length)]
-    : { x: 0, y: 0 };
+  const occ = new Set(snake.map(s=>s.x+','+s.y));
+  if(heart) occ.add(heart.x+','+heart.y);
+  const free=[];
+  for(let x=0;x<COLS;x++) for(let y=0;y<ROWS;y++)
+    if(!occ.has(x+','+y)) free.push({x,y});
+  food = free.length ? free[Math.floor(Math.random()*free.length)] : {x:0,y:0};
 }
 
 
 /* ──────────────────────────────────────────────────────────
-   §6  HEART BONUS — spawn & clear
+   §7  HEART BONUS
 ────────────────────────────────────────────────────────── */
 function spawnHeart(ts) {
-  /* Pick a random free cell (not snake, not food) */
-  const occupied = new Set();
-  snake.forEach(s => occupied.add(s.x + ',' + s.y));
-  occupied.add(food.x + ',' + food.y);
-
-  const free = [];
-  for (let x = 0; x < COLS; x++) {
-    for (let y = 0; y < ROWS; y++) {
-      if (!occupied.has(x + ',' + y)) free.push({ x, y });
-    }
-  }
-  if (!free.length) return;
-
-  heart        = free[Math.floor(Math.random() * free.length)];
+  const occ = new Set(snake.map(s=>s.x+','+s.y));
+  occ.add(food.x+','+food.y);
+  const free=[];
+  for(let x=0;x<COLS;x++) for(let y=0;y<ROWS;y++)
+    if(!occ.has(x+','+y)) free.push({x,y});
+  if(!free.length) return;
+  heart        = free[Math.floor(Math.random()*free.length)];
   heartSpawnTS = ts;
   heartFadeTS  = 0;
   heartVisible = true;
   Audio.playHeartSpawn();
 }
-
-function clearHeart() {
-  heart        = null;
-  heartVisible = false;
-  heartFadeTS  = 0;
-}
+function clearHeart() { heart=null; heartVisible=false; heartFadeTS=0; }
 
 
 /* ──────────────────────────────────────────────────────────
-   §7  INIT GAME
+   §8  INIT GAME
 ────────────────────────────────────────────────────────── */
 function initGame() {
   cancelAnimationFrame(rafId);
   Audio.stopBGM();
   clearHeart();
+  hideGoOverlay();
 
-  /* Snake starts in the centre, 3 cells, moving right */
-  snake   = [{ x: 12, y: 7 }, { x: 11, y: 7 }, { x: 10, y: 7 }];
-  dir     = { x: 1, y: 0 };
-  nextDir = { x: 1, y: 0 };
-
-  score  = 0; level = 1; speed = 175;
-  mouthOpen = 0;
+  snake   = [{x:12,y:7},{x:11,y:7},{x:10,y:7}];
+  dir     = {x:1,y:0};
+  nextDir = {x:1,y:0};
+  score=0; level=1; speed=calcSpeed(1);
+  mouthOpen=0; idlePhase=0;
 
   placeFood();
   updateHUD();
-
-  gameState  = 'idle';
-  lastTick   = 0;
-  deathFlash = 0;
+  gameState='idle'; lastTick=0; deathFlash=0;
   setStartBtn('start');
 }
 
 
 /* ──────────────────────────────────────────────────────────
-   §8  DRAWING ROUTINES
+   §9  DRAWING
 ────────────────────────────────────────────────────────── */
 
-/* Blit the pre-baked grid (fast — single drawImage call) */
-function drawBg() {
-  ctx.drawImage(bgCanvas, 0, 0);
-}
+function drawBg() { ctx.drawImage(bgCanvas,0,0); }
 
 /* Red pixel-art apple */
 function drawFood() {
-  if (!food) return;
-  const px = food.x * CELL, py = food.y * CELL;
-  const s  = CELL; // 12
-
-  // Stem (dark)
-  ctx.fillStyle = PAL.dark;
-  ctx.fillRect(px + 5, py + 1, 2, 2);
-
-  // Leaf (green) — tiny 3×2 pixel
-  ctx.fillStyle = '#2a6a10';
-  ctx.fillRect(px + 6, py + 1, 3, 2);
-
-  // Apple body — dark red border
-  ctx.fillStyle = '#8b0000';
-  ctx.fillRect(px + 2, py + 3, s - 4, s - 4);
-  ctx.fillRect(px + 1, py + 4, s - 2, s - 6);
-  ctx.fillRect(px + 2, py + s - 3, s - 4, 1);
-
-  // Mid-red fill (inside border)
-  ctx.fillStyle = '#cc1111';
-  ctx.fillRect(px + 3, py + 4, s - 6, s - 6);
-
-  // Highlight pixel (top-left shine)
-  ctx.fillStyle = '#ff8888';
-  ctx.fillRect(px + 3, py + 4, 2, 2);
+  if(!food) return;
+  const px=food.x*CELL, py=food.y*CELL, s=CELL;
+  ctx.fillStyle=PAL.dark; ctx.fillRect(px+5,py+1,2,2);   // stem
+  ctx.fillStyle='#2a6a10'; ctx.fillRect(px+6,py+1,3,2);  // leaf
+  // Body border
+  ctx.fillStyle='#8b0000';
+  ctx.fillRect(px+2,py+3,s-4,s-4);
+  ctx.fillRect(px+1,py+4,s-2,s-6);
+  ctx.fillRect(px+2,py+s-3,s-4,1);
+  // Mid fill
+  ctx.fillStyle='#cc1111'; ctx.fillRect(px+3,py+4,s-6,s-6);
+  // Shine
+  ctx.fillStyle='#ff8888'; ctx.fillRect(px+3,py+4,2,2);
 }
 
-/* Snake — directional eyes + mouth-open animation on head */
+/* Polished snake — deeper colours, rounded feel, expressive head */
 function drawSnake() {
+  const len = snake.length;
   snake.forEach((seg, i) => {
-    const px = seg.x * CELL, py = seg.y * CELL;
+    const px=seg.x*CELL, py=seg.y*CELL;
+    const isHead = i===0;
+    const isTail = i===len-1;
 
-    // Body block (dark outer)
-    ctx.fillStyle = PAL.dark;
-    ctx.fillRect(px + 1, py + 1, CELL - 2, CELL - 2);
+    /* ── Outer block ── */
+    // Shadow edge (slightly inset darker border)
+    ctx.fillStyle = PAL.shadow;
+    ctx.fillRect(px, py, CELL, CELL);
 
-    if (i === 0) {
-      /* ── HEAD ── */
+    // Main body colour — head slightly brighter
+    ctx.fillStyle = isHead ? PAL.head : PAL.dark;
+    ctx.fillRect(px+1, py+1, CELL-2, CELL-2);
 
-      /* Mouth-open: carve a gap at the leading edge */
+    /* ── Inner highlight (scale effect) ── */
+    if (!isHead) {
+      // Highlight stripe top-left — creates depth
+      ctx.fillStyle = PAL.mid;
+      ctx.fillRect(px+2, py+2, CELL-5, CELL-5);
+      // Tiny corner accent
+      ctx.fillStyle = '#204820';
+      ctx.fillRect(px+2, py+2, 2, 2);
+    }
+
+    if (isHead) {
+      /* ── Mouth-open gap ── */
       if (mouthOpen > 0) {
         ctx.fillStyle = PAL.bg;
-        if      (dir.x ===  1) ctx.fillRect(px + CELL - 5, py + 4, 4, 4); // right
-        else if (dir.x === -1) ctx.fillRect(px + 1,        py + 4, 4, 4); // left
-        else if (dir.y === -1) ctx.fillRect(px + 4,        py + 1, 4, 4); // up
-        else                   ctx.fillRect(px + 4, py + CELL - 5, 4, 4); // down
+        if      (dir.x=== 1) ctx.fillRect(px+CELL-5, py+4, 4, 4);
+        else if (dir.x===-1) ctx.fillRect(px+1,      py+4, 4, 4);
+        else if (dir.y===-1) ctx.fillRect(px+4,      py+1, 4, 4);
+        else                  ctx.fillRect(px+4, py+CELL-5, 4, 4);
       }
 
-      /* Eyes — position depends on travel direction */
+      /* ── Expressive eyes ── */
+      // Eye whites (bigger = more expressive)
       ctx.fillStyle = PAL.bg;
-      let eyes;
-      if      (dir.x ===  1) eyes = [{ ex: CELL-4, ey: 2 }, { ex: CELL-4, ey: CELL-5 }];
-      else if (dir.x === -1) eyes = [{ ex: 2,       ey: 2 }, { ex: 2,       ey: CELL-5 }];
-      else if (dir.y === -1) eyes = [{ ex: 2,       ey: 2 }, { ex: CELL-4, ey: 2       }];
-      else                   eyes = [{ ex: 2, ey: CELL-4  }, { ex: CELL-4, ey: CELL-4  }];
-      eyes.forEach(e => ctx.fillRect(px + e.ex, py + e.ey, 2, 2));
+      let eyePositions;
+      if      (dir.x=== 1) eyePositions=[{ex:CELL-4,ey:2},{ex:CELL-4,ey:CELL-5}];
+      else if (dir.x===-1) eyePositions=[{ex:2,ey:2},{ex:2,ey:CELL-5}];
+      else if (dir.y===-1) eyePositions=[{ex:2,ey:2},{ex:CELL-4,ey:2}];
+      else                  eyePositions=[{ex:2,ey:CELL-4},{ex:CELL-4,ey:CELL-4}];
 
-    } else {
-      /* BODY — inner shading for scale texture */
-      ctx.fillStyle = PAL.mid;
-      ctx.fillRect(px + 2, py + 2, CELL - 4, CELL - 4);
+      // 2×2 white part
+      eyePositions.forEach(e => ctx.fillRect(px+e.ex, py+e.ey, 2, 2));
+
+      // 1×1 dark pupil — offset slightly toward direction
+      ctx.fillStyle = PAL.dark;
+      eyePositions.forEach(e => {
+        const pupX = e.ex + (dir.x===1?1:0);
+        const pupY = e.ey + (dir.y===1?1:0);
+        ctx.fillRect(px+pupX, py+pupY, 1, 1);
+      });
     }
   });
 }
 
-/**
- * Draw heart bonus + liquid drain timer bar.
- * Uses timestamps for frame-rate-independent alpha/fade.
- * @param {number} ts - current rAF timestamp (ms)
- */
+/* Heart bonus with liquid drain bar */
 function drawHeart(ts) {
-  if (!heartVisible || !heart) return;
-
-  const elapsed = ts - heartSpawnTS;  // ms since spawn
-
-  /* ── Determine alpha ──────────────────────────────────
-     After HEART_LIFE ms: record when fade started once.
-     Alpha decays linearly over HEART_FADE ms.            */
-  let alpha = 1;
-  if (elapsed >= HEART_LIFE) {
-    if (!heartFadeTS) heartFadeTS = ts;  // mark fade start
-    const fadeElapsed = ts - heartFadeTS;
-    alpha = Math.max(0, 1 - fadeElapsed / HEART_FADE);
-    if (alpha <= 0) { clearHeart(); return; }
+  if(!heartVisible||!heart) return;
+  const elapsed = ts - heartSpawnTS;
+  let alpha=1;
+  if(elapsed>=HEART_LIFE){
+    if(!heartFadeTS) heartFadeTS=ts;
+    alpha = Math.max(0, 1-(ts-heartFadeTS)/HEART_FADE);
+    if(alpha<=0){clearHeart();return;}
   }
 
-  const px = heart.x * CELL;
-  const py = heart.y * CELL;
+  const px=heart.x*CELL, py=heart.y*CELL;
+  ctx.save(); ctx.globalAlpha=alpha;
 
-  ctx.save();
-  ctx.globalAlpha = alpha;
+  /* Pulsing glow */
+  const pulse = 1+Math.sin(ts*0.009)*0.15;
+  const gr = ctx.createRadialGradient(px+CELL/2,py+CELL/2,1,px+CELL/2,py+CELL/2,10*pulse);
+  gr.addColorStop(0,'rgba(255,30,80,0.55)');
+  gr.addColorStop(1,'rgba(255,30,80,0)');
+  ctx.fillStyle=gr;
+  ctx.fillRect(px-10,py-10,CELL+20,CELL+20);
 
-  /* ── Pulsing glow behind heart ── */
-  const pulseScale = 1 + Math.sin(ts * 0.008) * 0.12;
-  const glowRadius = 9 * pulseScale;
-  const grd = ctx.createRadialGradient(
-    px + CELL/2, py + CELL/2, 1,
-    px + CELL/2, py + CELL/2, glowRadius * 2
-  );
-  grd.addColorStop(0, 'rgba(255,40,80,0.50)');
-  grd.addColorStop(1, 'rgba(255,40,80,0)');
-  ctx.fillStyle = grd;
-  ctx.fillRect(px - glowRadius, py - glowRadius, CELL + glowRadius*2, CELL + glowRadius*2);
-
-  /* ── Pixel-art heart (9×7 pixel mask, 1px each) ──
-     Centred in the 12×12 cell (offset by 1.5 left, 2 top) */
-  const ox = px + 1;   // left pixel origin
-  const oy = py + 2;   // top pixel origin
-  // 1 = filled, 0 = transparent
-  const HEART_PIXELS = [
-    [0,1,1,0,0,0,1,1,0],
-    [1,1,1,1,0,1,1,1,1],
-    [1,1,1,1,1,1,1,1,1],
-    [0,1,1,1,1,1,1,1,0],
-    [0,0,1,1,1,1,1,0,0],
-    [0,0,0,1,1,1,0,0,0],
-    [0,0,0,0,1,0,0,0,0],
-  ];
+  /* Pixel heart */
+  const ox=px+1, oy=py+2;
+  const HP=[[0,1,1,0,0,0,1,1,0],[1,1,1,1,0,1,1,1,1],[1,1,1,1,1,1,1,1,1],
+            [0,1,1,1,1,1,1,1,0],[0,0,1,1,1,1,1,0,0],[0,0,0,1,1,1,0,0,0],[0,0,0,0,1,0,0,0,0]];
   // Shadow
-  ctx.fillStyle = 'rgba(120,0,20,0.60)';
-  HEART_PIXELS.forEach((row, r) => row.forEach((on, c) => {
-    if (on) ctx.fillRect(ox + c + 1, oy + r + 1, 1, 1);
-  }));
-  // Main fill
-  ctx.fillStyle = '#e0002a';
-  HEART_PIXELS.forEach((row, r) => row.forEach((on, c) => {
-    if (on) ctx.fillRect(ox + c, oy + r, 1, 1);
-  }));
-  // Highlight (top-left shine pixel)
-  ctx.fillStyle = 'rgba(255,160,180,0.90)';
-  ctx.fillRect(ox + 1, oy, 2, 1);
+  ctx.fillStyle='rgba(100,0,20,0.55)';
+  HP.forEach((row,r)=>row.forEach((c,col)=>{if(c) ctx.fillRect(ox+col+1,oy+r+1,1,1);}));
+  // Fill
+  ctx.fillStyle='#dd0030';
+  HP.forEach((row,r)=>row.forEach((c,col)=>{if(c) ctx.fillRect(ox+col,oy+r,1,1);}));
+  // Shine
+  ctx.fillStyle='rgba(255,180,200,0.85)'; ctx.fillRect(ox+1,oy,2,1);
 
-  /* ── Liquid drain timer bar (right of heart cell) ──
-     Fills from TOP and shrinks downward as time runs out.
-     Colour shifts: green → orange → red as it drains.     */
-  const progress = Math.min(elapsed / HEART_LIFE, 1);  // 0 → 1
-  const barX  = px + CELL + 2;
-  const barH  = CELL;
-  const barY  = py;
-  const fillH = Math.max(0, barH * (1 - progress));  // shrinking from top
-
-  // Track background
-  ctx.fillStyle = 'rgba(40, 8, 10, 0.60)';
-  ctx.fillRect(barX, barY, 3, barH);
-
-  // Liquid fill — colour by urgency
-  let liqColor;
-  if      (progress < 0.50) liqColor = '#ff3366';   // plenty of time
-  else if (progress < 0.75) liqColor = '#ff8800';   // running low
-  else                       liqColor = '#ffdd00';   // critical
-
-  ctx.fillStyle = liqColor;
-  ctx.fillRect(barX, barY + (barH - fillH), 3, fillH);
-
-  // Border
-  ctx.strokeStyle = 'rgba(0,0,0,0.45)';
-  ctx.lineWidth   = 0.5;
-  ctx.strokeRect(barX, barY, 3, barH);
+  /* Liquid drain bar (right of cell) */
+  const prog = Math.min(elapsed/HEART_LIFE,1);
+  const bx=px+CELL+2, by=py, bh=CELL;
+  const fill=Math.max(0,bh*(1-prog));
+  ctx.fillStyle='rgba(30,5,8,0.60)'; ctx.fillRect(bx,by,3,bh);
+  const col = prog<.5 ? '#ff3366' : prog<.78 ? '#ff8800' : '#ffdd00';
+  ctx.fillStyle=col; ctx.fillRect(bx, by+(bh-fill), 3, fill);
+  ctx.strokeStyle='rgba(0,0,0,0.45)'; ctx.lineWidth=0.5;
+  ctx.strokeRect(bx,by,3,bh);
 
   ctx.restore();
 }
 
-/**
- * Semi-transparent overlay for menus.
- * Always stamps the "by RIYAD BIN ALOM" watermark in the corner.
- */
-function drawOverlay(title, line1, line2) {
-  ctx.fillStyle = PAL.overlay;
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+/* ── Animated IDLE/START screen ── */
+function drawIdleScreen(ts) {
+  drawBg();
+  drawFood();
 
-  ctx.fillStyle = PAL.dark;
-  ctx.textAlign = 'center';
+  // Overlay tint
+  ctx.fillStyle = 'rgba(10,35,10,0.78)';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
 
-  ctx.font = 'bold 30px VT323, monospace';
-  ctx.fillText(title, canvas.width/2, canvas.height/2 - 22);
+  ctx.textAlign='center';
+  const cx=canvas.width/2, cy=canvas.height/2;
 
-  ctx.font = '16px VT323, monospace';
-  ctx.fillText(line1, canvas.width/2, canvas.height/2 + 2);
-  if (line2) ctx.fillText(line2, canvas.width/2, canvas.height/2 + 20);
+  // Breathing glow behind title
+  const glow = Math.sin(ts*0.003)*0.5+0.5;
+  const gr=ctx.createRadialGradient(cx,cy-28,5,cx,cy-28,55);
+  gr.addColorStop(0,`rgba(80,180,30,${0.25*glow})`);
+  gr.addColorStop(1,'rgba(80,180,30,0)');
+  ctx.fillStyle=gr; ctx.fillRect(0,0,canvas.width,canvas.height);
+
+  // Title
+  ctx.font='bold 36px VT323,monospace';
+  ctx.fillStyle=`rgba(180,255,100,${0.85+glow*0.15})`;
+  ctx.shadowColor='rgba(100,255,50,0.6)'; ctx.shadowBlur=8*glow;
+  ctx.fillText('SNAKE', cx, cy-28);
+  ctx.shadowBlur=0;
+
+  // Subtitle
+  ctx.font='13px VT323,monospace';
+  ctx.fillStyle='rgba(160,220,80,0.60)';
+  ctx.fillText('Classic. Fast. Addictive.', cx, cy-12);
+
+  // Instructions
+  ctx.font='12px Share Tech Mono,monospace';
+  ctx.fillStyle='rgba(140,200,60,0.55)';
+  ctx.fillText('Use ↑ ↓ ← → or swipe to move', cx, cy+6);
+
+  // Blinking "Press START"
+  const blink = Math.sin(ts*0.005)>0;
+  if(blink){
+    ctx.font='14px VT323,monospace';
+    ctx.fillStyle='rgba(200,255,120,0.85)';
+    ctx.fillText('Press START to begin', cx, cy+22);
+  }
+
+  // Motivational line
+  ctx.font='10px Share Tech Mono,monospace';
+  ctx.fillStyle='rgba(120,180,50,0.35)';
+  ctx.fillText('Every move matters.', cx, cy+36);
 
   // Watermark
-  ctx.save();
-  ctx.font      = '9px Share Tech Mono, monospace';
-  ctx.fillStyle = 'rgba(15,56,15,0.38)';
-  ctx.textAlign = 'left';
-  ctx.fillText('by RIYAD BIN ALOM', 4, canvas.height - 4);
-  ctx.restore();
+  ctx.font='8px Share Tech Mono,monospace';
+  ctx.fillStyle='rgba(100,150,30,0.30)';
+  ctx.textAlign='left';
+  ctx.fillText('by RIYAD BIN ALOM', 4, canvas.height-4);
+  ctx.textAlign='center';
 }
 
-/** Full frame render (background + food + snake + heart) */
+/* Overlay for pause */
+function drawPauseOverlay() {
+  ctx.fillStyle='rgba(10,30,10,0.82)';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.textAlign='center';
+  ctx.font='bold 28px VT323,monospace';
+  ctx.fillStyle='rgba(180,255,100,0.90)';
+  ctx.fillText('⏸  PAUSED', canvas.width/2, canvas.height/2-10);
+  ctx.font='14px VT323,monospace';
+  ctx.fillStyle='rgba(140,200,60,0.65)';
+  ctx.fillText('Press START to resume', canvas.width/2, canvas.height/2+10);
+  ctx.font='8px Share Tech Mono,monospace';
+  ctx.fillStyle='rgba(100,150,30,0.30)';
+  ctx.textAlign='left';
+  ctx.fillText('by RIYAD BIN ALOM', 4, canvas.height-4);
+}
+
+/** Full game render (used while running / dying) */
 function render(ts) {
   drawBg();
   drawFood();
   drawSnake();
-  if (heartVisible) drawHeart(ts);
-}
-
-function renderIdle()  { render(0); drawOverlay('🐍 SNAKE', 'PRESS START TO PLAY'); }
-function renderPause() { render(performance.now()); drawOverlay('⏸  PAUSED', 'Press START to resume'); }
-function renderDead()  { render(0); drawOverlay('GAME OVER', 'SCORE: ' + score, 'Press START to restart'); }
-
-
-/* ──────────────────────────────────────────────────────────
-   §9  CINEMATIC GAME-OVER SCROLL (Minecraft-style)
-   Text rises from bottom to top at a readable speed.
-   Smooth fade vignette at top and bottom edges.
-────────────────────────────────────────────────────────── */
-const SCROLL_LINES = [
-  { text: 'GAME  OVER',                    size: 32, color: '#ff3344', font: 'VT323' },
-  { text: '',                              size: 16, color: '#000',    font: 'VT323' },
-  { text: 'Riyad Bin Alom says:',           size: 17, color: '#88cc88', font: 'VT323' },
-  { text: '',                              size: 14, color: '#000',    font: 'VT323' },
-  { text: '"Keep going,',                  size: 16, color: '#ccffcc', font: 'VT323' },
-  { text: 'keep growing,',                 size: 16, color: '#ccffcc', font: 'VT323' },
-  { text: 'and one day you will',          size: 16, color: '#ccffcc', font: 'VT323' },
-  { text: 'master everything',             size: 16, color: '#ccffcc', font: 'VT323' },
-  { text: 'you play."',                    size: 16, color: '#ccffcc', font: 'VT323' },
-  { text: '',                              size: 14, color: '#000',    font: 'VT323' },
-  { text: '— RIYAD BIN ALOM —',            size: 13, color: 'rgba(139,178,15,0.75)', font: 'Orbitron' },
-];
-const LINE_GAP   = 22;  // px between lines
-const SCROLL_SPX = 28;  // pixels per second
-
-function startScroll() {
-  gameState    = 'scrolling';
-  scrollStartTS = performance.now();
-}
-
-function renderScroll(ts) {
-  const elapsed  = ts - scrollStartTS;            // ms
-  const travelled = (elapsed / 1000) * SCROLL_SPX;  // px scrolled upward
-
-  // Black background
-  ctx.fillStyle = '#000';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  ctx.textAlign = 'center';
-
-  // totalHeight = sum of all line heights + gaps
-  const totalH = SCROLL_LINES.length * LINE_GAP;
-
-  // startY: lines begin just below the canvas, then rise
-  const startY = canvas.height - travelled + canvas.height * 0.1;
-
-  SCROLL_LINES.forEach((line, i) => {
-    const y = startY + i * LINE_GAP;
-    // Skip off-screen lines for performance
-    if (y < -LINE_GAP * 2 || y > canvas.height + LINE_GAP) return;
-
-    ctx.font      = `bold ${line.size}px ${line.font}, monospace`;
-    ctx.fillStyle = line.color;
-    ctx.fillText(line.text, canvas.width / 2, y);
-  });
-
-  // Edge vignette (top and bottom fade to black)
-  const vig = ctx.createLinearGradient(0, 0, 0, canvas.height);
-  vig.addColorStop(0,    'rgba(0,0,0,0.75)');
-  vig.addColorStop(0.18, 'rgba(0,0,0,0)');
-  vig.addColorStop(0.82, 'rgba(0,0,0,0)');
-  vig.addColorStop(1,    'rgba(0,0,0,0.75)');
-  ctx.fillStyle = vig;
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  // Once last line has scrolled off the top, transition to dead screen
-  const lastLineY = startY + (SCROLL_LINES.length - 1) * LINE_GAP;
-  if (lastLineY < -LINE_GAP) {
-    gameState = 'dead';
-    renderDead();
-    setStartBtn('restart');
-  }
+  if(heartVisible) drawHeart(ts);
 }
 
 
 /* ──────────────────────────────────────────────────────────
-   §10  SCORE POPUP (floating DOM text)
+   §10  SCORE POPUPS
 ────────────────────────────────────────────────────────── */
 function showScorePopup(pts, gx, gy, isHeart) {
-  const popup = document.createElement('div');
-  popup.className   = isHeart ? 'heart-popup' : 'score-popup';
-  popup.textContent = (isHeart ? '❤ +' : '+') + pts;
-
-  /* Position relative to screenInner div */
-  const cRect = canvas.getBoundingClientRect();
-  const pRect = screenInner.getBoundingClientRect();
-  popup.style.left = ((gx * CELL + CELL/2) + (cRect.left - pRect.left)) + 'px';
-  popup.style.top  = ((gy * CELL)          + (cRect.top  - pRect.top))  + 'px';
-
+  const popup=document.createElement('div');
+  popup.className=isHeart?'heart-popup':'score-popup';
+  popup.textContent=(isHeart?'❤ +':'+')+pts;
+  const cr=canvas.getBoundingClientRect(), pr=screenInner.getBoundingClientRect();
+  popup.style.left=((gx*CELL+CELL/2)+(cr.left-pr.left))+'px';
+  popup.style.top =(( gy*CELL)      +(cr.top -pr.top ))+'px';
   screenInner.appendChild(popup);
-  popup.addEventListener('animationend', () => popup.remove());
+  popup.addEventListener('animationend',()=>popup.remove());
 }
 
 
 /* ──────────────────────────────────────────────────────────
    §11  GAME TICK
-   Called once per game step (every `speed` ms).
-   Moves the snake, checks collisions, handles food & heart.
 ────────────────────────────────────────────────────────── */
 function tick(ts) {
-  /* Apply buffered direction (prevents 180° reversal) */
-  dir = { ...nextDir };
-
-  /* New head position with wrap-around */
-  const head = {
-    x: (snake[0].x + dir.x + COLS) % COLS,
-    y: (snake[0].y + dir.y + ROWS) % ROWS,
+  dir={...nextDir};
+  const head={
+    x:(snake[0].x+dir.x+COLS)%COLS,
+    y:(snake[0].y+dir.y+ROWS)%ROWS,
   };
 
-  /* Self-collision: check all body segments except the tail
-     (tail moves away this tick, so it's safe to enter that cell) */
-  for (let i = 0; i < snake.length - 1; i++) {
-    if (snake[i].x === head.x && snake[i].y === head.y) {
-      triggerDeath();
-      return;
-    }
+  // Self-collision (exclude tail which moves away)
+  for(let i=0;i<snake.length-1;i++){
+    if(snake[i].x===head.x&&snake[i].y===head.y){triggerDeath();return;}
   }
 
-  /* Advance the snake */
   snake.unshift(head);
+  if(mouthOpen>0) mouthOpen--;
 
-  /* Decrement mouth-open timer */
-  if (mouthOpen > 0) mouthOpen--;
+  /* ── Food ── */
+  if(head.x===food.x&&head.y===food.y){
+    const pts=10;  // 10 pts per fruit (spec)
+    score+=pts;
+    if(score>hiScore){hiScore=score;localStorage.setItem('rba_snakeHi',hiScore);}
 
-  /* ── Food collection ── */
-  if (head.x === food.x && head.y === food.y) {
-    const pts = 10 * level;
-    score += pts;
-    if (score > hiScore) { hiScore = score; localStorage.setItem('rba_snakeHi', hiScore); }
+    // Level check — score-threshold based
+    const newLevel = calcLevel(score);
+    const didLevel = newLevel > level;
+    level = newLevel;
+    speed = calcSpeed(level);
 
-    const prevLevel = level;
-    level = Math.floor((snake.length - 3) / 5) + 1;   // level up every 5 food
-    speed = Math.max(65, 175 - (level - 1) * 14);       // faster per level
-
-    mouthOpen = 3;   // show open mouth for 3 ticks
-    placeFood();     // always guaranteed to find a free cell
+    mouthOpen=3;
+    placeFood();
     updateHUD();
     Audio.playEat();
     showScorePopup(pts, head.x, head.y, false);
 
-    /* Level increased → spawn heart bonus */
-    if (level > prevLevel) {
-      Audio.playLevelUp();
-      spawnHeart(ts);
-    }
+    if(didLevel){ Audio.playLevelUp(); spawnHeart(ts); }
   } else {
-    /* Normal move: remove tail */
     snake.pop();
   }
 
-  /* ── Heart collection ── */
-  if (heartVisible && heart && !heartFadeTS
-      && head.x === heart.x && head.y === heart.y) {
+  /* ── Heart ── */
+  if(heartVisible&&heart&&!heartFadeTS&&head.x===heart.x&&head.y===heart.y){
+    const reward=30;
+    score+=reward;
+    if(score>hiScore){hiScore=score;localStorage.setItem('rba_snakeHi',hiScore);}
 
-    const reward = 30;
-    score += reward;
-    if (score > hiScore) { hiScore = score; localStorage.setItem('rba_snakeHi', hiScore); }
-
-    /* Shrink snake by 3 (min length = 3) */
-    const toRemove = Math.min(3, snake.length - 3);
-    for (let k = 0; k < toRemove; k++) snake.pop();
+    /* Spec: add 3 body segments (grow, not shrink) */
+    const tail=snake[snake.length-1];
+    for(let k=0;k<3;k++) snake.push({...tail});
 
     updateHUD();
     showScorePopup(reward, heart.x, heart.y, true);
@@ -1181,228 +1194,159 @@ function tick(ts) {
 
 
 /* ──────────────────────────────────────────────────────────
-   §12  DEATH SEQUENCE  (flash then cinematic scroll)
+   §12  DEATH
 ────────────────────────────────────────────────────────── */
 function triggerDeath() {
-  gameState  = 'dying';
-  deathFlash = 8;       // 8 alternating frames
+  gameState='dying'; deathFlash=8;
   clearHeart();
   Audio.playGameOver();
 }
 
 function processDeath(ts) {
-  if (deathFlash <= 0) {
-    startScroll();      // transition to cinematic
+  if(deathFlash<=0){
+    gameState='dead';
+    render(0);
+    // Show DOM game-over overlay after a short pause
+    setTimeout(()=>{ showGoOverlay(); setStartBtn('restart'); }, 300);
     return;
   }
-  /* Alternate: black flash vs normal render */
-  if (deathFlash % 2 === 0) {
-    ctx.fillStyle = PAL.dark;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-  } else {
-    render(ts);
-  }
+  if(deathFlash%2===0){ctx.fillStyle=PAL.dark;ctx.fillRect(0,0,canvas.width,canvas.height);}
+  else render(ts);
   deathFlash--;
 }
 
 
 /* ──────────────────────────────────────────────────────────
-   §13  MAIN GAME LOOP  (requestAnimationFrame)
-   Timestamp-based: no setInterval drift.
-   Between ticks: still renders if heart needs animation.
+   §13  RAF MAIN LOOP
 ────────────────────────────────────────────────────────── */
 function loop(ts) {
-  rafId = requestAnimationFrame(loop);
+  rafId=requestAnimationFrame(loop);
 
-  /* Cinematic scroll — runs every frame */
-  if (gameState === 'scrolling') {
-    renderScroll(ts);
+  if(gameState==='dying'){
+    if(ts-lastTick>80){lastTick=ts;processDeath(ts);}
     return;
   }
-
-  /* Death flash — runs at ~12fps */
-  if (gameState === 'dying') {
-    if (ts - lastTick > 80) { lastTick = ts; processDeath(ts); }
+  if(gameState==='idle'){
+    drawIdleScreen(ts);
     return;
   }
+  if(gameState!=='running') return;
 
-  /* Only advance when running */
-  if (gameState !== 'running') return;
-
-  const elapsed = ts - lastTick;
-
-  if (elapsed >= speed) {
-    /* ── GAME TICK ── */
-    lastTick = ts;
+  if(ts-lastTick>=speed){
+    lastTick=ts;
     tick(ts);
     render(ts);
     Audio.playTick();
-  } else if (heartVisible) {
-    /* Between ticks: re-render only when heart is active
-       (needed for smooth timer-bar animation & glow pulse) */
-    render(ts);
+  } else if(heartVisible){
+    render(ts);  // keep heart animation smooth between ticks
   }
 }
 
 
 /* ──────────────────────────────────────────────────────────
-   §14  GAME FLOW ACTIONS
+   §14  GAME FLOW
 ────────────────────────────────────────────────────────── */
 function startGame() {
-  /* Ignore button presses during mid-death or scroll */
-  if (gameState === 'dying' || gameState === 'scrolling') return;
-
+  if(gameState==='dying') return;
   Audio.init();
   cancelAnimationFrame(rafId);
   initGame();
-
-  gameState = 'running';
-  lastTick  = 0;
-
+  gameState='running'; lastTick=0;
   Audio.playIntro();
-  /* Start BGM after intro jingle finishes (~1.7s) */
-  setTimeout(() => { if (gameState === 'running') Audio.startBGM(); }, 1800);
-
-  rafId = requestAnimationFrame(loop);
+  setTimeout(()=>{ if(gameState==='running') Audio.startBGM(); }, 1800);
+  rafId=requestAnimationFrame(loop);
 }
 
 function togglePause() {
-  if (gameState === 'dying' || gameState === 'scrolling') return;
+  if(gameState==='dying'||gameState==='dead') return;
   Audio.init();
-  if (gameState === 'running') {
-    gameState = 'paused';
-    Audio.stopBGM();
-    renderPause();
+  if(gameState==='running'){
+    gameState='paused'; Audio.stopBGM();
+    drawBg(); drawFood(); drawSnake();
+    drawPauseOverlay();
     setStartBtn('resume');
-  } else if (gameState === 'paused') {
-    gameState = 'running';
-    lastTick  = 0;   // reset so snake doesn't teleport
-    Audio.startBGM();
-    setStartBtn('start');
+  } else if(gameState==='paused'){
+    gameState='running'; lastTick=0;
+    Audio.startBGM(); setStartBtn('start');
   }
 }
 
-/** Central handler for the START button and Space/Enter key */
 function handleStart() {
-  if (gameState === 'idle'    || gameState === 'dead')    startGame();
-  else if (gameState === 'running' || gameState === 'paused') togglePause();
+  if(gameState==='idle'||gameState==='dead') startGame();
+  else if(gameState==='running'||gameState==='paused') togglePause();
 }
 
 
 /* ──────────────────────────────────────────────────────────
-   §15  KEYBOARD INPUT
+   §15  KEYBOARD
 ────────────────────────────────────────────────────────── */
-const KEY_MAP = {
-  ArrowUp:    { x:  0, y: -1 },  ArrowDown:  { x: 0,  y: 1 },
-  ArrowLeft:  { x: -1, y:  0 },  ArrowRight: { x: 1,  y: 0 },
-  w: {x:0,y:-1}, W:{x:0,y:-1},   s:{x:0,y:1},   S:{x:0,y:1},
-  a: {x:-1,y:0}, A:{x:-1,y:0},   d:{x:1,y:0},   D:{x:1,y:0},
+const KEY_MAP={
+  ArrowUp:{x:0,y:-1},ArrowDown:{x:0,y:1},ArrowLeft:{x:-1,y:0},ArrowRight:{x:1,y:0},
+  w:{x:0,y:-1},W:{x:0,y:-1},s:{x:0,y:1},S:{x:0,y:1},
+  a:{x:-1,y:0},A:{x:-1,y:0},d:{x:1,y:0},D:{x:1,y:0},
 };
-
-document.addEventListener('keydown', e => {
-  if (e.key === ' ' || e.key === 'Enter') {
-    e.preventDefault();
-    handleStart();
-    return;
-  }
-  if (e.key === 'm' || e.key === 'M') {
-    Audio.init();
-    Audio.toggleMute();
-    return;
-  }
-  const d = KEY_MAP[e.key];
-  if (d && gameState === 'running') {
-    /* Prevent 180° reversal */
-    if (!(d.x === -dir.x && d.y === -dir.y)) nextDir = d;
-    if (e.key.startsWith('Arrow')) e.preventDefault();
+document.addEventListener('keydown',e=>{
+  if(e.key===' '||e.key==='Enter'){e.preventDefault();handleStart();return;}
+  if(e.key==='m'||e.key==='M'){Audio.init();Audio.toggleMute();return;}
+  const d=KEY_MAP[e.key];
+  if(d&&gameState==='running'){
+    if(!(d.x===-dir.x&&d.y===-dir.y)) nextDir=d;
+    if(e.key.startsWith('Arrow')) e.preventDefault();
   }
 });
 
 
 /* ──────────────────────────────────────────────────────────
    §16  D-PAD BINDING
-   Uses mousedown / touchstart for instant response.
-   Adds 'pressed' CSS class for visual feedback.
 ────────────────────────────────────────────────────────── */
-function bindDpad(id, callback) {
-  const el = document.getElementById(id);
-  if (!el) return;
-
-  const onPress = ev => {
-    ev.preventDefault();
-    el.classList.add('pressed');
-    Audio.init();
-    callback();
-  };
-  const onRelease = () => el.classList.remove('pressed');
-
-  el.addEventListener('mousedown',   onPress);
-  el.addEventListener('touchstart',  onPress,   { passive: false });
-  el.addEventListener('mouseup',     onRelease);
-  el.addEventListener('mouseleave',  onRelease);
-  el.addEventListener('touchend',    onRelease);
-  el.addEventListener('touchcancel', onRelease);
+function bindDpad(id,cb){
+  const el=document.getElementById(id); if(!el) return;
+  const press=ev=>{ev.preventDefault();el.classList.add('pressed');Audio.init();cb();};
+  const release=()=>el.classList.remove('pressed');
+  el.addEventListener('mousedown',press);
+  el.addEventListener('touchstart',press,{passive:false});
+  ['mouseup','mouseleave','touchend','touchcancel'].forEach(ev=>el.addEventListener(ev,release));
 }
 
-bindDpad('btn-up',    () => {
-  if (gameState === 'running' && !(dir.x === 0 && dir.y === 1))   nextDir = { x: 0, y: -1 };
-});
-bindDpad('btn-down',  () => {
-  if (gameState === 'running' && !(dir.x === 0 && dir.y === -1))  nextDir = { x: 0, y:  1 };
-});
-bindDpad('btn-left',  () => {
-  if (gameState === 'running' && !(dir.x === 1 && dir.y === 0))   nextDir = { x: -1, y: 0 };
-});
-bindDpad('btn-right', () => {
-  if (gameState === 'running' && !(dir.x === -1 && dir.y === 0))  nextDir = { x:  1, y: 0 };
-});
+bindDpad('btn-up',   ()=>{if(gameState==='running'&&!(dir.x===0&&dir.y=== 1)) nextDir={x:0,y:-1};});
+bindDpad('btn-down', ()=>{if(gameState==='running'&&!(dir.x===0&&dir.y===-1)) nextDir={x:0,y: 1};});
+bindDpad('btn-left', ()=>{if(gameState==='running'&&!(dir.x=== 1&&dir.y===0)) nextDir={x:-1,y:0};});
+bindDpad('btn-right',()=>{if(gameState==='running'&&!(dir.x===-1&&dir.y===0)) nextDir={x: 1,y:0};});
 
-/* Bottom buttons */
-document.getElementById('btn-start').addEventListener('click',   () => { Audio.init(); handleStart();  });
-document.getElementById('btn-pause').addEventListener('click',   () => { Audio.init(); togglePause(); });
-document.getElementById('btn-restart').addEventListener('click', () => { Audio.init(); startGame();   });
-document.getElementById('soundToggle').addEventListener('click', () => Audio.toggleMute());
+document.getElementById('btn-start').addEventListener('click',  ()=>{Audio.init();handleStart();});
+document.getElementById('btn-pause').addEventListener('click',  ()=>{Audio.init();togglePause();});
+document.getElementById('btn-restart').addEventListener('click',()=>{Audio.init();startGame();});
+document.getElementById('soundToggle').addEventListener('click',()=>Audio.toggleMute());
+
+/* Game-over overlay "Play Again" */
+goPlayAgain.addEventListener('click',()=>{Audio.init();startGame();});
 
 
 /* ──────────────────────────────────────────────────────────
    §17  TOUCH SWIPE ON CANVAS
 ────────────────────────────────────────────────────────── */
-let touchX = 0, touchY = 0;
-
-canvas.addEventListener('touchstart', e => {
-  touchX = e.touches[0].clientX;
-  touchY = e.touches[0].clientY;
-  e.preventDefault();
-}, { passive: false });
-
-canvas.addEventListener('touchend', e => {
-  const dx = e.changedTouches[0].clientX - touchX;
-  const dy = e.changedTouches[0].clientY - touchY;
-  const ax = Math.abs(dx), ay = Math.abs(dy);
-
-  /* Tap: no movement → toggle start/pause */
-  if (ax < 14 && ay < 14) { handleStart(); return; }
-
-  if (gameState !== 'running') return;
-
-  if (ax > ay) {
-    /* Horizontal swipe */
-    if (dx > 0 && !(dir.x === -1)) nextDir = { x:  1, y: 0 };
-    else if (dx < 0 && !(dir.x === 1)) nextDir = { x: -1, y: 0 };
+let tx=0,ty=0;
+canvas.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY;e.preventDefault();},{passive:false});
+canvas.addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-tx, dy=e.changedTouches[0].clientY-ty;
+  if(Math.abs(dx)<14&&Math.abs(dy)<14){handleStart();return;}
+  if(gameState!=='running') return;
+  if(Math.abs(dx)>Math.abs(dy)){
+    if(dx>0&&!(dir.x===-1)) nextDir={x:1,y:0};
+    else if(dx<0&&!(dir.x===1)) nextDir={x:-1,y:0};
   } else {
-    /* Vertical swipe */
-    if (dy > 0 && !(dir.y === -1)) nextDir = { x: 0, y:  1 };
-    else if (dy < 0 && !(dir.y === 1)) nextDir = { x: 0, y: -1 };
+    if(dy>0&&!(dir.y===-1)) nextDir={x:0,y:1};
+    else if(dy<0&&!(dir.y===1)) nextDir={x:0,y:-1};
   }
   e.preventDefault();
-}, { passive: false });
+},{passive:false});
 
 
 /* ──────────────────────────────────────────────────────────
    §18  BOOT
 ────────────────────────────────────────────────────────── */
 initGame();
-rafId = requestAnimationFrame(loop);   // start rAF loop immediately
+rafId=requestAnimationFrame(loop);
 </script>
 </body>
 </html>
