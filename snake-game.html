@@ -637,23 +637,23 @@ const bgCtx       = bgCanvas.getContext('2d');
 
 /* ──────────────────────────────────────────────────────────
    §2  LEVEL SYSTEM
-   score thresholds: 50 | 150 | 300 | 450 | 600 | 750 …
+   score thresholds: 50 | 150 | 230 | 330 | 430 | 530 …
    formula from spec:
      level 1→2 : 50
      level 2→3 : 150
-     level 3→4 : 300
-     level n→n+1 (n≥4): 300 + (n-3)*150
+     level 3→4 : 230
+     level n→n+1 (n≥4): 230 + (n-3)*100
 ────────────────────────────────────────────────────────── */
-const LEVEL_THRESHOLDS = [0, 50, 150, 300]; // index = level-1
+const LEVEL_THRESHOLDS = [0, 50, 150, 230]; // index = level-1
 
 function getThreshold(lvl) {
   // threshold to REACH level lvl
   if (lvl <= 1) return 0;
   if (lvl === 2) return 50;
   if (lvl === 3) return 150;
-  if (lvl === 4) return 300;
-  // lvl >= 5: 300 + (lvl-4)*150
-  return 300 + (lvl - 4) * 150;
+  if (lvl === 4) return 230;
+  // lvl >= 5: 230 + (lvl-4)*100
+  return 230 + (lvl - 4) * 100;
 }
 
 /**
