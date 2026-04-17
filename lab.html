@@ -619,198 +619,355 @@ a{color:inherit;text-decoration:none;}
 .app-size-note i{font-size:10px;color:var(--subtle);}
 
 /* ══════════════════════════════════════
-   APP SCREENSHOT SLIDER
+   APP SCREENSHOT SLIDER  — v2 PERFECTED
 ══════════════════════════════════════ */
 .screenshots-wrap{
-  background:var(--bg2);
-  border:1px solid rgba(212,168,67,0.15);
+  background:linear-gradient(180deg,#0e0d08 0%,#111318 100%);
+  border:1px solid rgba(212,168,67,0.18);
   border-top:none;
   border-radius:0 0 28px 28px;
-  padding:36px 0 40px;
-  margin-top:-8px;
+  padding:32px 0 40px;
+  margin-top:-4px;
   margin-bottom:20px;
   position:relative;
   overflow:hidden;
 }
-.screenshots-wrap::before{
-  content:'';position:absolute;inset:0;pointer-events:none;
-  background:radial-gradient(ellipse 60% 80% at 50% 100%, rgba(212,168,67,0.04) 0%, transparent 60%);
+/* Ambient glow beneath */
+.screenshots-wrap::after{
+  content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  width:60%;height:200px;
+  background:radial-gradient(ellipse,rgba(212,168,67,0.07) 0%,transparent 70%);
+  pointer-events:none;
 }
 
-/* Section header */
+/* ── Header ── */
 .ss-header{
   display:flex;align-items:center;justify-content:space-between;
-  padding:0 36px 28px;
-  flex-wrap:wrap;gap:12px;
+  padding:0 40px 28px;gap:12px;
 }
 .ss-title{
   display:flex;align-items:center;gap:10px;
-  font-size:12px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;
+  font-size:11px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;
   color:var(--muted);
 }
-.ss-title i{color:var(--gold);font-size:13px;}
-
+.ss-title i{color:var(--gold);}
 .ss-counter{
-  font-size:13px;font-weight:600;color:var(--subtle);
-  font-variant-numeric:tabular-nums;
+  font-size:13px;font-weight:700;color:var(--subtle);
+  font-variant-numeric:tabular-nums;letter-spacing:0.05em;
 }
-.ss-counter span{color:var(--gold);}
+.ss-counter strong{color:var(--gold);font-size:17px;}
 
-/* Slider viewport */
-.ss-viewport{
+/* ── Stage (overflow hidden) ── */
+.ss-stage{
   position:relative;
-  padding:0 36px;
+  height:420px; /* fixed height so slides are big and visible */
   overflow:hidden;
 }
 
-/* Track that holds all slides */
+/* ── The sliding track ── */
 .ss-track{
   display:flex;
-  gap:20px;
-  transition:transform 0.55s cubic-bezier(.22,1,.36,1);
+  align-items:center;
+  height:100%;
+  gap:0;
+  transition:transform 0.6s cubic-bezier(.16,1,.3,1);
   will-change:transform;
   cursor:grab;
   user-select:none;
+  padding:12px 0;
 }
-.ss-track:active{cursor:grabbing;}
+.ss-track:active{ cursor:grabbing; }
 
-/* Individual slide */
+/* ── Each slide ── */
 .ss-slide{
   flex-shrink:0;
-  width:200px;
-  position:relative;
-  transition:transform .4s cubic-bezier(.22,1,.36,1), opacity .4s;
+  width:220px;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-end;
+  padding:0 14px;
+  transition:
+    transform 0.55s cubic-bezier(.16,1,.3,1),
+    opacity   0.55s ease,
+    filter    0.55s ease;
+  transform:scale(0.82) translateY(10px);
+  opacity:0.35;
+  filter:brightness(0.7);
+  cursor:pointer;
 }
-.ss-slide.active-slide{transform:translateY(-6px);}
-.ss-slide:not(.active-slide){opacity:0.65;}
-.ss-slide:hover:not(.active-slide){opacity:0.85;}
+.ss-slide.ss-active{
+  transform:scale(1) translateY(0);
+  opacity:1;
+  filter:brightness(1);
+}
+.ss-slide.ss-neighbor{
+  transform:scale(0.9) translateY(5px);
+  opacity:0.62;
+  filter:brightness(0.85);
+}
 
-/* Phone frame (SVG border mockup) */
-.ss-phone-frame{
+/* ── Phone Mockup Frame ── */
+.ss-phone{
   position:relative;
-  border-radius:28px;
+  width:100%;
+  flex:1;
+  border-radius:30px;
   overflow:hidden;
-  border:2px solid rgba(255,255,255,0.1);
+  background:#0a0a0a;
+  /* Realistic layered bezel */
   box-shadow:
-    0 0 0 1px rgba(0,0,0,0.5),
-    0 8px 40px rgba(0,0,0,0.6),
-    inset 0 1px 0 rgba(255,255,255,0.08);
-  aspect-ratio: 9/19.5;
-  background:#080808;
-  transition:box-shadow .4s;
+    0 0 0 2px #1a1a1a,
+    0 0 0 4px #0d0d0d,
+    0 16px 60px rgba(0,0,0,0.7);
+  transition:box-shadow 0.55s ease;
 }
-.ss-slide.active-slide .ss-phone-frame{
-  border-color:rgba(212,168,67,0.45);
+.ss-slide.ss-active .ss-phone{
   box-shadow:
-    0 0 0 1px rgba(0,0,0,0.5),
-    0 20px 60px rgba(0,0,0,0.7),
-    0 0 30px rgba(212,168,67,0.12),
-    inset 0 1px 0 rgba(255,255,255,0.1);
+    0 0 0 2px rgba(212,168,67,0.7),
+    0 0 0 5px rgba(212,168,67,0.15),
+    0 30px 80px rgba(0,0,0,0.75),
+    0 0 50px rgba(212,168,67,0.18);
 }
-
 /* Notch */
-.ss-phone-frame::before{
+.ss-phone::before{
   content:'';
   position:absolute;top:0;left:50%;transform:translateX(-50%);
-  width:60px;height:8px;
-  background:#080808;
-  border-radius:0 0 10px 10px;
+  width:70px;height:10px;
+  background:#0a0a0a;
+  border-radius:0 0 14px 14px;
   z-index:10;
 }
-/* Side buttons */
-.ss-phone-frame::after{
+/* Volume button */
+.ss-phone::after{
   content:'';
-  position:absolute;right:-3px;top:60px;
-  width:3px;height:44px;
-  background:rgba(255,255,255,0.06);
-  border-radius:0 2px 2px 0;
+  position:absolute;left:-4px;top:72px;
+  width:4px;height:52px;
+  background:rgba(255,255,255,0.08);
+  border-radius:2px 0 0 2px;
 }
-
+/* Screenshot image */
 .ss-img{
-  width:100%;height:100%;
+  width:100%;
+  height:100%;
   object-fit:cover;
-  object-position:top;
+  object-position:top center;
   display:block;
-  transition:transform .5s cubic-bezier(.22,1,.36,1);
+  transition:transform 0.6s cubic-bezier(.16,1,.3,1);
   pointer-events:none;
+  border-radius:inherit;
 }
-.ss-slide:hover .ss-img{transform:scale(1.02);}
+.ss-slide:hover .ss-img{ transform:scale(1.03); }
 
-/* Slide label */
-.ss-label{
-  text-align:center;
-  margin-top:12px;
-  font-size:11px;font-weight:600;
-  color:var(--subtle);
-  letter-spacing:0.08em;
-  transition:color .3s;
-}
-.ss-slide.active-slide .ss-label{color:var(--gold);}
-
-/* Navigation arrows */
-.ss-arrow{
-  position:absolute;top:50%;transform:translateY(-60%);
-  width:44px;height:44px;border-radius:50%;
-  background:rgba(11,12,14,0.92);
-  border:1px solid rgba(212,168,67,0.25);
-  color:var(--gold);font-size:14px;
+/* Zoom hint on active */
+.ss-zoom-hint{
+  position:absolute;
+  bottom:10px;right:10px;
+  width:28px;height:28px;
+  border-radius:8px;
+  background:rgba(0,0,0,0.65);
+  border:1px solid rgba(255,255,255,0.15);
   display:grid;place-items:center;
-  cursor:pointer;
-  transition:all .3s var(--ease);
-  z-index:20;
-  backdrop-filter:blur(12px);
-  box-shadow:0 4px 20px rgba(0,0,0,0.5);
+  font-size:11px;color:rgba(255,255,255,0.7);
+  opacity:0;
+  transition:opacity 0.3s;
+  backdrop-filter:blur(8px);
+  pointer-events:none;
+  z-index:5;
+}
+.ss-slide.ss-active:hover .ss-zoom-hint{ opacity:1; }
+
+/* ── Label ── */
+.ss-label{
+  margin-top:10px;
+  font-size:11px;font-weight:600;letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--subtle);
+  transition:color 0.4s;
+  white-space:nowrap;
+}
+.ss-slide.ss-active .ss-label{ color:var(--gold); }
+
+/* ── Arrow Buttons ── */
+.ss-arrow{
+  position:absolute;top:50%;transform:translateY(-50%);
+  width:46px;height:46px;border-radius:50%;
+  background:rgba(11,12,14,0.9);
+  border:1px solid rgba(212,168,67,0.3);
+  color:var(--gold);font-size:15px;
+  display:grid;place-items:center;
+  cursor:pointer;z-index:20;
+  transition:all 0.3s var(--ease);
+  backdrop-filter:blur(16px);
+  box-shadow:0 4px 24px rgba(0,0,0,0.6);
 }
 .ss-arrow:hover{
-  background:rgba(212,168,67,0.15);
-  border-color:rgba(212,168,67,0.5);
-  transform:translateY(-60%) scale(1.08);
-  box-shadow:0 8px 28px rgba(212,168,67,0.2);
+  background:rgba(212,168,67,0.18);
+  border-color:rgba(212,168,67,0.6);
+  transform:translateY(-50%) scale(1.1);
+  box-shadow:0 8px 32px rgba(212,168,67,0.25);
 }
-.ss-arrow:active{transform:translateY(-60%) scale(0.95);}
-.ss-arrow.disabled{opacity:0.25;pointer-events:none;}
-.ss-prev{left:6px;}
-.ss-next{right:6px;}
+.ss-arrow:active{ transform:translateY(-50%) scale(0.93); }
+.ss-arrow.ss-disabled{ opacity:0.2; pointer-events:none; }
+.ss-prev{ left:12px; }
+.ss-next{ right:12px; }
 
-/* Gradient fade edges */
-.ss-fade-left{
-  position:absolute;left:36px;top:0;bottom:0;width:60px;
-  background:linear-gradient(to right,var(--bg2),transparent);
+/* Edge fade masks */
+.ss-mask-l,.ss-mask-r{
+  position:absolute;top:0;bottom:0;width:90px;
   pointer-events:none;z-index:5;
 }
-.ss-fade-right{
-  position:absolute;right:36px;top:0;bottom:0;width:60px;
-  background:linear-gradient(to left,var(--bg2),transparent);
-  pointer-events:none;z-index:5;
-}
+.ss-mask-l{ left:0;  background:linear-gradient(to right,#111318 0%,transparent 100%); }
+.ss-mask-r{ right:0; background:linear-gradient(to left, #111318 0%,transparent 100%); }
 
-/* Dot indicators */
+/* ── Dots ── */
 .ss-dots{
-  display:flex;justify-content:center;gap:8px;
-  padding-top:28px;
+  display:flex;justify-content:center;align-items:center;
+  gap:7px;padding:22px 0 0;
 }
 .ss-dot{
-  width:6px;height:6px;border-radius:50%;
+  height:5px;border-radius:3px;
   background:var(--subtle);
   cursor:pointer;
-  transition:all .35s var(--ease);
+  transition:all 0.4s cubic-bezier(.16,1,.3,1);
+  width:5px;
 }
-.ss-dot.active{
-  width:24px;border-radius:4px;
-  background:var(--gold);
-  box-shadow:0 0 10px rgba(212,168,67,0.4);
+.ss-dot.ss-dot-active{
+  width:28px;
+  background:linear-gradient(90deg,var(--gold),var(--rust));
+  box-shadow:0 0 12px rgba(212,168,67,0.5);
 }
-.ss-dot:hover:not(.active){background:var(--muted);}
+.ss-dot:hover:not(.ss-dot-active){ background:var(--muted); width:10px; }
 
-/* Swipe hint on mobile */
+/* ── Swipe hint (mobile) ── */
 .ss-swipe-hint{
-  display:none;
-  text-align:center;
-  font-size:11px;color:var(--subtle);
-  padding-top:12px;
-  gap:5px;align-items:center;justify-content:center;
+  display:none;justify-content:center;align-items:center;gap:6px;
+  padding-top:10px;font-size:11px;color:var(--subtle);
 }
-.ss-swipe-hint i{font-size:12px;}
+
+/* ══════════════════════════════════════
+   LIGHTBOX (fullscreen viewer)
+══════════════════════════════════════ */
+.lb-overlay{
+  position:fixed;inset:0;z-index:9000;
+  background:rgba(5,5,6,0.96);
+  backdrop-filter:blur(28px);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;
+  transition:opacity 0.35s ease;
+}
+.lb-overlay.lb-open{
+  opacity:1;pointer-events:all;
+}
+
+/* Inner layout */
+.lb-inner{
+  display:flex;align-items:center;justify-content:center;
+  gap:20px;width:100%;height:100%;padding:60px 20px 80px;
+  position:relative;
+}
+
+/* Phone in lightbox */
+.lb-phone-wrap{
+  position:relative;
+  height:min(85vh, 680px);
+  aspect-ratio:9/19.5;
+  border-radius:38px;
+  overflow:hidden;
+  box-shadow:
+    0 0 0 2px rgba(212,168,67,0.6),
+    0 0 0 6px rgba(212,168,67,0.12),
+    0 40px 120px rgba(0,0,0,0.9);
+  transform:scale(0.88);
+  transition:transform 0.45s cubic-bezier(.16,1,.3,1);
+  background:#080808;
+}
+.lb-overlay.lb-open .lb-phone-wrap{
+  transform:scale(1);
+}
+/* notch */
+.lb-phone-wrap::before{
+  content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:80px;height:12px;background:#080808;border-radius:0 0 16px 16px;z-index:10;
+}
+.lb-img{
+  width:100%;height:100%;
+  object-fit:cover;object-position:top;
+  display:block;border-radius:inherit;
+  transition:opacity 0.2s;
+}
+.lb-img.lb-loading{ opacity:0; }
+
+/* Label strip */
+.lb-label-strip{
+  position:absolute;bottom:-44px;left:50%;transform:translateX(-50%);
+  white-space:nowrap;
+  font-size:12px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--muted);
+}
+.lb-label-strip strong{ color:var(--gold); }
+
+/* Arrows */
+.lb-arrow{
+  width:52px;height:52px;border-radius:50%;flex-shrink:0;
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.1);
+  color:rgba(255,255,255,0.6);font-size:16px;
+  display:grid;place-items:center;
+  cursor:pointer;
+  transition:all 0.25s;
+}
+.lb-arrow:hover{
+  background:rgba(212,168,67,0.15);
+  border-color:rgba(212,168,67,0.4);
+  color:var(--gold);
+  transform:scale(1.1);
+}
+.lb-arrow.lb-disabled{ opacity:0.15;pointer-events:none; }
+
+/* Close button */
+.lb-close{
+  position:absolute;top:18px;right:20px;
+  width:44px;height:44px;border-radius:12px;
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.1);
+  color:rgba(255,255,255,0.5);font-size:16px;
+  display:grid;place-items:center;cursor:pointer;
+  transition:all 0.25s;z-index:10;
+}
+.lb-close:hover{
+  background:rgba(255,80,80,0.15);
+  border-color:rgba(255,80,80,0.3);
+  color:#ff6b6b;transform:scale(1.05);
+}
+
+/* Counter */
+.lb-counter{
+  position:absolute;top:22px;left:50%;transform:translateX(-50%);
+  font-size:13px;font-weight:700;color:var(--muted);
+  letter-spacing:0.1em;
+}
+.lb-counter strong{ color:var(--gold); }
+
+/* Dots row inside lightbox */
+.lb-dots{
+  position:absolute;bottom:24px;left:50%;transform:translateX(-50%);
+  display:flex;gap:7px;align-items:center;
+}
+.lb-dot-item{
+  width:6px;height:6px;border-radius:50%;
+  background:rgba(255,255,255,0.2);cursor:pointer;
+  transition:all 0.35s;
+}
+.lb-dot-item.lb-dot-on{
+  width:22px;border-radius:3px;
+  background:var(--gold);
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════ */
 
 /* ══════════════════════════════════════
    RESPONSIVE
@@ -834,14 +991,14 @@ a{color:inherit;text-decoration:none;}
   .nav-ham{display:grid;}
   .hero-stats{justify-content:flex-start;}
   .stat:first-child{padding-left:0;}
-  .ss-slide{width:160px;}
   .ss-header{padding:0 18px 20px;}
-  .ss-viewport{padding:0 18px;}
-  .ss-fade-left{left:18px;}
-  .ss-fade-right{right:18px;}
+  .ss-stage{height:340px;}
+  .ss-slide{width:180px;}
   .ss-arrow{display:none;}
   .ss-swipe-hint{display:flex;}
-  .screenshots-wrap{padding:28px 0 32px;}
+  .ss-mask-l,.ss-mask-r{width:50px;}
+  .lb-arrow{width:40px;height:40px;font-size:13px;}
+  .lb-phone-wrap{height:min(78vh,560px);}
 }
 @media(max-width:600px){
   .hero{padding:56px 0 48px;}
@@ -996,93 +1153,130 @@ a{color:inherit;text-decoration:none;}
   <div class="screenshots-wrap reveal">
 
     <div class="ss-header">
-      <div class="ss-title">
-        <i class="fa-solid fa-mobile-screen-button"></i>
-        App Screenshots
-      </div>
-      <div class="ss-counter">
-        <span id="ssCurrentNum">1</span> / 8
-      </div>
+      <div class="ss-title"><i class="fa-solid fa-mobile-screen-button"></i> App Screenshots</div>
+      <div class="ss-counter"><strong id="ssNum">1</strong> / 8</div>
     </div>
 
-    <div class="ss-viewport" id="ssViewport">
-      <button class="ss-arrow ss-prev" id="ssPrev" aria-label="Previous">
-        <i class="fa-solid fa-chevron-left"></i>
-      </button>
-      <button class="ss-arrow ss-next" id="ssNext" aria-label="Next">
-        <i class="fa-solid fa-chevron-right"></i>
-      </button>
-
-      <div class="ss-fade-left"></div>
-      <div class="ss-fade-right"></div>
+    <!-- Stage -->
+    <div class="ss-stage" id="ssStage">
+      <button class="ss-arrow ss-prev" id="ssPrev"><i class="fa-solid fa-chevron-left"></i></button>
+      <button class="ss-arrow ss-next" id="ssNext"><i class="fa-solid fa-chevron-right"></i></button>
+      <div class="ss-mask-l"></div>
+      <div class="ss-mask-r"></div>
 
       <div class="ss-track" id="ssTrack">
-        <div class="ss-slide active-slide" data-index="0">
-          <div class="ss-phone-frame">
-            <img src="pho1.jpg" alt="HISAB Screenshot 1" class="ss-img" loading="lazy">
+
+        <div class="ss-slide ss-active" data-i="0" data-label="Home Screen">
+          <div class="ss-phone">
+            <img src="pho1.jpg" class="ss-img" alt="Home Screen" loading="lazy">
+            <div class="ss-zoom-hint"><i class="fa-solid fa-expand"></i></div>
           </div>
           <div class="ss-label">Home Screen</div>
         </div>
-        <div class="ss-slide" data-index="1">
-          <div class="ss-phone-frame">
-            <img src="pho2.jpg" alt="HISAB Screenshot 2" class="ss-img" loading="lazy">
+
+        <div class="ss-slide" data-i="1" data-label="Dashboard">
+          <div class="ss-phone">
+            <img src="pho2.jpg" class="ss-img" alt="Dashboard" loading="lazy">
+            <div class="ss-zoom-hint"><i class="fa-solid fa-expand"></i></div>
           </div>
           <div class="ss-label">Dashboard</div>
         </div>
-        <div class="ss-slide" data-index="2">
-          <div class="ss-phone-frame">
-            <img src="pho3.jpg" alt="HISAB Screenshot 3" class="ss-img" loading="lazy">
+
+        <div class="ss-slide" data-i="2" data-label="Add Expense">
+          <div class="ss-phone">
+            <img src="pho3.jpg" class="ss-img" alt="Add Expense" loading="lazy">
+            <div class="ss-zoom-hint"><i class="fa-solid fa-expand"></i></div>
           </div>
           <div class="ss-label">Add Expense</div>
         </div>
-        <div class="ss-slide" data-index="3">
-          <div class="ss-phone-frame">
-            <img src="pho4.jpg" alt="HISAB Screenshot 4" class="ss-img" loading="lazy">
+
+        <div class="ss-slide" data-i="3" data-label="Income Track">
+          <div class="ss-phone">
+            <img src="pho4.jpg" class="ss-img" alt="Income Track" loading="lazy">
+            <div class="ss-zoom-hint"><i class="fa-solid fa-expand"></i></div>
           </div>
           <div class="ss-label">Income Track</div>
         </div>
-        <div class="ss-slide" data-index="4">
-          <div class="ss-phone-frame">
-            <img src="pho5.jpg" alt="HISAB Screenshot 5" class="ss-img" loading="lazy">
+
+        <div class="ss-slide" data-i="4" data-label="Analytics">
+          <div class="ss-phone">
+            <img src="pho5.jpg" class="ss-img" alt="Analytics" loading="lazy">
+            <div class="ss-zoom-hint"><i class="fa-solid fa-expand"></i></div>
           </div>
           <div class="ss-label">Analytics</div>
         </div>
-        <div class="ss-slide" data-index="5">
-          <div class="ss-phone-frame">
-            <img src="pho6.jpg" alt="HISAB Screenshot 6" class="ss-img" loading="lazy">
+
+        <div class="ss-slide" data-i="5" data-label="Budget View">
+          <div class="ss-phone">
+            <img src="pho6.jpg" class="ss-img" alt="Budget View" loading="lazy">
+            <div class="ss-zoom-hint"><i class="fa-solid fa-expand"></i></div>
           </div>
           <div class="ss-label">Budget View</div>
         </div>
-        <div class="ss-slide" data-index="6">
-          <div class="ss-phone-frame">
-            <img src="pho7.jpg" alt="HISAB Screenshot 7" class="ss-img" loading="lazy">
+
+        <div class="ss-slide" data-i="6" data-label="History">
+          <div class="ss-phone">
+            <img src="pho7.jpg" class="ss-img" alt="History" loading="lazy">
+            <div class="ss-zoom-hint"><i class="fa-solid fa-expand"></i></div>
           </div>
           <div class="ss-label">History</div>
         </div>
-        <div class="ss-slide" data-index="7">
-          <div class="ss-phone-frame">
-            <img src="pho8.jpg" alt="HISAB Screenshot 8" class="ss-img" loading="lazy">
+
+        <div class="ss-slide" data-i="7" data-label="Settings">
+          <div class="ss-phone">
+            <img src="pho8.jpg" class="ss-img" alt="Settings" loading="lazy">
+            <div class="ss-zoom-hint"><i class="fa-solid fa-expand"></i></div>
           </div>
           <div class="ss-label">Settings</div>
         </div>
-      </div>
-    </div>
 
+      </div><!-- /track -->
+    </div><!-- /stage -->
+
+    <!-- Dot strip -->
     <div class="ss-dots" id="ssDots">
-      <div class="ss-dot active" data-dot="0"></div>
-      <div class="ss-dot" data-dot="1"></div>
-      <div class="ss-dot" data-dot="2"></div>
-      <div class="ss-dot" data-dot="3"></div>
-      <div class="ss-dot" data-dot="4"></div>
-      <div class="ss-dot" data-dot="5"></div>
-      <div class="ss-dot" data-dot="6"></div>
-      <div class="ss-dot" data-dot="7"></div>
+      <div class="ss-dot ss-dot-active" data-d="0"></div>
+      <div class="ss-dot" data-d="1"></div>
+      <div class="ss-dot" data-d="2"></div>
+      <div class="ss-dot" data-d="3"></div>
+      <div class="ss-dot" data-d="4"></div>
+      <div class="ss-dot" data-d="5"></div>
+      <div class="ss-dot" data-d="6"></div>
+      <div class="ss-dot" data-d="7"></div>
     </div>
 
-    <div class="ss-swipe-hint">
-      <i class="fa-solid fa-hand-pointer"></i> Swipe to explore
+    <div class="ss-swipe-hint"><i class="fa-solid fa-hand-pointer"></i>&nbsp;Swipe to explore</div>
+
+  </div>
+
+  <!-- ══ LIGHTBOX ══ -->
+  <div class="lb-overlay" id="lbOverlay">
+    <button class="lb-close" id="lbClose"><i class="fa-solid fa-xmark"></i></button>
+    <div class="lb-counter"><strong id="lbNum">1</strong> / 8</div>
+
+    <div class="lb-inner">
+      <button class="lb-arrow" id="lbPrev"><i class="fa-solid fa-chevron-left"></i></button>
+
+      <div style="position:relative;display:flex;flex-direction:column;align-items:center;">
+        <div class="lb-phone-wrap" id="lbPhoneWrap">
+          <img src="" class="lb-img" id="lbImg" alt="">
+        </div>
+        <div class="lb-label-strip" id="lbLabel"></div>
+      </div>
+
+      <button class="lb-arrow" id="lbNext"><i class="fa-solid fa-chevron-right"></i></button>
     </div>
 
+    <div class="lb-dots" id="lbDots">
+      <div class="lb-dot-item lb-dot-on" data-ld="0"></div>
+      <div class="lb-dot-item" data-ld="1"></div>
+      <div class="lb-dot-item" data-ld="2"></div>
+      <div class="lb-dot-item" data-ld="3"></div>
+      <div class="lb-dot-item" data-ld="4"></div>
+      <div class="lb-dot-item" data-ld="5"></div>
+      <div class="lb-dot-item" data-ld="6"></div>
+      <div class="lb-dot-item" data-ld="7"></div>
+    </div>
   </div>
 
   <div class="sec-label reveal">
@@ -1260,152 +1454,240 @@ a{color:inherit;text-decoration:none;}
 </footer>
 
 <script>
-// ── SCREENSHOT SLIDER ──────────────────────────────
+// ── SCREENSHOT SLIDER v2 ───────────────────────────
 (function(){
-  var track    = document.getElementById('ssTrack');
-  var slides   = Array.from(track.querySelectorAll('.ss-slide'));
-  var dots     = Array.from(document.querySelectorAll('.ss-dot'));
-  var prev     = document.getElementById('ssPrev');
-  var next     = document.getElementById('ssNext');
-  var counter  = document.getElementById('ssCurrentNum');
-  var viewport = document.getElementById('ssViewport');
-  var total    = slides.length;
-  var current  = 0;
-  var SLIDE_W  = 220; // slide width + gap
-  var autoTimer;
+  var LABELS = ['Home Screen','Dashboard','Add Expense','Income Track','Analytics','Budget View','History','Settings'];
+  var SRCS   = ['pho1.jpg','pho2.jpg','pho3.jpg','pho4.jpg','pho5.jpg','pho6.jpg','pho7.jpg','pho8.jpg'];
+  var TOTAL  = 8;
+  var SLIDE_W = 220; // px per slide slot (width + padding)
 
-  function getOffset(index) {
-    var vpW = viewport.offsetWidth;
-    var slideEl = slides[index];
-    var slideW = slideEl.offsetWidth;
-    // Center the active slide in the viewport
-    var centerTarget = vpW / 2 - slideW / 2;
-    // Left position of this slide in the track
-    var slideLeft = index * SLIDE_W;
-    return slideLeft - centerTarget;
+  // Slider elements
+  var track   = document.getElementById('ssTrack');
+  var stage   = document.getElementById('ssStage');
+  var slides  = Array.from(track.querySelectorAll('.ss-slide'));
+  var dots    = Array.from(document.querySelectorAll('#ssDots .ss-dot'));
+  var numEl   = document.getElementById('ssNum');
+  var btnPrev = document.getElementById('ssPrev');
+  var btnNext = document.getElementById('ssNext');
+
+  // Lightbox elements
+  var lbOverlay  = document.getElementById('lbOverlay');
+  var lbImg      = document.getElementById('lbImg');
+  var lbLabel    = document.getElementById('lbLabel');
+  var lbNum      = document.getElementById('lbNum');
+  var lbClose    = document.getElementById('lbClose');
+  var lbPrev     = document.getElementById('lbPrev');
+  var lbNext     = document.getElementById('lbNext');
+  var lbDotItems = Array.from(document.querySelectorAll('#lbDots .lb-dot-item'));
+  var lbPhone    = document.getElementById('lbPhoneWrap');
+
+  var current = 0;
+  var lbCurrent = 0;
+  var autoTimer = null;
+  var isDragging = false;
+  var dragStartX = 0, dragDeltaX = 0;
+
+  // ── Compute track offset so current slide is centered ──
+  function getTrackOffset(idx) {
+    var stageW = stage.offsetWidth;
+    var slideCenter = idx * SLIDE_W + (SLIDE_W / 2);
+    return slideCenter - stageW / 2;
   }
 
-  function goTo(index, animate) {
-    if (index < 0) index = 0;
-    if (index >= total) index = total - 1;
-    current = index;
-
-    // Update slides
+  // ── Apply visual state to all slides ──
+  function updateSlides(idx) {
     slides.forEach(function(s, i) {
-      s.classList.toggle('active-slide', i === current);
+      s.classList.remove('ss-active', 'ss-neighbor');
+      var diff = Math.abs(i - idx);
+      if (diff === 0) s.classList.add('ss-active');
+      else if (diff === 1) s.classList.add('ss-neighbor');
     });
+  }
 
-    // Update dots
+  // ── Update dots ──
+  function updateDots(idx) {
     dots.forEach(function(d, i) {
-      d.classList.toggle('active', i === current);
+      d.classList.toggle('ss-dot-active', i === idx);
     });
+  }
 
-    // Update counter
-    counter.textContent = current + 1;
+  // ── Arrow state ──
+  function updateArrows(idx) {
+    btnPrev.classList.toggle('ss-disabled', idx === 0);
+    btnNext.classList.toggle('ss-disabled', idx === TOTAL - 1);
+  }
 
-    // Move track
-    var offset = getOffset(current);
-    if (animate === false) {
-      track.style.transition = 'none';
-    } else {
-      track.style.transition = 'transform 0.55s cubic-bezier(.22,1,.36,1)';
-    }
+  // ── Main goTo ──
+  function goTo(idx, instant) {
+    idx = Math.max(0, Math.min(TOTAL - 1, idx));
+    current = idx;
+    var offset = getTrackOffset(idx);
+    track.style.transition = instant ? 'none' : 'transform 0.6s cubic-bezier(.16,1,.3,1)';
     track.style.transform = 'translateX(' + (-offset) + 'px)';
-
-    // Arrow states
-    prev.classList.toggle('disabled', current === 0);
-    next.classList.toggle('disabled', current === total - 1);
+    updateSlides(idx);
+    updateDots(idx);
+    updateArrows(idx);
+    if (numEl) numEl.textContent = idx + 1;
   }
 
+  // ── Auto-play ──
   function startAuto() {
-    clearInterval(autoTimer);
+    stopAuto();
     autoTimer = setInterval(function() {
-      var next_i = (current + 1) >= total ? 0 : current + 1;
-      goTo(next_i);
-    }, 3500);
+      goTo((current + 1) % TOTAL);
+    }, 3800);
   }
-
   function stopAuto() {
-    clearInterval(autoTimer);
+    if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
   }
 
-  // Button clicks
-  prev.addEventListener('click', function() {
-    stopAuto(); goTo(current - 1); startAuto();
-  });
-  next.addEventListener('click', function() {
-    stopAuto(); goTo(current + 1); startAuto();
+  // ── Arrow clicks ──
+  btnPrev.addEventListener('click', function() { stopAuto(); goTo(current - 1); startAuto(); });
+  btnNext.addEventListener('click', function() { stopAuto(); goTo(current + 1); startAuto(); });
+
+  // ── Dot clicks ──
+  dots.forEach(function(d, i) {
+    d.addEventListener('click', function() { stopAuto(); goTo(i); startAuto(); });
   });
 
-  // Dot clicks
-  dots.forEach(function(d) {
-    d.addEventListener('click', function() {
-      stopAuto(); goTo(parseInt(d.dataset.dot)); startAuto();
-    });
-  });
-
-  // Slide click to focus
+  // ── Slide click: non-active → focus; active → open lightbox ──
   slides.forEach(function(s, i) {
-    s.addEventListener('click', function() {
-      stopAuto(); goTo(i); startAuto();
+    s.addEventListener('click', function(e) {
+      if (isDragging || Math.abs(dragDeltaX) > 5) return;
+      if (i === current) {
+        openLightbox(i);
+      } else {
+        stopAuto(); goTo(i); startAuto();
+      }
     });
   });
 
-  // Pause on hover
-  viewport.addEventListener('mouseenter', stopAuto);
-  viewport.addEventListener('mouseleave', startAuto);
+  // ── Pause on hover ──
+  stage.addEventListener('mouseenter', stopAuto);
+  stage.addEventListener('mouseleave', startAuto);
 
-  // Drag / swipe
-  var dragStart = 0, dragCurrent = 0, isDragging = false;
-
+  // ── Drag (mouse + touch) ──
   function onDragStart(x) {
-    isDragging = true; dragStart = x; dragCurrent = x;
+    isDragging = true; dragStartX = x; dragDeltaX = 0;
     stopAuto();
     track.style.transition = 'none';
   }
   function onDragMove(x) {
     if (!isDragging) return;
-    dragCurrent = x;
-    var diff = dragCurrent - dragStart;
-    var offset = getOffset(current);
-    track.style.transform = 'translateX(' + (-offset + diff) + 'px)';
+    dragDeltaX = x - dragStartX;
+    var offset = getTrackOffset(current);
+    track.style.transform = 'translateX(' + (-offset + dragDeltaX) + 'px)';
   }
   function onDragEnd() {
     if (!isDragging) return;
     isDragging = false;
-    var diff = dragCurrent - dragStart;
-    if (diff < -50) goTo(current + 1);
-    else if (diff > 50) goTo(current - 1);
-    else goTo(current);
+    if (dragDeltaX < -50)      goTo(current + 1);
+    else if (dragDeltaX > 50)  goTo(current - 1);
+    else                        goTo(current);
     startAuto();
+    // reset delta after tiny delay so click handler sees it
+    setTimeout(function(){ dragDeltaX = 0; }, 50);
   }
 
-  // Mouse drag
-  track.addEventListener('mousedown', function(e) { onDragStart(e.clientX); });
-  window.addEventListener('mousemove', function(e) { onDragMove(e.clientX); });
-  window.addEventListener('mouseup', onDragEnd);
+  track.addEventListener('mousedown',  function(e){ onDragStart(e.clientX); e.preventDefault(); });
+  window.addEventListener('mousemove', function(e){ onDragMove(e.clientX); });
+  window.addEventListener('mouseup',   function(){ onDragEnd(); });
+  track.addEventListener('touchstart', function(e){ onDragStart(e.touches[0].clientX); }, {passive:true});
+  track.addEventListener('touchmove',  function(e){ onDragMove(e.touches[0].clientX);  }, {passive:true});
+  track.addEventListener('touchend',   onDragEnd);
 
-  // Touch
-  track.addEventListener('touchstart', function(e) { onDragStart(e.touches[0].clientX); }, {passive:true});
-  track.addEventListener('touchmove',  function(e) { onDragMove(e.touches[0].clientX);  }, {passive:true});
-  track.addEventListener('touchend', onDragEnd);
-
-  // Keyboard
+  // ── Keyboard (slider) ──
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'ArrowLeft')  { stopAuto(); goTo(current-1); startAuto(); }
-    if (e.key === 'ArrowRight') { stopAuto(); goTo(current+1); startAuto(); }
+    if (lbOverlay.classList.contains('lb-open')) return; // handled by lightbox
+    if (e.key === 'ArrowLeft')  { stopAuto(); goTo(current - 1); startAuto(); }
+    if (e.key === 'ArrowRight') { stopAuto(); goTo(current + 1); startAuto(); }
   });
 
-  // Resize recalc
+  // ── Resize ──
   var resizeTO;
   window.addEventListener('resize', function() {
     clearTimeout(resizeTO);
-    resizeTO = setTimeout(function(){ goTo(current, false); }, 150);
+    resizeTO = setTimeout(function(){ goTo(current, true); }, 120);
   });
 
-  // Init
-  goTo(0, false);
-  startAuto();
+  // ──────────────────────────────────────────────
+  //  LIGHTBOX
+  // ──────────────────────────────────────────────
+  function openLightbox(idx) {
+    stopAuto();
+    lbCurrent = idx;
+    renderLightbox(idx);
+    lbOverlay.classList.add('lb-open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox() {
+    lbOverlay.classList.remove('lb-open');
+    document.body.style.overflow = '';
+    setTimeout(startAuto, 400);
+  }
+  function renderLightbox(idx) {
+    lbImg.classList.add('lb-loading');
+    var src = SRCS[idx];
+    var tmp = new Image();
+    tmp.onload = function() {
+      lbImg.src = src;
+      lbImg.classList.remove('lb-loading');
+    };
+    tmp.src = src;
+    lbLabel.innerHTML = LABELS[idx];
+    lbNum.textContent = idx + 1;
+    lbDotItems.forEach(function(d, i){ d.classList.toggle('lb-dot-on', i === idx); });
+    lbPrev.classList.toggle('lb-disabled', idx === 0);
+    lbNext.classList.toggle('lb-disabled', idx === TOTAL - 1);
+  }
+  function lbGoTo(idx) {
+    idx = Math.max(0, Math.min(TOTAL - 1, idx));
+    lbCurrent = idx;
+    // Animate phone: quick scale dip
+    lbPhone.style.transform = 'scale(0.94)';
+    setTimeout(function(){
+      renderLightbox(idx);
+      lbPhone.style.transform = 'scale(1)';
+    }, 160);
+  }
+
+  lbClose.addEventListener('click', closeLightbox);
+  lbPrev.addEventListener('click',  function(){ lbGoTo(lbCurrent - 1); });
+  lbNext.addEventListener('click',  function(){ lbGoTo(lbCurrent + 1); });
+
+  // Lightbox dot clicks
+  lbDotItems.forEach(function(d, i) {
+    d.addEventListener('click', function(){ lbGoTo(i); });
+  });
+
+  // Close on backdrop click
+  lbOverlay.addEventListener('click', function(e) {
+    if (e.target === lbOverlay) closeLightbox();
+  });
+
+  // Lightbox keyboard
+  document.addEventListener('keydown', function(e) {
+    if (!lbOverlay.classList.contains('lb-open')) return;
+    if (e.key === 'Escape')      closeLightbox();
+    if (e.key === 'ArrowLeft')   lbGoTo(lbCurrent - 1);
+    if (e.key === 'ArrowRight')  lbGoTo(lbCurrent + 1);
+  });
+
+  // Lightbox swipe
+  var lbDragX = 0, lbDragging = false;
+  lbOverlay.addEventListener('touchstart', function(e){ lbDragging = true; lbDragX = e.touches[0].clientX; }, {passive:true});
+  lbOverlay.addEventListener('touchmove',  function(e){ if(!lbDragging) return; }, {passive:true});
+  lbOverlay.addEventListener('touchend',   function(e) {
+    if (!lbDragging) return;
+    lbDragging = false;
+    var dx = e.changedTouches[0].clientX - lbDragX;
+    if (dx < -50) lbGoTo(lbCurrent + 1);
+    else if (dx > 50) lbGoTo(lbCurrent - 1);
+  });
+
+  // ── Init ──
+  goTo(0, true);
+  setTimeout(startAuto, 1000);
 })();
 
 // Hamburger
