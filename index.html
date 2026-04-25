@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Riyad Bin Alam — Welcome to My World</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&=DM+Sans:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<title>Riyad Bin Alom — Welcome to My World</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 <style>
 /* ══════════════════════════════════════
@@ -313,38 +313,7 @@ img{display:block;max-width:100%;}
   font-size:10.5px;color:var(--muted);letter-spacing:.16em;text-transform:uppercase;
 }
 
-/* ══════════════════════════════════════
-   TICKER / MARQUEE STRIP
-══════════════════════════════════════ */
-.ticker{
-  background:var(--bg2);
-  border-top:1px solid var(--border2);
-  border-bottom:1px solid var(--border2);
-  padding:14px 0;
-  overflow:hidden;
-  position:relative;
-}
-.ticker::before,.ticker::after{
-  content:'';position:absolute;top:0;bottom:0;width:80px;z-index:2;
-}
-.ticker::before{left:0;background:linear-gradient(to right,var(--bg2),transparent);}
-.ticker::after{right:0;background:linear-gradient(to left,var(--bg2),transparent);}
-
-.ticker-track{
-  display:flex;gap:0;
-  width:max-content;
-  animation:ticker 28s linear infinite;
-}
-@keyframes ticker{from{transform:translateX(0);}to{transform:translateX(-50%);}}
-.ticker-track:hover{animation-play-state:paused;}
-
-.tick-item{
-  display:inline-flex;align-items:center;gap:10px;
-  padding:0 28px;font-size:13px;color:var(--muted);
-  white-space:nowrap;
-}
-.tick-item i{color:var(--gold);font-size:13px;}
-.tick-sep{color:var(--muted2);font-size:18px;opacity:.3;}
+/* ticker removed */
 
 /* ══════════════════════════════════════
    SECTIONS
@@ -730,7 +699,7 @@ img{display:block;max-width:100%;}
   <div class="nav-inner">
     <div class="nav-brand">
       <div class="nav-logo">R</div>
-      <div class="nav-name">Riyad Bin Alam</div>
+      <div class="nav-name">Riyad Bin Alom</div>
     </div>
     <div class="nav-links">
       <a href="index.html" class="active"><i class="fa-solid fa-house"></i> Home</a>
@@ -767,7 +736,7 @@ img{display:block;max-width:100%;}
     </div>
 
     <h1 class="hero-h1">
-      I'm <span class="gold"><em>Riyad</em></span><br>Bin Alam
+      I'm <span class="gold"><em>Riyad</em></span><br>Bin Alom
     </h1>
 
     <p class="hero-subtitle">
@@ -815,54 +784,16 @@ img{display:block;max-width:100%;}
 
   <!-- Right: Photo -->
   <div class="hero-img">
-    <img src="riyad.jpg" alt="Riyad Bin Alam" loading="eager">
+    <img src="riyad.jpg" alt="Riyad Bin Alom" loading="eager">
     <div class="hero-img-ov"></div>
     <div class="img-nametag">
-      <div class="n1">Riyad Bin Alam</div>
+      <div class="n1">Riyad Bin Alom</div>
       <div class="n2">Bangladesh · 2007</div>
     </div>
   </div>
 </section>
 
-<!-- ════════ TICKER ════════ -->
-<div class="ticker">
-  <div class="ticker-track" id="tickerTrack">
-    <!-- Items duplicated for infinite loop -->
-    <div class="tick-item"><i class="fa-solid fa-book-quran"></i> Islamic Studies</div>
-    <div class="tick-item tick-sep">✦</div>
-    <div class="tick-item"><i class="fa-solid fa-atom"></i> Scientific Inquiry</div>
-    <div class="tick-item tick-sep">✦</div>
-    <div class="tick-item"><i class="fa-solid fa-landmark"></i> History & Civilizations</div>
-    <div class="tick-item tick-sep">✦</div>
-    <div class="tick-item"><i class="fa-solid fa-pen-nib"></i> Creative Writing</div>
-    <div class="tick-item tick-sep">✦</div>
-    <div class="tick-item"><i class="fa-solid fa-code"></i> Web Development</div>
-    <div class="tick-item tick-sep">✦</div>
-    <div class="tick-item"><i class="fa-solid fa-globe"></i> Bangladesh</div>
-    <div class="tick-item tick-sep">✦</div>
-    <div class="tick-item"><i class="fa-solid fa-brain"></i> Psychology</div>
-    <div class="tick-item tick-sep">✦</div>
-    <div class="tick-item"><i class="fa-solid fa-star-and-crescent"></i> Faith & Reason</div>
-    <div class="tick-item tick-sep">✦</div>
-    <!-- Duplicate for seamless loop -->
-    <div class="tick-item"><i class="fa-solid fa-book-quran"></i> Islamic Studies</div>
-    <div class="tick-item tick-sep">✦</div>
-    <div class="tick-item"><i class="fa-solid fa-atom"></i> Scientific Inquiry</div>
-    <div class="tick-item tick-sep">✦</div>
-    <div class="tick-item"><i class="fa-solid fa-landmark"></i> History & Civilizations</div>
-    <div class="tick-item tick-sep">✦</div>
-    <div class="tick-item"><i class="fa-solid fa-pen-nib"></i> Creative Writing</div>
-    <div class="tick-item tick-sep">✦</div>
-    <div class="tick-item"><i class="fa-solid fa-code"></i> Web Development</div>
-    <div class="tick-item tick-sep">✦</div>
-    <div class="tick-item"><i class="fa-solid fa-globe"></i> Bangladesh</div>
-    <div class="tick-item tick-sep">✦</div>
-    <div class="tick-item"><i class="fa-solid fa-brain"></i> Psychology</div>
-    <div class="tick-item tick-sep">✦</div>
-    <div class="tick-item"><i class="fa-solid fa-star-and-crescent"></i> Faith & Reason</div>
-    <div class="tick-item tick-sep">✦</div>
-  </div>
-</div>
+
 
 <!-- ════════ ABOUT / BENTO ════════ -->
 <section class="section">
@@ -946,7 +877,7 @@ img{display:block;max-width:100%;}
           <span class="soc-label">Find me</span>
           <div class="soc-row">
             <a class="soc-ic" href="https://www.facebook.com/share/184vgdmKC6/" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-            <a class="soc-ic" href="https://x.com/Riyad_Bin_Alam" target="_blank" title="X"><i class="fab fa-x-twitter"></i></a>
+            <a class="soc-ic" href="https://x.com/Riyad_Bin_Alom" target="_blank" title="X"><i class="fab fa-x-twitter"></i></a>
             <a class="soc-ic" href="https://www.instagram.com/riyadbinal0m" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
             <a class="soc-ic" href="#" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
           </div>
@@ -1030,19 +961,7 @@ img{display:block;max-width:100%;}
 <!-- ════════ FOOTER ════════ -->
 <footer class="footer">
   <div class="footer-inner">
-    <!--
-      SECRET LINK: Looks exactly like plain text.
-      No hover effect, no cursor change, no underline.
-      Only those who know can find it.
-    -->
-    <a href="https://riyadbinalom78-ai.github.io/family-/"
-       class="footer-logo"
-       target="_blank"
-       rel="noopener noreferrer"
-       tabindex="-1"
-       style="pointer-events:auto;cursor:default;-webkit-text-fill-color:transparent;"
-       onmouseover="this.style.cssText=this.style.cssText"
-       onfocus="this.blur()">RBA</a>
+    <div class="footer-logo">RBA</div>
 
     <div class="footer-tag">Welcome to my world — where ideas come alive</div>
 
@@ -1056,7 +975,8 @@ img{display:block;max-width:100%;}
     </div>
 
     <div class="footer-copy">
-      © 2026 · Riyad Bin Alam · Crafted with intention and purpose.
+      <!-- © is the secret trigger — triple click opens family tree -->
+      <span id="secret-copy" style="cursor:default;user-select:none;">©</span> 2026 · Riyad Bin Alom · Crafted with intention and purpose.
     </div>
   </div>
 </footer>
@@ -1099,17 +1019,16 @@ window.addEventListener('scroll', () => {
     : 'rgba(10,9,8,0.88)';
 }, { passive: true });
 
-/* ── Secret RBA: triple-click activates link ── */
-const rbaLink = document.querySelector('.footer-logo');
-let rbaClicks = 0, rbaTimer;
-rbaLink.addEventListener('click', e => {
-  e.preventDefault();
-  rbaClicks++;
-  clearTimeout(rbaTimer);
-  rbaTimer = setTimeout(() => { rbaClicks = 0; }, 600);
-  if (rbaClicks >= 3) {
-    rbaClicks = 0;
-    window.open('https:/riyadbinalom78-ai.github.io/family-/', '_blank');
+/* ── Secret © : triple-click opens family tree ── */
+const secretCopy = document.getElementById('secret-copy');
+let sClicks = 0, sTimer;
+secretCopy.addEventListener('click', () => {
+  sClicks++;
+  clearTimeout(sTimer);
+  sTimer = setTimeout(() => { sClicks = 0; }, 600);
+  if (sClicks >= 3) {
+    sClicks = 0;
+    window.open('https://riyadbinalom78-ai.github.io/family-/', '_blank');
   }
 });
 </script>
