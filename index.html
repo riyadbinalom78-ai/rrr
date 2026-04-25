@@ -3,376 +3,734 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Riyad Bin Alom — Welcome to My World</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>Riyad Bin Alam — Welcome to My World</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 <style>
+/* ══════════════════════════════════════
+   ROOT & RESET
+══════════════════════════════════════ */
 :root{
-  --bg:#0e0d0b;--bg2:#141210;--bg3:#1a1713;
-  --text:#e8e0d0;--muted:#a09080;--gold:#d4a843;--rust:#c0622a;
-  --border:rgba(212,168,67,0.12);--border2:rgba(232,224,208,0.06);
-  --card:rgba(255,255,255,0.025);--maxw:1280px;--nav-h:72px;
+  --bg:#0a0908;
+  --bg2:#111009;
+  --bg3:#18150f;
+  --bg4:#1e1a12;
+  --text:#ede5d4;
+  --muted:#9a8870;
+  --muted2:#6a5e4e;
+  --gold:#c8963c;
+  --gold2:#e8b84b;
+  --gold3:#f5d07a;
+  --rust:#b85a28;
+  --border:rgba(200,150,60,0.11);
+  --border2:rgba(237,229,212,0.07);
+  --card:rgba(255,255,255,0.022);
+  --maxw:1300px;
+  --nav-h:70px;
+  --radius:16px;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
-body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;}
-body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:0.35;}
+body{
+  font-family:'DM Sans',system-ui,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.6;
+  overflow-x:hidden;
+}
+
+/* Grain texture overlay */
+body::after{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:9999;opacity:0.028;mix-blend-mode:overlay;
+}
+
 a{color:inherit;text-decoration:none;}
 img{display:block;max-width:100%;}
 
-/* ── NAVBAR ── */
-.navbar{position:sticky;top:0;z-index:200;height:var(--nav-h);display:flex;align-items:center;background:rgba(14,13,11,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
-.nav-inner{max-width:var(--maxw);margin:0 auto;padding:0 28px;width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;}
-.nav-brand{display:flex;align-items:center;gap:12px;flex-shrink:0;}
-.nav-logo{width:42px;height:42px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--rust));display:grid;place-items:center;font-family:'Playfair Display',serif;font-weight:900;font-size:20px;color:#0e0d0b;box-shadow:0 4px 20px rgba(212,168,67,0.25);}
-.nav-name{font-family:'Playfair Display',serif;font-weight:600;font-size:17px;white-space:nowrap;}
+/* ══════════════════════════════════════
+   NAVBAR
+══════════════════════════════════════ */
+.navbar{
+  position:sticky;top:0;z-index:200;
+  height:var(--nav-h);
+  display:flex;align-items:center;
+  background:rgba(10,9,8,0.88);
+  backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);
+  transition:background .3s;
+}
+.nav-inner{
+  max-width:var(--maxw);margin:0 auto;padding:0 32px;
+  width:100%;display:flex;align-items:center;
+  justify-content:space-between;gap:16px;
+}
+.nav-brand{display:flex;align-items:center;gap:13px;flex-shrink:0;}
+.nav-logo{
+  width:42px;height:42px;border-radius:10px;
+  background:linear-gradient(135deg,var(--gold),var(--rust));
+  display:grid;place-items:center;
+  font-family:'Playfair Display',serif;
+  font-weight:900;font-size:20px;color:#0a0908;
+  box-shadow:0 4px 22px rgba(200,150,60,0.28);
+  flex-shrink:0;
+}
+.nav-name{
+  font-family:'Playfair Display',serif;
+  font-weight:600;font-size:16.5px;
+  white-space:nowrap;letter-spacing:.01em;
+}
 .nav-links{display:flex;align-items:center;gap:2px;}
-.nav-links a{display:inline-flex;align-items:center;gap:6px;padding:8px 13px;border-radius:8px;font-size:13.5px;font-weight:500;color:var(--muted);transition:all .2s;white-space:nowrap;}
+.nav-links a{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:8px 13px;border-radius:9px;
+  font-size:13.5px;font-weight:500;
+  color:var(--muted);transition:all .2s;
+  white-space:nowrap;
+}
 .nav-links a i{font-size:11px;}
 .nav-links a:hover{color:var(--text);background:var(--card);}
-.nav-links a.active{color:var(--gold);background:rgba(212,168,67,0.08);border:1px solid rgba(212,168,67,0.15);}
-.nav-ham{display:none;background:none;border:1px solid var(--border);color:var(--muted);width:42px;height:42px;border-radius:8px;cursor:pointer;font-size:16px;transition:all .2s;place-items:center;}
-.nav-ham:hover{color:var(--gold);border-color:var(--gold);}
+.nav-links a.active{
+  color:var(--gold2);
+  background:rgba(200,150,60,0.09);
+  border:1px solid rgba(200,150,60,0.18);
+}
+.nav-ham{
+  display:none;background:none;
+  border:1px solid var(--border);
+  color:var(--muted);width:42px;height:42px;
+  border-radius:9px;cursor:pointer;font-size:16px;
+  transition:all .2s;place-items:center;
+}
+.nav-ham:hover{color:var(--gold2);border-color:var(--gold);}
 
-/* ── MOBILE MENU ── */
-.mobile-menu{display:none;position:fixed;inset:0;top:var(--nav-h);background:rgba(14,13,11,0.98);backdrop-filter:blur(20px);z-index:150;flex-direction:column;padding:24px;gap:6px;border-top:1px solid var(--border);overflow-y:auto;}
+/* Mobile menu */
+.mobile-menu{
+  display:none;position:fixed;
+  inset:0;top:var(--nav-h);
+  background:rgba(10,9,8,0.98);
+  backdrop-filter:blur(28px);
+  z-index:150;flex-direction:column;
+  padding:24px;gap:5px;
+  border-top:1px solid var(--border);
+  overflow-y:auto;
+}
 .mobile-menu.open{display:flex;}
-.mobile-menu a{display:flex;align-items:center;gap:14px;padding:15px 18px;border-radius:12px;font-size:16px;font-weight:500;color:var(--muted);border:1px solid transparent;transition:all .2s;}
+.mobile-menu a{
+  display:flex;align-items:center;gap:14px;
+  padding:15px 18px;border-radius:12px;
+  font-size:15.5px;font-weight:500;
+  color:var(--muted);border:1px solid transparent;
+  transition:all .2s;
+}
 .mobile-menu a i{width:20px;text-align:center;color:var(--gold);}
-.mobile-menu a:hover,.mobile-menu a.active{color:var(--gold);border-color:var(--border);background:var(--card);}
-.mobile-divider{height:1px;background:var(--border2);margin:8px 0;}
+.mobile-menu a:hover,.mobile-menu a.active{
+  color:var(--gold2);border-color:var(--border);
+  background:var(--card);
+}
+.mob-div{height:1px;background:var(--border2);margin:6px 0;}
 
-/* ── HERO ── */
+/* ══════════════════════════════════════
+   HERO
+══════════════════════════════════════ */
 .hero{
   min-height:calc(100vh - var(--nav-h));
   display:grid;
-  grid-template-columns:1fr 500px;
-  gap:0;
+  grid-template-columns:1fr 480px;
   align-items:stretch;
   overflow:hidden;
+  position:relative;
 }
 
-/* Left text panel */
+/* Ambient background glow */
+.hero::before{
+  content:'';position:absolute;
+  top:20%;left:10%;
+  width:600px;height:600px;
+  background:radial-gradient(circle,rgba(200,150,60,0.04) 0%,transparent 65%);
+  pointer-events:none;z-index:0;
+  animation:glow 8s ease-in-out infinite alternate;
+}
+@keyframes glow{
+  from{opacity:.5;transform:translate(0,0) scale(1);}
+  to{opacity:1;transform:translate(30px,20px) scale(1.05);}
+}
+
+/* Left text */
 .hero-text{
-  display:flex;
-  flex-direction:column;
+  display:flex;flex-direction:column;
   justify-content:center;
-  padding:80px 60px;
-  max-width:680px;
+  padding:80px 64px;
+  position:relative;z-index:1;
 }
+
 .hero-eyebrow{
-  display:inline-flex;align-items:center;gap:10px;
-  font-size:12px;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;
-  color:var(--gold);margin-bottom:24px;
-  opacity:0;animation:fadeUp .7s ease .1s forwards;
+  display:inline-flex;align-items:center;gap:12px;
+  font-size:11.5px;font-weight:600;
+  letter-spacing:.26em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:28px;
+  opacity:0;animation:fadeUp .7s ease .08s forwards;
 }
-.hero-eyebrow::before{content:'';width:28px;height:1px;background:var(--gold);}
+.hero-eyebrow .line{width:32px;height:1px;background:var(--gold);opacity:.7;}
+
 .hero-h1{
   font-family:'Playfair Display',serif;
-  font-size:clamp(48px,5.5vw,80px);
+  font-size:clamp(46px,5.8vw,82px);
   font-weight:900;line-height:1.0;
-  letter-spacing:-0.02em;
-  margin-bottom:8px;
-  opacity:0;animation:fadeUp .7s ease .2s forwards;
+  letter-spacing:-.025em;
+  margin-bottom:6px;
+  opacity:0;animation:fadeUp .7s ease .18s forwards;
 }
-.hero-h1 .gold{background:linear-gradient(135deg,var(--gold),var(--rust));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.hero-tagline{
-  font-family:'Playfair Display',serif;
-  font-style:italic;
-  font-size:clamp(16px,2vw,22px);
-  color:var(--muted);
-  margin-bottom:28px;
-  opacity:0;animation:fadeUp .7s ease .3s forwards;
+.hero-h1 em{
+  font-style:italic;font-weight:400;
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.08em;
 }
-.hero-desc{
-  font-size:16px;color:var(--muted);
-  line-height:1.85;max-width:480px;
-  margin-bottom:40px;
-  opacity:0;animation:fadeUp .7s ease .4s forwards;
+.hero-h1 .gold{
+  background:linear-gradient(125deg,var(--gold3),var(--gold),var(--rust));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
 }
-.hero-desc strong{color:var(--text);}
 
-/* CTA buttons */
+.hero-subtitle{
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
+  font-size:clamp(18px,2.2vw,25px);
+  color:var(--muted);
+  line-height:1.5;
+  margin-bottom:30px;
+  opacity:0;animation:fadeUp .7s ease .28s forwards;
+  letter-spacing:.01em;
+}
+
+/* Divider line */
+.hero-div{
+  display:flex;align-items:center;gap:16px;
+  margin-bottom:30px;
+  opacity:0;animation:fadeUp .7s ease .36s forwards;
+}
+.hero-div span{width:48px;height:1px;background:linear-gradient(to right,var(--gold),transparent);}
+.hero-div small{
+  font-size:11px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--muted2);
+}
+
+.hero-desc{
+  font-size:15.5px;color:var(--muted);
+  line-height:1.9;max-width:440px;
+  margin-bottom:42px;
+  opacity:0;animation:fadeUp .7s ease .44s forwards;
+}
+.hero-desc strong{color:var(--text);font-weight:500;}
+
+/* CTA */
 .hero-cta{
   display:flex;gap:12px;flex-wrap:wrap;
-  margin-bottom:44px;
-  opacity:0;animation:fadeUp .7s ease .5s forwards;
+  margin-bottom:48px;
+  opacity:0;animation:fadeUp .7s ease .54s forwards;
 }
-.btn-gold{
-  display:inline-flex;align-items:center;gap:9px;
-  padding:14px 28px;border-radius:10px;
+.btn-primary{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:14px 28px;border-radius:11px;
   background:linear-gradient(135deg,var(--gold),var(--rust));
-  color:#0e0d0b;font-weight:700;font-size:14px;
-  transition:all .25s;border:none;cursor:pointer;
+  color:#0a0908;font-weight:700;font-size:14px;
+  transition:all .28s;border:none;cursor:pointer;
+  letter-spacing:.01em;
+  box-shadow:0 6px 28px rgba(200,150,60,0.2);
 }
-.btn-gold:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(212,168,67,0.3);}
-.btn-outline{
-  display:inline-flex;align-items:center;gap:9px;
-  padding:13px 26px;border-radius:10px;
+.btn-primary:hover{
+  transform:translateY(-3px);
+  box-shadow:0 14px 40px rgba(200,150,60,0.32);
+}
+.btn-ghost{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:13px 26px;border-radius:11px;
   border:1px solid var(--border);
   color:var(--muted);font-weight:500;font-size:14px;
-  transition:all .25s;
+  transition:all .28s;
 }
-.btn-outline:hover{color:var(--gold);border-color:rgba(212,168,67,0.4);}
+.btn-ghost:hover{
+  color:var(--gold2);
+  border-color:rgba(200,150,60,0.35);
+  background:rgba(200,150,60,0.04);
+}
 
-/* Social row */
-.hero-socials{
-  display:flex;align-items:center;gap:20px;
-  opacity:0;animation:fadeUp .7s ease .6s forwards;
+/* Stats row */
+.hero-stats{
+  display:flex;gap:32px;flex-wrap:wrap;
+  opacity:0;animation:fadeUp .7s ease .62s forwards;
 }
-.social-label{font-size:11px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);}
-.social-icons{display:flex;gap:8px;}
-.soc-ic{
-  width:42px;height:42px;border-radius:10px;
-  border:1px solid var(--border2);
-  display:grid;place-items:center;
-  color:var(--muted);font-size:15px;
-  transition:all .22s;background:var(--card);
+.stat{display:flex;flex-direction:column;gap:2px;}
+.stat-n{
+  font-family:'Playfair Display',serif;
+  font-size:26px;font-weight:700;
+  color:var(--gold2);line-height:1;
 }
-.soc-ic:hover{color:var(--gold);border-color:var(--border);transform:translateY(-2px);}
+.stat-l{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted2);}
+.stat-sep{width:1px;background:var(--border2);align-self:stretch;margin:4px 0;}
 
-/* Right image panel - Adjusted for better sizing */
+/* Right: Image panel */
 .hero-img{
-  position:relative;
-  overflow:hidden;
+  position:relative;overflow:hidden;
   background:var(--bg2);
-  height: 100%;
 }
 .hero-img img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  object-position: center top;
-  display:block;
-  transition:transform .6s ease;
+  width:100%;height:100%;
+  object-fit:cover;object-position:center top;
+  display:block;transition:transform .7s ease;
 }
-.hero-img:hover img{transform:scale(1.03);}
-.hero-img-overlay{
+.hero-img:hover img{transform:scale(1.04);}
+
+/* Gradient overlays on image */
+.hero-img-ov{
   position:absolute;inset:0;
-  background:linear-gradient(to right, rgba(14,13,11,0.3) 0%, transparent 20%, transparent 80%, rgba(14,13,11,0.2) 100%),
-             linear-gradient(to top, rgba(14,13,11,0.7) 0%, transparent 30%);
-  pointer-events:none;
+  background:
+    linear-gradient(to right, rgba(10,9,8,.55) 0%, rgba(10,9,8,.1) 22%, transparent 40%),
+    linear-gradient(to top, rgba(10,9,8,.75) 0%, rgba(10,9,8,.2) 28%, transparent 52%);
+  pointer-events:none;z-index:1;
 }
 
-/* ── INTRO STRIP ── */
-.intro-strip{
+/* Name tag on image */
+.img-nametag{
+  position:absolute;bottom:28px;left:50%;
+  transform:translateX(-50%);
+  z-index:2;
+  background:rgba(10,9,8,0.72);
+  backdrop-filter:blur(16px);
+  border:1px solid var(--border);
+  border-radius:40px;
+  padding:10px 22px;
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+  white-space:nowrap;
+  animation:fadeUp .8s ease .9s both;
+}
+.img-nametag .n1{
+  font-family:'Playfair Display',serif;
+  font-size:14px;font-weight:700;color:var(--gold2);letter-spacing:.02em;
+}
+.img-nametag .n2{
+  font-size:10.5px;color:var(--muted);letter-spacing:.16em;text-transform:uppercase;
+}
+
+/* ══════════════════════════════════════
+   TICKER / MARQUEE STRIP
+══════════════════════════════════════ */
+.ticker{
   background:var(--bg2);
   border-top:1px solid var(--border2);
   border-bottom:1px solid var(--border2);
-  padding:28px 0;
+  padding:14px 0;
+  overflow:hidden;
+  position:relative;
 }
-.intro-strip-inner{
-  max-width:var(--maxw);margin:0 auto;padding:0 28px;
-  display:flex;align-items:center;justify-content:center;
-  gap:40px;flex-wrap:wrap;
+.ticker::before,.ticker::after{
+  content:'';position:absolute;top:0;bottom:0;width:80px;z-index:2;
 }
-.strip-item{
-  display:flex;align-items:center;gap:12px;
-  font-size:14px;color:var(--muted);
-}
-.strip-item i{color:var(--gold);font-size:16px;}
-.strip-divider{width:1px;height:20px;background:var(--border2);}
+.ticker::before{left:0;background:linear-gradient(to right,var(--bg2),transparent);}
+.ticker::after{right:0;background:linear-gradient(to left,var(--bg2),transparent);}
 
-/* ── FEATURES SECTION ── */
-.section{padding:80px 0;}
-.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;}
-.section-eye{
+.ticker-track{
+  display:flex;gap:0;
+  width:max-content;
+  animation:ticker 28s linear infinite;
+}
+@keyframes ticker{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+.ticker-track:hover{animation-play-state:paused;}
+
+.tick-item{
   display:inline-flex;align-items:center;gap:10px;
-  font-size:12px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;
-  color:var(--gold);margin-bottom:16px;
+  padding:0 28px;font-size:13px;color:var(--muted);
+  white-space:nowrap;
 }
-.section-eye::before{content:'';width:28px;height:1px;background:var(--gold);}
-.section-h2{
-  font-family:'Playfair Display',serif;
-  font-size:clamp(32px,4vw,52px);
-  font-weight:900;line-height:1.05;
-  letter-spacing:-0.02em;margin-bottom:12px;
-}
-.section-sub{color:var(--muted);font-size:15.5px;max-width:55ch;margin-bottom:56px;line-height:1.8;}
+.tick-item i{color:var(--gold);font-size:13px;}
+.tick-sep{color:var(--muted2);font-size:18px;opacity:.3;}
 
-/* Feature cards */
-.feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
-.feature-card{
+/* ══════════════════════════════════════
+   SECTIONS
+══════════════════════════════════════ */
+.section{padding:96px 0;}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 32px;}
+
+.sec-eye{
+  display:inline-flex;align-items:center;gap:10px;
+  font-size:11.5px;font-weight:600;
+  letter-spacing:.24em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:14px;
+}
+.sec-eye::before{content:'';width:28px;height:1px;background:var(--gold);opacity:.8;}
+
+.sec-h2{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(30px,4vw,50px);
+  font-weight:900;line-height:1.05;
+  letter-spacing:-.022em;margin-bottom:14px;
+}
+.sec-p{
+  color:var(--muted);font-size:15.5px;
+  max-width:52ch;line-height:1.85;margin-bottom:60px;
+}
+
+/* ── ABOUT BENTO ── */
+.bento{
+  display:grid;
+  grid-template-columns:repeat(12,1fr);
+  grid-template-rows:auto;
+  gap:16px;
+}
+.bento-card{
   background:var(--card);
   border:1px solid var(--border2);
   border-radius:20px;
   padding:32px;
-  transition:all .3s;
+  transition:all .3s ease;
   position:relative;overflow:hidden;
 }
-.feature-card::before{
-  content:'';position:absolute;top:0;left:0;right:0;
-  height:2px;
-  background:linear-gradient(90deg,var(--gold),var(--rust));
-  transform:scaleX(0);transform-origin:left;
-  transition:transform .35s ease;
+.bento-card:hover{
+  border-color:var(--border);
+  transform:translateY(-4px);
+  box-shadow:0 20px 52px rgba(0,0,0,.36);
 }
-.feature-card:hover{border-color:var(--border);transform:translateY(-6px);box-shadow:0 24px 60px rgba(0,0,0,0.4);}
-.feature-card:hover::before{transform:scaleX(1);}
-.feature-icon{
+.bento-card::after{
+  content:'';position:absolute;
+  top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(200,150,60,0.28),transparent);
+  opacity:0;transition:opacity .3s;
+}
+.bento-card:hover::after{opacity:1;}
+
+/* Bento grid layout */
+.bc1{grid-column:span 5;grid-row:span 2;}
+.bc2{grid-column:span 7;}
+.bc3{grid-column:span 4;}
+.bc4{grid-column:span 3;}
+.bc5{grid-column:span 5;}
+.bc6{grid-column:span 7;}
+
+.bento-icon{
   width:52px;height:52px;border-radius:14px;
-  background:rgba(212,168,67,0.07);
-  border:1px solid rgba(212,168,67,0.14);
+  background:rgba(200,150,60,0.07);
+  border:1px solid rgba(200,150,60,0.14);
   display:grid;place-items:center;
   color:var(--gold);font-size:20px;
-  margin-bottom:22px;
+  margin-bottom:20px;
 }
-.feature-h3{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;margin-bottom:10px;}
-.feature-p{font-size:14px;color:var(--muted);line-height:1.75;}
+.bento-h{
+  font-family:'Playfair Display',serif;
+  font-size:20px;font-weight:700;
+  margin-bottom:10px;line-height:1.2;
+}
+.bento-p{font-size:14px;color:var(--muted);line-height:1.78;}
+.bento-num{
+  font-family:'Playfair Display',serif;
+  font-size:64px;font-weight:900;
+  line-height:.9;
+  background:linear-gradient(135deg,var(--gold3),var(--gold));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  margin-bottom:10px;
+}
+.bento-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:11px;font-weight:600;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--gold);
+  padding:4px 10px;border-radius:20px;
+  border:1px solid rgba(200,150,60,.2);
+  background:rgba(200,150,60,.06);
+  margin-bottom:16px;
+}
+.interest-list{
+  display:flex;flex-direction:column;gap:10px;
+  margin-top:14px;
+}
+.int-item{
+  display:flex;align-items:center;gap:12px;
+  font-size:14px;color:var(--muted);
+}
+.int-item i{color:var(--gold);width:16px;text-align:center;font-size:12px;}
+.int-bar{
+  flex:1;height:3px;border-radius:3px;
+  background:var(--border2);overflow:hidden;
+  margin-left:auto;width:80px;flex-shrink:0;
+}
+.int-fill{
+  height:100%;border-radius:3px;
+  background:linear-gradient(to right,var(--gold),var(--gold2));
+}
 
 /* ── QUOTE ── */
-.quote-section{
-  padding:80px 0;
+.quote-sect{
+  padding:96px 0;
   background:var(--bg2);
   border-top:1px solid var(--border2);
   border-bottom:1px solid var(--border2);
+  position:relative;overflow:hidden;
+}
+.quote-sect::before{
+  content:'"';position:absolute;
+  top:-40px;left:50%;transform:translateX(-50%);
+  font-family:'Playfair Display',serif;
+  font-size:300px;line-height:1;
+  color:rgba(200,150,60,0.04);
+  pointer-events:none;user-select:none;
 }
 .quote-inner{
-  max-width:780px;margin:0 auto;padding:0 28px;
-  text-align:center;
+  max-width:800px;margin:0 auto;padding:0 32px;
+  text-align:center;position:relative;z-index:1;
 }
-.quote-mark{
-  font-family:'Playfair Display',serif;
-  font-size:80px;line-height:.8;
-  color:rgba(212,168,67,0.15);
-  margin-bottom:16px;
-  display:block;
-}
-.quote-text{
-  font-family:'Playfair Display',serif;
+.q-text{
+  font-family:'Cormorant Garamond',serif;
   font-style:italic;
-  font-size:clamp(22px,3vw,32px);
+  font-size:clamp(22px,3.5vw,38px);
   color:var(--text);
-  line-height:1.5;
-  margin-bottom:20px;
+  line-height:1.55;
+  margin-bottom:28px;
+  font-weight:300;
+  letter-spacing:.01em;
 }
-.quote-src{
-  font-size:14px;color:var(--muted);
-  display:flex;align-items:center;justify-content:center;gap:10px;
+.q-src{
+  display:inline-flex;align-items:center;gap:14px;
+  font-size:13px;color:var(--muted);letter-spacing:.08em;
 }
-.quote-src::before,.quote-src::after{content:'';flex:1;max-width:60px;height:1px;background:var(--border);}
+.q-src::before,.q-src::after{
+  content:'';width:48px;height:1px;background:var(--border);
+}
 
-/* ── RECENT WRITINGS ── */
-.writings-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;}
-.writing-card{
+/* ── BLOG CARDS ── */
+.blog-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;}
+.blog-card{
   background:var(--card);
   border:1px solid var(--border2);
-  border-radius:16px;
-  padding:28px;
+  border-radius:18px;
+  padding:30px;
   transition:all .3s;
-  display:flex;flex-direction:column;gap:12px;
+  display:flex;flex-direction:column;gap:13px;
+  cursor:pointer;
 }
-.writing-card:hover{border-color:var(--border);transform:translateY(-4px);}
-.writing-tag{
+.blog-card:hover{
+  border-color:var(--border);
+  transform:translateY(-5px);
+  box-shadow:0 22px 55px rgba(0,0,0,.38);
+}
+.blog-tag{
   display:inline-flex;align-items:center;gap:6px;
-  font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;
-  color:var(--gold);padding:3px 10px;border-radius:20px;
-  border:1px solid rgba(212,168,67,0.2);background:rgba(212,168,67,0.06);
-  width:fit-content;
+  font-size:11px;font-weight:600;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--gold);
+  padding:3px 10px;border-radius:20px;
+  border:1px solid rgba(200,150,60,.2);
+  background:rgba(200,150,60,.06);width:fit-content;
 }
-.writing-h{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;line-height:1.2;color:var(--text);transition:color .2s;}
-.writing-card:hover .writing-h{color:var(--gold);}
-.writing-p{font-size:14px;color:var(--muted);line-height:1.7;flex:1;}
-.writing-link{
-  display:inline-flex;align-items:center;gap:6px;
-  font-size:13px;font-weight:600;color:var(--muted);
-  transition:all .2s;width:fit-content;
+.blog-h{
+  font-family:'Playfair Display',serif;
+  font-size:20px;font-weight:700;line-height:1.25;
+  color:var(--text);transition:color .2s;
 }
-.writing-link:hover{color:var(--gold);gap:10px;}
+.blog-card:hover .blog-h{color:var(--gold2);}
+.blog-p{font-size:14px;color:var(--muted);line-height:1.75;flex:1;}
+.blog-link{
+  display:inline-flex;align-items:center;gap:7px;
+  font-size:13px;font-weight:600;
+  color:var(--muted2);transition:all .22s;width:fit-content;
+}
+.blog-card:hover .blog-link{color:var(--gold);gap:11px;}
 
 /* ── PALESTINE ── */
-.pal-section{
-  padding:80px 0;
-  background:linear-gradient(180deg,var(--bg2),var(--bg));
-  border-top:1px solid rgba(0,122,61,0.15);
+.pal-sect{
+  padding:96px 0;
+  position:relative;overflow:hidden;
+  border-top:1px solid rgba(0,120,55,.12);
 }
-.pal-inner{max-width:780px;margin:0 auto;padding:0 28px;text-align:center;}
-.pal-flag{font-size:64px;margin-bottom:24px;display:inline-block;animation:sway 4s ease-in-out infinite;}
-@keyframes sway{0%,100%{transform:rotate(-2deg);}50%{transform:rotate(2deg) scale(1.04);}}
-.pal-h{font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,44px);font-weight:900;margin-bottom:20px;background:linear-gradient(135deg,var(--text),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.pal-divider{width:60px;height:2px;background:linear-gradient(90deg,var(--gold),#007A3D);margin:0 auto 24px;border-radius:2px;}
-.pal-p{font-size:16px;color:var(--muted);line-height:1.9;max-width:620px;margin:0 auto;}
+.pal-sect::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at center,rgba(0,120,55,.04) 0%,transparent 65%);
+  pointer-events:none;
+}
+.pal-inner{
+  max-width:700px;margin:0 auto;
+  padding:0 32px;text-align:center;
+  position:relative;z-index:1;
+}
+.pal-flag{
+  font-size:60px;margin:0 auto 26px;display:inline-block;
+  filter:drop-shadow(0 4px 16px rgba(0,120,55,.2));
+  animation:sway 5s ease-in-out infinite;
+}
+@keyframes sway{
+  0%,100%{transform:rotate(-3deg);}
+  50%{transform:rotate(3deg) scale(1.06);}
+}
+.pal-h{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(26px,4vw,42px);
+  font-weight:900;margin-bottom:18px;
+  background:linear-gradient(135deg,var(--text),var(--gold));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.pal-div{
+  width:56px;height:2px;
+  background:linear-gradient(90deg,var(--gold),#007A3D);
+  margin:0 auto 22px;border-radius:2px;
+}
+.pal-p{font-size:16px;color:var(--muted);line-height:1.9;}
 
-/* ── CONNECT CTA ── */
-.cta-section{padding:80px 0;}
+/* ── CTA ── */
+.cta-sect{padding:96px 0;}
 .cta-card{
   background:var(--card);
   border:1px solid var(--border2);
   border-radius:28px;
-  padding:64px;
+  padding:72px 64px;
   text-align:center;
   position:relative;overflow:hidden;
 }
 .cta-card::before{
-  content:'';position:absolute;top:50%;left:50%;
-  width:500px;height:500px;
-  background:radial-gradient(circle,rgba(212,168,67,0.05),transparent 70%);
+  content:'';position:absolute;
+  top:50%;left:50%;
+  width:600px;height:400px;
+  background:radial-gradient(ellipse,rgba(200,150,60,.05) 0%,transparent 65%);
   transform:translate(-50%,-50%);pointer-events:none;
 }
-.cta-h{font-family:'Playfair Display',serif;font-size:clamp(28px,3.5vw,44px);font-weight:900;margin-bottom:14px;}
-.cta-p{font-size:16px;color:var(--muted);max-width:48ch;margin:0 auto 32px;line-height:1.8;}
+.cta-h{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(28px,3.5vw,46px);
+  font-weight:900;margin-bottom:16px;
+}
+.cta-p{
+  font-size:16px;color:var(--muted);
+  max-width:48ch;margin:0 auto 36px;line-height:1.85;
+}
 .cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
 
 /* ── FOOTER ── */
-.footer{padding:48px 0 32px;border-top:1px solid var(--border2);text-align:center;}
-.footer-logo{font-family:'Playfair Display',serif;font-size:28px;font-weight:900;background:linear-gradient(135deg,var(--gold),var(--rust));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px;}
-.footer-tagline{font-family:'Playfair Display',serif;font-style:italic;font-size:14px;color:var(--muted);margin-bottom:28px;}
-.footer-links{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;margin-bottom:28px;}
-.footer-links a{font-size:13px;padding:6px 14px;border-radius:8px;color:var(--muted);transition:all .2s;}
+.footer{
+  padding:52px 0 36px;
+  border-top:1px solid var(--border2);
+}
+.footer-inner{
+  max-width:var(--maxw);margin:0 auto;
+  padding:0 32px;
+  display:flex;flex-direction:column;
+  align-items:center;gap:20px;
+}
+.footer-logo{
+  font-family:'Playfair Display',serif;
+  font-size:32px;font-weight:900;
+  background:linear-gradient(135deg,var(--gold),var(--rust));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  letter-spacing:-.01em;
+  /* SECRET LINK — styled to look like plain text */
+  cursor:default;
+  user-select:none;
+}
+.footer-logo:hover{
+  /* No change — invisible as a link */
+  -webkit-text-fill-color:transparent;
+}
+.footer-tag{
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;font-size:15px;
+  color:var(--muted);margin-top:-8px;
+}
+.footer-links{
+  display:flex;justify-content:center;
+  gap:4px;flex-wrap:wrap;
+}
+.footer-links a{
+  font-size:13px;padding:6px 14px;
+  border-radius:8px;color:var(--muted2);
+  transition:all .2s;
+}
 .footer-links a:hover{color:var(--gold);background:var(--card);}
-.footer-copy{font-size:13px;color:rgba(160,144,128,0.5);}
+.footer-copy{
+  font-size:13px;color:rgba(154,136,112,.4);
+  text-align:center;line-height:1.6;
+}
 
-/* ── ANIMATIONS ── */
-@keyframes fadeUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
-.reveal{opacity:0;transform:translateY(22px);transition:opacity .65s ease,transform .65s ease;}
-.reveal.visible{opacity:1;transform:translateY(0);}
-.rd1{transition-delay:.1s;}.rd2{transition-delay:.2s;}.rd3{transition-delay:.3s;}
+/* ══════════════════════════════════════
+   SOCIAL ICONS
+══════════════════════════════════════ */
+.socials{display:flex;align-items:center;gap:20px;}
+.soc-label{
+  font-size:10.5px;font-weight:600;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:var(--muted2);
+}
+.soc-row{display:flex;gap:8px;}
+.soc-ic{
+  width:42px;height:42px;border-radius:10px;
+  border:1px solid var(--border2);
+  display:grid;place-items:center;
+  color:var(--muted);font-size:14px;
+  transition:all .22s;background:var(--card);
+}
+.soc-ic:hover{
+  color:var(--gold2);border-color:var(--border);
+  transform:translateY(-3px);
+  background:rgba(200,150,60,.06);
+}
 
-/* ── RESPONSIVE ── */
+/* ══════════════════════════════════════
+   ANIMATIONS & SCROLL REVEAL
+══════════════════════════════════════ */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(26px);}
+  to{opacity:1;transform:translateY(0);}
+}
+.reveal{
+  opacity:0;transform:translateY(20px);
+  transition:opacity .7s ease,transform .7s ease;
+}
+.reveal.vis{opacity:1;transform:translateY(0);}
+.d1{transition-delay:.08s;}.d2{transition-delay:.16s;}.d3{transition-delay:.24s;}.d4{transition-delay:.32s;}
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════ */
 @media(max-width:1100px){
-  .hero{grid-template-columns:1fr 400px;}
-  .hero-text{padding:60px 40px;}
+  .hero{grid-template-columns:1fr 420px;}
+  .hero-text{padding:64px 44px;}
+  .bc1{grid-column:span 12;}
+  .bc2{grid-column:span 12;}
+  .bc3{grid-column:span 6;}
+  .bc4{grid-column:span 6;}
+  .bc5{grid-column:span 6;}
+  .bc6{grid-column:span 6;}
 }
 @media(max-width:900px){
-  .hero{
-    grid-template-columns:1fr;
-    grid-template-rows:auto;
-    min-height:auto;
-  }
-  .hero-img{
-    order:-1;
-    height:70vw;
-    max-height:480px;
-  }
-  .hero-text{
-    padding:40px 24px 56px;
-    max-width:100%;
-  }
-  .feature-grid{grid-template-columns:1fr 1fr;}
-  .writings-grid{grid-template-columns:1fr;}
+  .hero{grid-template-columns:1fr;min-height:auto;}
+  .hero-img{order:-1;height:72vw;max-height:480px;}
+  .hero-text{padding:40px 24px 56px;max-width:100%;}
+  .blog-grid{grid-template-columns:1fr;}
+  .hero-stats{gap:20px;}
 }
 @media(max-width:840px){
   .nav-links{display:none;}
   .nav-ham{display:grid;}
-  .wrap{padding:0 20px;}
+  .wrap,.footer-inner{padding:0 20px;}
+  .bento{grid-template-columns:1fr;}
+  .bc1,.bc2,.bc3,.bc4,.bc5,.bc6{grid-column:span 1;}
 }
 @media(max-width:600px){
   .hero-img{height:100vw;max-height:400px;}
-  .feature-grid{grid-template-columns:1fr;}
   .hero-cta{flex-direction:column;}
+  .hero-stats{gap:16px;}
+  .stat-sep{display:none;}
   .cta-card{padding:40px 24px;}
-  .intro-strip-inner{gap:20px;}
-  .strip-divider{display:none;}
+  .section{padding:64px 0;}
+  .quote-sect,.pal-sect,.cta-sect{padding:64px 0;}
 }
 </style>
 </head>
 <body>
 
-<nav class="navbar">
+<!-- ════════ NAVBAR ════════ -->
+<nav class="navbar" id="nav">
   <div class="nav-inner">
     <div class="nav-brand">
       <div class="nav-logo">R</div>
-      <div class="nav-name">Riyad Bin Alom</div>
+      <div class="nav-name">Riyad Bin Alam</div>
     </div>
     <div class="nav-links">
       <a href="index.html" class="active"><i class="fa-solid fa-house"></i> Home</a>
@@ -382,165 +740,312 @@ img{display:block;max-width:100%;}
       <a href="lab.html"><i class="fa-solid fa-rocket"></i> Lab</a>
       <a href="contact.html"><i class="fa-solid fa-envelope"></i> Contact</a>
     </div>
-    <button class="nav-ham" id="hamBtn" aria-label="Menu"><i class="fa-solid fa-bars" id="hamIcon"></i></button>
+    <button class="nav-ham" id="hamBtn" aria-label="Menu">
+      <i class="fa-solid fa-bars" id="hamIcon"></i>
+    </button>
   </div>
 </nav>
 
+<!-- Mobile Menu -->
 <div class="mobile-menu" id="mobileMenu">
   <a href="index.html" class="active"><i class="fa-solid fa-house"></i> Home</a>
   <a href="about.html"><i class="fa-solid fa-user"></i> About</a>
   <a href="skills.html"><i class="fa-solid fa-code"></i> Skills</a>
   <a href="blog.html"><i class="fa-solid fa-pen-nib"></i> Blog</a>
-  <div class="mobile-divider"></div>
+  <div class="mob-div"></div>
   <a href="lab.html"><i class="fa-solid fa-rocket"></i> Lab — My Creations</a>
-  <div class="mobile-divider"></div>
+  <div class="mob-div"></div>
   <a href="contact.html"><i class="fa-solid fa-envelope"></i> Contact</a>
 </div>
 
+<!-- ════════ HERO ════════ -->
 <section class="hero">
   <div class="hero-text">
-    <div class="hero-eyebrow">Welcome to my world</div>
+    <div class="hero-eyebrow">
+      <span class="line"></span>
+      Welcome to my world
+    </div>
+
     <h1 class="hero-h1">
-      I'm <span class="gold">Riyad</span><br>Bin Alom
+      I'm <span class="gold"><em>Riyad</em></span><br>Bin Alam
     </h1>
-    <p class="hero-tagline">Where curiosity meets purpose, and ideas take flight</p>
-    <p class="hero-desc">
-      A passionate seeker of truth from <strong>Bangladesh</strong>, weaving together
-      Islamic wisdom, scientific curiosity, and the art of storytelling.
-      I believe in authentic voices that illuminate minds and transform hearts.
+
+    <p class="hero-subtitle">
+      Where curiosity meets purpose,<br>and ideas take flight
     </p>
+
+    <div class="hero-div">
+      <span></span>
+      <small>From Bangladesh, to the world</small>
+    </div>
+
+    <p class="hero-desc">
+      A passionate seeker of truth weaving together
+      <strong>Islamic wisdom</strong>, <strong>scientific curiosity</strong>,
+      and the art of storytelling. I believe in authentic voices
+      that illuminate minds and transform hearts.
+    </p>
+
     <div class="hero-cta">
-      <a href="about.html" class="btn-gold"><i class="fa-solid fa-user"></i> Discover More</a>
-      <a href="blog.html" class="btn-outline"><i class="fa-solid fa-pen-nib"></i> Read My Blog</a>
+      <a href="about.html" class="btn-primary">
+        <i class="fa-solid fa-user"></i> Discover More
+      </a>
+      <a href="blog.html" class="btn-ghost">
+        <i class="fa-solid fa-pen-nib"></i> Read My Blog
+      </a>
     </div>
-    <div class="hero-socials">
-      <span class="social-label">Follow</span>
-      <div class="social-icons">
-        <a class="soc-ic" href="https://www.facebook.com/share/184vgdmKC6/" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-        <a class="soc-ic" href="https://x.com/Riyad_Bin_Alom" target="_blank" title="X"><i class="fab fa-x-twitter"></i></a>
-        <a class="soc-ic" href="https://www.instagram.com/riyadbinal0m" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
-        <a class="soc-ic" href="#" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-n">2</div>
+        <div class="stat-l">Languages</div>
+      </div>
+      <div class="stat-sep"></div>
+      <div class="stat">
+        <div class="stat-n">∞</div>
+        <div class="stat-l">Curiosity</div>
+      </div>
+      <div class="stat-sep"></div>
+      <div class="stat">
+        <div class="stat-n">1</div>
+        <div class="stat-l">Purpose</div>
       </div>
     </div>
   </div>
 
+  <!-- Right: Photo -->
   <div class="hero-img">
-    <img src="riyad.jpg" alt="Riyad Bin Alom" loading="eager">
-    <div class="hero-img-overlay"></div>
-  </div>
-</section>
-
-<div class="intro-strip">
-  <div class="intro-strip-inner">
-    <div class="strip-item"><i class="fa-solid fa-book-quran"></i> Islamic Studies</div>
-    <div class="strip-divider"></div>
-    <div class="strip-item"><i class="fa-solid fa-atom"></i> Scientific Inquiry</div>
-    <div class="strip-divider"></div>
-    <div class="strip-item"><i class="fa-solid fa-landmark"></i> History & Civilizations</div>
-    <div class="strip-divider"></div>
-    <div class="strip-item"><i class="fa-solid fa-pen-nib"></i> Creative Writing</div>
-    <div class="strip-divider"></div>
-    <div class="strip-item"><i class="fa-solid fa-code"></i> Web Development</div>
-    <div class="strip-divider"></div>
-    <div class="strip-item"><i class="fa-solid fa-globe"></i> Bangladesh</div>
-  </div>
-</div>
-
-<section class="section">
-  <div class="wrap">
-    <div class="section-eye reveal">What I'm About</div>
-    <h2 class="section-h2 reveal rd1">Faith, Knowledge &<br>Purpose</h2>
-    <p class="section-sub reveal rd2">A student navigating the intersections of religion, reason, and the art of being human.</p>
-
-    <div class="feature-grid">
-      <div class="feature-card reveal">
-        <div class="feature-icon"><i class="fa-solid fa-book-quran"></i></div>
-        <div class="feature-h3">Islamic Studies</div>
-        <p class="feature-p">Deep engagement with Quranic wisdom, Islamic ethics, and the timeless principles of living with purpose and sincerity.</p>
-      </div>
-      <div class="feature-card reveal rd1">
-        <div class="feature-icon"><i class="fa-solid fa-atom"></i></div>
-        <div class="feature-h3">Scientific Curiosity</div>
-        <p class="feature-p">Exploring the natural world through observation and critical thinking — where faith and reason coexist beautifully.</p>
-      </div>
-      <div class="feature-card reveal rd2">
-        <div class="feature-icon"><i class="fa-solid fa-feather-pointed"></i></div>
-        <div class="feature-h3">Reflective Writing</div>
-        <p class="feature-p">Crafting essays, stories, and reflections in both Bengali and English — authentic voices for a world that needs honesty.</p>
-      </div>
+    <img src="riyad.jpg" alt="Riyad Bin Alam" loading="eager">
+    <div class="hero-img-ov"></div>
+    <div class="img-nametag">
+      <div class="n1">Riyad Bin Alam</div>
+      <div class="n2">Bangladesh · 2007</div>
     </div>
   </div>
 </section>
 
-<div class="quote-section">
-  <div class="quote-inner">
-    <span class="quote-mark">"</span>
-    <p class="quote-text">Be in this world as if you were a stranger or a traveler.</p>
-    <div class="quote-src">Prophet Muhammad ﷺ</div>
+<!-- ════════ TICKER ════════ -->
+<div class="ticker">
+  <div class="ticker-track" id="tickerTrack">
+    <!-- Items duplicated for infinite loop -->
+    <div class="tick-item"><i class="fa-solid fa-book-quran"></i> Islamic Studies</div>
+    <div class="tick-item tick-sep">✦</div>
+    <div class="tick-item"><i class="fa-solid fa-atom"></i> Scientific Inquiry</div>
+    <div class="tick-item tick-sep">✦</div>
+    <div class="tick-item"><i class="fa-solid fa-landmark"></i> History & Civilizations</div>
+    <div class="tick-item tick-sep">✦</div>
+    <div class="tick-item"><i class="fa-solid fa-pen-nib"></i> Creative Writing</div>
+    <div class="tick-item tick-sep">✦</div>
+    <div class="tick-item"><i class="fa-solid fa-code"></i> Web Development</div>
+    <div class="tick-item tick-sep">✦</div>
+    <div class="tick-item"><i class="fa-solid fa-globe"></i> Bangladesh</div>
+    <div class="tick-item tick-sep">✦</div>
+    <div class="tick-item"><i class="fa-solid fa-brain"></i> Psychology</div>
+    <div class="tick-item tick-sep">✦</div>
+    <div class="tick-item"><i class="fa-solid fa-star-and-crescent"></i> Faith & Reason</div>
+    <div class="tick-item tick-sep">✦</div>
+    <!-- Duplicate for seamless loop -->
+    <div class="tick-item"><i class="fa-solid fa-book-quran"></i> Islamic Studies</div>
+    <div class="tick-item tick-sep">✦</div>
+    <div class="tick-item"><i class="fa-solid fa-atom"></i> Scientific Inquiry</div>
+    <div class="tick-item tick-sep">✦</div>
+    <div class="tick-item"><i class="fa-solid fa-landmark"></i> History & Civilizations</div>
+    <div class="tick-item tick-sep">✦</div>
+    <div class="tick-item"><i class="fa-solid fa-pen-nib"></i> Creative Writing</div>
+    <div class="tick-item tick-sep">✦</div>
+    <div class="tick-item"><i class="fa-solid fa-code"></i> Web Development</div>
+    <div class="tick-item tick-sep">✦</div>
+    <div class="tick-item"><i class="fa-solid fa-globe"></i> Bangladesh</div>
+    <div class="tick-item tick-sep">✦</div>
+    <div class="tick-item"><i class="fa-solid fa-brain"></i> Psychology</div>
+    <div class="tick-item tick-sep">✦</div>
+    <div class="tick-item"><i class="fa-solid fa-star-and-crescent"></i> Faith & Reason</div>
+    <div class="tick-item tick-sep">✦</div>
   </div>
 </div>
 
+<!-- ════════ ABOUT / BENTO ════════ -->
 <section class="section">
   <div class="wrap">
-    <div class="section-eye reveal">From the Blog</div>
-    <h2 class="section-h2 reveal rd1">Recent Reflections</h2>
-    <p class="section-sub reveal rd2">Thoughts on faith, identity, and the art of being a stranger in a world that never stops moving.</p>
+    <div class="sec-eye reveal">Who I Am</div>
+    <h2 class="sec-h2 reveal d1">Faith, Knowledge<br>& Purpose</h2>
+    <p class="sec-p reveal d2">A student navigating the intersections of religion, reason, and the art of being human.</p>
 
-    <div class="writings-grid">
-      <a class="writing-card reveal" href="blog.html">
-        <div class="writing-tag">Featured</div>
-        <div class="writing-h">The Weight of Wearing a Mask</div>
-        <p class="writing-p">In a world that feels like a never-ending masquerade, the hardest thing to do is to show your true face. We trade our authenticity for acceptance...</p>
-        <div class="writing-link">Read Article <i class="fa-solid fa-arrow-right"></i></div>
+    <div class="bento">
+
+      <!-- Card 1: Big intro -->
+      <div class="bento-card bc1 reveal">
+        <div class="bento-tag"><i class="fa-solid fa-user"></i> About Me</div>
+        <div class="bento-h">A Seeker<br>of Truth</div>
+        <p class="bento-p" style="margin-top:14px;">
+          From a small corner of Bangladesh, I look outward at the universe with wonder. My journey is one of constant learning — guided by faith, driven by curiosity, and grounded in the belief that every question deserves an honest answer.
+        </p>
+        <div class="interest-list" style="margin-top:24px;">
+          <div class="int-item">
+            <i class="fa-solid fa-book-quran"></i>
+            <span>Islamic Studies</span>
+            <div class="int-bar"><div class="int-fill" style="width:92%;"></div></div>
+          </div>
+          <div class="int-item">
+            <i class="fa-solid fa-atom"></i>
+            <span>Science & Nature</span>
+            <div class="int-bar"><div class="int-fill" style="width:80%;"></div></div>
+          </div>
+          <div class="int-item">
+            <i class="fa-solid fa-pen-nib"></i>
+            <span>Writing</span>
+            <div class="int-bar"><div class="int-fill" style="width:85%;"></div></div>
+          </div>
+          <div class="int-item">
+            <i class="fa-solid fa-brain"></i>
+            <span>Psychology</span>
+            <div class="int-bar"><div class="int-fill" style="width:78%;"></div></div>
+          </div>
+          <div class="int-item">
+            <i class="fa-solid fa-code"></i>
+            <span>Web Development</span>
+            <div class="int-bar"><div class="int-fill" style="width:68%;"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Islamic -->
+      <div class="bento-card bc2 reveal d1">
+        <div class="bento-icon"><i class="fa-solid fa-book-quran"></i></div>
+        <div class="bento-h">Islamic Studies</div>
+        <p class="bento-p">Deep engagement with Quranic wisdom, Islamic ethics, and the timeless principles of living with purpose and sincerity in a complex modern world.</p>
+      </div>
+
+      <!-- Card 3: Science -->
+      <div class="bento-card bc3 reveal d2">
+        <div class="bento-icon"><i class="fa-solid fa-atom"></i></div>
+        <div class="bento-h">Scientific Curiosity</div>
+        <p class="bento-p">Where faith and reason coexist beautifully — exploring the natural world through honest observation.</p>
+      </div>
+
+      <!-- Card 4: Origin -->
+      <div class="bento-card bc4 reveal d3">
+        <div class="bento-num">BD</div>
+        <div class="bento-p" style="font-size:13px;">Born & raised in <strong style="color:var(--text);">Bangladesh</strong> — proud of my roots, open to the world.</div>
+      </div>
+
+      <!-- Card 5: Writing -->
+      <div class="bento-card bc5 reveal">
+        <div class="bento-icon"><i class="fa-solid fa-feather-pointed"></i></div>
+        <div class="bento-h">Reflective Writing</div>
+        <p class="bento-p">Crafting essays, stories, and reflections in both Bengali and English. Authentic voices for a world that needs honesty.</p>
+      </div>
+
+      <!-- Card 6: Social -->
+      <div class="bento-card bc6 reveal d1" style="display:flex;flex-direction:column;justify-content:space-between;">
+        <div>
+          <div class="bento-h" style="margin-bottom:10px;">Connect With Me</div>
+          <p class="bento-p">Ideas, conversations, and collaborations are always welcome.</p>
+        </div>
+        <div class="socials" style="margin-top:22px;">
+          <span class="soc-label">Find me</span>
+          <div class="soc-row">
+            <a class="soc-ic" href="https://www.facebook.com/share/184vgdmKC6/" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a class="soc-ic" href="https://x.com/Riyad_Bin_Alam" target="_blank" title="X"><i class="fab fa-x-twitter"></i></a>
+            <a class="soc-ic" href="https://www.instagram.com/riyadbinal0m" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+            <a class="soc-ic" href="#" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════ QUOTE ════════ -->
+<div class="quote-sect">
+  <div class="quote-inner reveal">
+    <p class="q-text">
+      "Be in this world as if you were a stranger or a traveler."
+    </p>
+    <div class="q-src">Prophet Muhammad ﷺ</div>
+  </div>
+</div>
+
+<!-- ════════ BLOG ════════ -->
+<section class="section">
+  <div class="wrap">
+    <div class="sec-eye reveal">From the Blog</div>
+    <h2 class="sec-h2 reveal d1">Recent Reflections</h2>
+    <p class="sec-p reveal d2">Thoughts on faith, identity, and the art of being a stranger in a world that never stops moving.</p>
+
+    <div class="blog-grid">
+      <a class="blog-card reveal" href="blog.html">
+        <div class="blog-tag">Featured</div>
+        <div class="blog-h">The Weight of Wearing a Mask</div>
+        <p class="blog-p">In a world that feels like a never-ending masquerade, the hardest thing to do is to show your true face. We trade our authenticity for acceptance...</p>
+        <div class="blog-link">Read Article <i class="fa-solid fa-arrow-right"></i></div>
       </a>
-      <a class="writing-card reveal rd1" href="blog.html">
-        <div class="writing-tag">Identity</div>
-        <div class="writing-h">The Art of Being a Stranger</div>
-        <p class="writing-p">There is a profound beauty in not belonging. A quiet strength in choosing to remain a stranger in a world that demands you fit in...</p>
-        <div class="writing-link">Read Article <i class="fa-solid fa-arrow-right"></i></div>
+      <a class="blog-card reveal d1" href="blog.html">
+        <div class="blog-tag">Identity</div>
+        <div class="blog-h">The Art of Being a Stranger</div>
+        <p class="blog-p">There is a profound beauty in not belonging. A quiet strength in choosing to remain a stranger in a world that demands you fit in...</p>
+        <div class="blog-link">Read Article <i class="fa-solid fa-arrow-right"></i></div>
       </a>
-      <a class="writing-card reveal rd2" href="blog.html">
-        <div class="writing-tag">বাংলা · গল্প</div>
-        <div class="writing-h">বাতিঘর</div>
-        <p class="writing-p">বিশাল এক সমুদ্রের মাঝে একা দাঁড়িয়ে আছে একটি বাতিঘর। রাত হলে সে নিজের বুক চিরে আলো জ্বালায়...</p>
-        <div class="writing-link">পড়ুন <i class="fa-solid fa-arrow-right"></i></div>
+      <a class="blog-card reveal d2" href="blog.html">
+        <div class="blog-tag">বাংলা · গল্প</div>
+        <div class="blog-h">বাতিঘর</div>
+        <p class="blog-p">বিশাল এক সমুদ্রের মাঝে একা দাঁড়িয়ে আছে একটি বাতিঘর। রাত হলে সে নিজের বুক চিরে আলো জ্বালায়...</p>
+        <div class="blog-link">পড়ুন <i class="fa-solid fa-arrow-right"></i></div>
       </a>
-      <a class="writing-card reveal rd3" href="blog.html">
-        <div class="writing-tag">Faith · Reflection</div>
-        <div class="writing-h">The Quiet Weight of Thinking Differently</div>
-        <p class="writing-p">There is a specific kind of exhaustion that comes with being surrounded by people, yet feeling entirely unseen...</p>
-        <div class="writing-link">Read Article <i class="fa-solid fa-arrow-right"></i></div>
+      <a class="blog-card reveal d3" href="blog.html">
+        <div class="blog-tag">Faith · Reflection</div>
+        <div class="blog-h">The Quiet Weight of Thinking Differently</div>
+        <p class="blog-p">There is a specific kind of exhaustion that comes with being surrounded by people, yet feeling entirely unseen...</p>
+        <div class="blog-link">Read Article <i class="fa-solid fa-arrow-right"></i></div>
       </a>
     </div>
   </div>
 </section>
 
-<div class="pal-section">
+<!-- ════════ PALESTINE ════════ -->
+<div class="pal-sect">
   <div class="pal-inner reveal">
     <div class="pal-flag">🇵🇸</div>
     <h2 class="pal-h">Standing with Palestine</h2>
-    <div class="pal-divider"></div>
+    <div class="pal-div"></div>
     <p class="pal-p">Every human being deserves freedom, dignity, and justice. The Palestinian struggle is not merely a political issue — it is a moral imperative. Silence in the face of oppression is complicity.</p>
   </div>
 </div>
 
-<section class="cta-section">
+<!-- ════════ CTA ════════ -->
+<section class="cta-sect">
   <div class="wrap">
     <div class="cta-card reveal">
       <h2 class="cta-h">Let's Start a Conversation</h2>
       <p class="cta-p">Whether you have a question, an idea to share, or simply want to connect — meaningful conversations are always welcome.</p>
       <div class="cta-btns">
-        <a href="contact.html" class="btn-gold"><i class="fa-solid fa-envelope"></i> Get in Touch</a>
-        <a href="lab.html" class="btn-outline"><i class="fa-solid fa-rocket"></i> See My Work</a>
+        <a href="contact.html" class="btn-primary"><i class="fa-solid fa-envelope"></i> Get in Touch</a>
+        <a href="lab.html" class="btn-ghost"><i class="fa-solid fa-rocket"></i> See My Work</a>
       </div>
     </div>
   </div>
 </section>
 
+<!-- ════════ FOOTER ════════ -->
 <footer class="footer">
-  <div class="wrap">
-    <div class="footer-logo">RBA</div>
-    <div class="footer-tagline">Welcome to my world — where ideas come alive</div>
+  <div class="footer-inner">
+    <!--
+      SECRET LINK: Looks exactly like plain text.
+      No hover effect, no cursor change, no underline.
+      Only those who know can find it.
+    -->
+    <a href="https://riyadbinAlam78-ai.github.io/family-/"
+       class="footer-logo"
+       target="_blank"
+       rel="noopener noreferrer"
+       tabindex="-1"
+       style="pointer-events:auto;cursor:default;-webkit-text-fill-color:transparent;"
+       onmouseover="this.style.cssText=this.style.cssText"
+       onfocus="this.blur()">RBA</a>
+
+    <div class="footer-tag">Welcome to my world — where ideas come alive</div>
+
     <div class="footer-links">
       <a href="index.html">Home</a>
       <a href="about.html">About</a>
@@ -549,20 +1054,65 @@ img{display:block;max-width:100%;}
       <a href="lab.html">Lab</a>
       <a href="contact.html">Contact</a>
     </div>
-    <div class="footer-copy">© 2026 · Riyad Bin Alom · Crafted with intention and purpose.</div>
+
+    <div class="footer-copy">
+      © 2026 · Riyad Bin Alam · Crafted with intention and purpose.
+    </div>
   </div>
 </footer>
 
+<!-- ════════ JS ════════ -->
 <script>
-// Hamburger
-const hamBtn=document.getElementById('hamBtn'),hamIcon=document.getElementById('hamIcon'),mobileMenu=document.getElementById('mobileMenu');
-let open=false;
-hamBtn.addEventListener('click',()=>{open=!open;mobileMenu.classList.toggle('open',open);hamIcon.className=open?'fa-solid fa-xmark':'fa-solid fa-bars';});
-// Close on link click
-mobileMenu.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{open=false;mobileMenu.classList.remove('open');hamIcon.className='fa-solid fa-bars';}));
-// Scroll reveal
-const io=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:0.08});
-document.querySelectorAll('.reveal').forEach(r=>io.observe(r));
+/* ── Hamburger ── */
+const hamBtn = document.getElementById('hamBtn');
+const hamIcon = document.getElementById('hamIcon');
+const mobileMenu = document.getElementById('mobileMenu');
+let menuOpen = false;
+
+hamBtn.addEventListener('click', () => {
+  menuOpen = !menuOpen;
+  mobileMenu.classList.toggle('open', menuOpen);
+  hamIcon.className = menuOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
+});
+mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+  menuOpen = false;
+  mobileMenu.classList.remove('open');
+  hamIcon.className = 'fa-solid fa-bars';
+}));
+
+/* ── Scroll Reveal ── */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('vis');
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.07 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+/* ── Navbar scroll effect ── */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.style.background = window.scrollY > 20
+    ? 'rgba(10,9,8,0.96)'
+    : 'rgba(10,9,8,0.88)';
+}, { passive: true });
+
+/* ── Secret RBA: triple-click activates link ── */
+const rbaLink = document.querySelector('.footer-logo');
+let rbaClicks = 0, rbaTimer;
+rbaLink.addEventListener('click', e => {
+  e.preventDefault();
+  rbaClicks++;
+  clearTimeout(rbaTimer);
+  rbaTimer = setTimeout(() => { rbaClicks = 0; }, 600);
+  if (rbaClicks >= 3) {
+    rbaClicks = 0;
+    window.open('https://riyadbinAlam78-ai.github.io/family-/', '_blank');
+  }
+});
 </script>
+
 </body>
 </html>
