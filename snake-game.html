@@ -26,8 +26,8 @@ body{
   background:var(--bg);
   min-height:100vh;
   display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  padding:14px 0 36px;
+  align-items:center;justify-content:flex-start;
+  padding:16px 0 20px;
   font-family:'VT323',monospace;
   background-image:
     radial-gradient(ellipse 60% 40% at 50% 0%,rgba(57,255,20,0.07) 0%,transparent 65%),
@@ -167,9 +167,14 @@ body{
 .start-icon{font-size:16px;line-height:1;}
 
 /* ── CREDIT ── */
-.credit-strip{margin-top:14px;display:flex;flex-direction:column;align-items:center;gap:4px;}
-.credit-by   {font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:3px;color:rgba(57,255,20,0.20);text-transform:uppercase;}
-.credit-name {font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;letter-spacing:4px;color:rgba(57,255,20,0.45);text-shadow:0 0 14px rgba(57,255,20,0.18);}
+.credit-strip{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:10px 0 2px;
+  border-top:1px solid rgba(57,255,20,0.06);
+  margin-top:12px;
+}
+.credit-by   {font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:3px;color:rgba(57,255,20,0.15);text-transform:uppercase;}
+.credit-name {font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:4px;color:rgba(57,255,20,0.35);text-shadow:0 0 10px rgba(57,255,20,0.14);}
 
 /* ── POPUPS ── */
 @keyframes scoreFloat{0%{opacity:1;transform:translateY(0) scale(1);}100%{opacity:0;transform:translateY(-34px) scale(1.6);}}
@@ -509,33 +514,50 @@ body{
 }
 
 @keyframes hackBtnPulse{
-  0%,100%{box-shadow:0 0 6px rgba(57,255,20,0.12),0 0 0 1px rgba(57,255,20,0.12);}
-  50%    {box-shadow:0 0 14px rgba(57,255,20,0.30),0 0 0 1px rgba(57,255,20,0.28);}
+  0%,100%{box-shadow:0 0 0 1px rgba(57,255,20,0.15),0 0 8px rgba(57,255,20,0.08);}
+  50%    {box-shadow:0 0 0 1px rgba(57,255,20,0.35),0 0 16px rgba(57,255,20,0.22);}
 }
 #btn-hack{
-  width:40px;height:26px;
-  border-radius:7px;
-  background:linear-gradient(160deg,#111a10 0%,#080e06 100%);
-  border:1px solid rgba(57,255,20,0.18);
-  display:flex;flex-direction:row;align-items:center;justify-content:center;gap:3px;
+  width:30px;height:30px;
+  border-radius:50%;
+  background:rgba(57,255,20,0.07);
+  border:1px solid rgba(57,255,20,0.22);
+  display:flex;align-items:center;justify-content:center;
   cursor:pointer;-webkit-tap-highlight-color:transparent;
   animation:hackBtnPulse 2.8s ease-in-out infinite;
-  transition:transform .1s,filter .1s;
+  transition:all .15s;
   flex-shrink:0;
+  position:relative;
 }
-#btn-hack:hover{ border-color:rgba(57,255,20,0.48); filter:brightness(1.4); }
-#btn-hack:active{ transform:scale(0.90); filter:brightness(1.8); animation:none; }
-#hack-btn-icon{ font-size:10px;line-height:1; }
-#btn-hack span:last-child{
-  font-family:'Orbitron',sans-serif;font-size:5.5px;font-weight:900;
-  letter-spacing:1px;color:rgba(57,255,20,0.65);
-  text-shadow:0 0 5px rgba(57,255,20,0.40);
+#btn-hack:hover{
+  background:rgba(57,255,20,0.14);
+  border-color:rgba(57,255,20,0.55);
+  box-shadow:0 0 12px rgba(57,255,20,0.30);
 }
+#btn-hack:active{
+  transform:scale(0.88);
+  filter:brightness(1.8);
+  animation:none;
+}
+#hack-btn-icon{
+  font-size:13px;line-height:1;
+  filter:drop-shadow(0 0 4px rgba(57,255,20,0.55));
+}
+/* hide text label, icon only */
+#btn-hack span:last-child{ display:none; }
 #btn-hack.active-hack{
-  border-color:rgba(57,255,20,0.60)!important;
-  background:linear-gradient(160deg,#1a3a10 0%,#0e2008 100%)!important;
-  box-shadow:0 0 14px rgba(57,255,20,0.38),0 0 0 1px rgba(57,255,20,0.35)!important;
+  background:rgba(57,255,20,0.18)!important;
+  border-color:rgba(57,255,20,0.65)!important;
+  box-shadow:0 0 16px rgba(57,255,20,0.40)!important;
   animation:none!important;
+}
+/* active dot indicator */
+#btn-hack.active-hack::after{
+  content:'';position:absolute;
+  top:4px;right:4px;
+  width:5px;height:5px;border-radius:50%;
+  background:#39ff14;
+  box-shadow:0 0 6px rgba(57,255,20,0.90);
 }
 
 /* ── Idle screen canvas hint text removed (no auto-open) ── */
