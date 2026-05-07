@@ -184,6 +184,74 @@ a{color:inherit;text-decoration:none;}
   border-radius:14px;
 }
 
+/* ── নীরব সাক্ষী ARTICLE ── */
+.article-nirab {
+  padding: 48px 0;
+  border-bottom: 1px solid var(--border2);
+  position: relative;
+}
+.article-nirab-tag {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid rgba(160,144,128,0.2);
+  background: rgba(160,144,128,0.04);
+}
+.article-nirab-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(22px, 3vw, 30px);
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0;
+  margin-bottom: 28px;
+  color: var(--text);
+  opacity: 0.75;
+}
+.nirab-body {
+  position: relative;
+}
+.nirab-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.nirab-line {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.75;
+  color: var(--muted);
+}
+.nirab-line:nth-child(1) { opacity: 0.95; }
+.nirab-line:nth-child(2) { opacity: 0.82; }
+.nirab-line:nth-child(3) { opacity: 0.68; }
+.nirab-line:nth-child(4) { opacity: 0.52; }
+.nirab-line:nth-child(5) { opacity: 0.36; }
+.nirab-line:nth-child(6) { opacity: 0.20; }
+.nirab-line:nth-child(7) { opacity: 0.09; }
+.nirab-line:nth-child(8) { opacity: 0.04; }
+
+.nirab-fade {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 110px;
+  background: linear-gradient(to bottom, transparent, var(--bg) 90%);
+  pointer-events: none;
+}
+.nirab-dots {
+  margin-top: 20px;
+  font-size: 22px;
+  letter-spacing: 0.35em;
+  color: var(--muted);
+  opacity: 0.3;
+  text-align: left;
+  padding-left: 2px;
+}
+
 /* SIDEBAR */
 .blog-sidebar{display:flex;flex-direction:column;gap:24px;position:sticky;top:90px;}
 .sidebar-card{
@@ -200,6 +268,24 @@ a{color:inherit;text-decoration:none;}
 .sidebar-link-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);margin-top:7px;flex-shrink:0;}
 .sidebar-link-text{font-size:13px;color:var(--muted);line-height:1.5;transition:color .2s;}
 .sidebar-link:hover .sidebar-link-text{color:var(--gold);}
+/* Nirab sidebar entry — dim, no hover effect */
+.sidebar-link-nirab {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 10px 0;
+  cursor: default;
+  user-select: none;
+}
+.sidebar-link-nirab .sidebar-link-dot {
+  background: var(--muted);
+  opacity: 0.35;
+}
+.sidebar-link-nirab .sidebar-link-text {
+  color: var(--muted);
+  opacity: 0.4;
+  font-style: italic;
+}
 
 /* FOOTER */
 .footer{padding:40px 0;border-top:1px solid var(--border2);text-align:center;color:var(--muted);font-size:14px;}
@@ -376,6 +462,31 @@ a{color:inherit;text-decoration:none;}
         <div class="article-signoff">সব বাতিঘর সমুদ্রে থাকে না — কিছু থাকে মানুষের ভেতরেও।</div>
       </article>
 
+      <!-- Article 5 — নীরব সাক্ষী (Mysterious / Incomplete) -->
+      <article class="article-nirab reveal">
+        <div class="article-meta">
+          <span class="article-nirab-tag">বাংলা · গল্প</span>
+          <span class="article-date" style="opacity:0.45;">2026</span>
+        </div>
+        <h1 class="article-nirab-title">নীরব সাক্ষী</h1>
+
+        <div class="nirab-body">
+          <div class="nirab-lines">
+            <div class="nirab-line">একটি ঘরে একটি আলো ছিল।</div>
+            <div class="nirab-line">একটি ছেলে সেই আলো দেখে বড় হয়েছে।</div>
+            <div class="nirab-line">বড় হতে হতে বুঝেছে —</div>
+            <div class="nirab-line">আলো আর উষ্ণতা সবসময় একই জিনিস নয়।</div>
+            <div class="nirab-line">কেউ কেউ এত সুন্দর করে মিথ্যা বলে যে সত্য বলাটাই অপরাধ হয়ে যায়।</div>
+            <div class="nirab-line">এটা সেই ছেলের গল্প —</div>
+            <div class="nirab-line">যে দেখেছিল।</div>
+            <div class="nirab-line">কিন্তু বলতে পারেনি।</div>
+          </div>
+          <div class="nirab-fade"></div>
+        </div>
+
+        <div class="nirab-dots">· · ·</div>
+      </article>
+
     </main>
 
     <!-- SIDEBAR -->
@@ -397,6 +508,11 @@ a{color:inherit;text-decoration:none;}
         <div class="sidebar-link">
           <span class="sidebar-link-dot"></span>
           <span class="sidebar-link-text">বাতিঘর</span>
+        </div>
+        <!-- Nirab Sakshi — no link, dimmed -->
+        <div class="sidebar-link-nirab">
+          <span class="sidebar-link-dot"></span>
+          <span class="sidebar-link-text">নীরব সাক্ষী</span>
         </div>
       </div>
 
@@ -438,12 +554,41 @@ a{color:inherit;text-decoration:none;}
 </footer>
 
 <script>
+/* ── Navbar hamburger ── */
 const hamBtn=document.getElementById('hamBtn'),hamIcon=document.getElementById('hamIcon'),mobileMenu=document.getElementById('mobileMenu');
 let menuOpen=false;
 hamBtn.addEventListener('click',()=>{menuOpen=!menuOpen;mobileMenu.classList.toggle('open',menuOpen);hamIcon.className=menuOpen?'fa-solid fa-xmark':'fa-solid fa-bars';});
 mobileMenu.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{menuOpen=false;mobileMenu.classList.remove('open');hamIcon.className='fa-solid fa-bars';}));
+
+/* ── Scroll reveal ── */
 const io=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:0.07});
 document.querySelectorAll('.reveal').forEach(r=>io.observe(r));
+
+/* ── Secret: 7-second hold anywhere → nirab-sakshi.html ── */
+let holdTimer = null;
+
+function startHold(e) {
+  // Ignore if user is holding a link/button (normal navigation)
+  if (e.target.closest('a, button')) return;
+  clearTimeout(holdTimer);
+  holdTimer = setTimeout(() => {
+    window.location.href = 'nirab-sakshi.html';
+  }, 7000);
+}
+
+function cancelHold() {
+  clearTimeout(holdTimer);
+  holdTimer = null;
+}
+
+document.addEventListener('mousedown', startHold);
+document.addEventListener('mouseup', cancelHold);
+document.addEventListener('mouseleave', cancelHold);
+document.addEventListener('touchstart', startHold, { passive: true });
+document.addEventListener('touchend', cancelHold);
+document.addEventListener('touchcancel', cancelHold);
+// Cancel if user scrolls (intentional scroll, not a hold)
+document.addEventListener('scroll', cancelHold, { passive: true });
 </script>
 </body>
 </html>
