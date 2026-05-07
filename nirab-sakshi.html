@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>নীরব সাক্ষী — ইভান ইলিয়াস</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Noto+Serif+Bengali:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1a1008;
+  --paper:#f6ede0;
+  --paper2:#ede3d2;
+  --accent:#6b0f0f;
+  --accent2:#a01818;
+  --accent-glow:rgba(107,15,15,0.13);
+  --gold:#8c6510;
+  --gold2:#b8870e;
+  --muted:#6a5a3c;
+  --rule:#c5b28a;
+  --rule2:rgba(197,178,138,0.38);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:#050100;font-family:'Noto Serif Bengali',serif;color:var(--ink);-webkit-font-smoothing:antialiased;}
+
+/* ── PROGRESS ── */
+.pbar{position:fixed;top:0;left:0;right:0;height:2px;z-index:999;}
+.pfill{height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--gold2),var(--accent2));transition:width .1s;}
+
+/* ══════════ COVER ══════════ */
+#cover{
+  min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  background:
+    radial-gradient(ellipse 60% 42% at 50% 30%,rgba(95,8,8,.36) 0%,transparent 62%),
+    radial-gradient(ellipse 100% 60% at 50% 100%,rgba(28,3,1,.65) 0%,transparent 55%),
+    linear-gradient(165deg,#060100 0%,#150704 48%,#060100 100%);
+  cursor:pointer;position:relative;overflow:hidden;padding:0 28px;
+}
+#cover::before{
+  content:'';position:absolute;inset:0;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.036'/%3E%3C/svg%3E");
+  pointer-events:none;
+}
+.c-wrap{text-align:center;position:relative;z-index:1;max-width:560px;}
+.c-eye{font-family:'Hind Siliguri',sans-serif;font-size:.57rem;letter-spacing:.56em;color:rgba(175,135,55,.4);text-transform:uppercase;margin-bottom:40px;animation:fup 1.6s cubic-bezier(.16,1,.3,1) .15s both;}
+.c-title{font-size:clamp(4rem,12vw,7.5rem);font-weight:700;color:#ece0c4;line-height:.98;letter-spacing:-.02em;text-shadow:0 0 100px rgba(120,10,10,.62),0 0 40px rgba(120,10,10,.3),0 8px 60px rgba(0,0,0,.82);animation:fup 1.6s cubic-bezier(.16,1,.3,1) .35s both;}
+.c-sub{font-family:'Hind Siliguri',sans-serif;font-size:.58rem;letter-spacing:.42em;color:rgba(158,116,38,.38);text-transform:uppercase;margin-top:6px;animation:fup 1.6s cubic-bezier(.16,1,.3,1) .52s both;}
+.c-ornament{display:flex;align-items:center;gap:16px;margin:28px auto;width:200px;animation:fup 1.6s cubic-bezier(.16,1,.3,1) .66s both;}
+.c-ornament span{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(158,108,18,.52),transparent);}
+.c-ornament i{font-style:normal;font-size:.48rem;color:rgba(158,108,18,.58);}
+.c-tagline{font-size:.97rem;font-style:italic;color:rgba(188,150,66,.52);line-height:2.12;max-width:320px;margin:0 auto;animation:fup 1.6s cubic-bezier(.16,1,.3,1) .8s both;}
+.c-author{font-size:.86rem;color:rgba(192,152,60,.48);letter-spacing:.18em;margin-top:14px;animation:fup 1.6s cubic-bezier(.16,1,.3,1) .94s both;}
+.c-cta{margin-top:72px;display:flex;flex-direction:column;align-items:center;gap:12px;animation:fup 1.6s cubic-bezier(.16,1,.3,1) 1.15s both;}
+.c-cta-txt{font-family:'Hind Siliguri',sans-serif;font-size:.52rem;letter-spacing:.52em;color:rgba(158,116,38,.3);text-transform:uppercase;}
+.c-arrow{width:1px;height:56px;background:linear-gradient(180deg,rgba(158,106,16,.58),transparent);animation:pulse 2.8s ease-in-out infinite;}
+
+/* ══════════ BOOK ══════════ */
+#book{display:none;max-width:780px;margin:0 auto;background:var(--paper);min-height:100vh;box-shadow:0 0 140px rgba(0,0,0,.88),inset 8px 0 24px rgba(0,0,0,.055);}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:200;background:rgba(246,237,224,.97);backdrop-filter:blur(16px);border-bottom:1px solid var(--rule);padding:13px 58px;display:flex;align-items:center;justify-content:space-between;}
+.nav-book{font-family:'Hind Siliguri',sans-serif;font-size:.6rem;letter-spacing:.28em;color:var(--muted);text-transform:uppercase;}
+.nav-loc{font-family:'Hind Siliguri',sans-serif;font-size:.56rem;color:rgba(197,178,138,.75);}
+
+/* TITLE PAGE */
+.tp{min-height:100vh;padding:90px 72px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;border-bottom:1px solid var(--rule2);}
+.tp-orn{font-size:1rem;color:var(--gold);opacity:.38;letter-spacing:.82em;margin-bottom:58px;}
+.tp-title{font-size:clamp(3.2rem,7vw,5rem);font-weight:700;color:var(--ink);line-height:1.05;}
+.tp-genre{font-family:'Hind Siliguri',sans-serif;font-size:.63rem;letter-spacing:.44em;color:var(--muted);text-transform:uppercase;margin-top:14px;opacity:.52;}
+.tp-rule{width:54px;height:1px;background:var(--gold);margin:52px auto;position:relative;}
+.tp-rule::before{content:'◆';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:6px;color:var(--gold);background:var(--paper);padding:0 8px;}
+.tp-author{font-size:1.05rem;color:var(--muted);font-style:italic;}
+.tp-pseudo{font-family:'Hind Siliguri',sans-serif;font-size:.56rem;letter-spacing:.35em;color:rgba(197,178,138,.7);text-transform:uppercase;margin-top:6px;}
+.tp-year{font-family:'Hind Siliguri',sans-serif;font-size:.6rem;letter-spacing:.32em;color:var(--rule);margin-top:86px;}
+
+/* DEDICATION PAGE */
+.dedication{min-height:60vh;padding:90px 80px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;border-bottom:1px solid var(--rule2);background:var(--paper);}
+.ded-label{font-family:'Hind Siliguri',sans-serif;font-size:.54rem;letter-spacing:.5em;color:rgba(140,101,16,.45);text-transform:uppercase;margin-bottom:36px;}
+.ded-main{font-size:1.12rem;font-style:italic;color:var(--ink);line-height:2.2;max-width:420px;}
+.ded-main strong{font-style:normal;font-weight:700;color:var(--accent);}
+.ded-note{font-family:'Hind Siliguri',sans-serif;font-size:.68rem;color:var(--muted);margin-top:28px;line-height:1.9;max-width:360px;opacity:.7;}
+
+/* AUTHOR'S NOTE */
+.author-note{padding:80px 80px;border-bottom:1px solid var(--rule2);background:var(--paper2);}
+.an-label{font-family:'Hind Siliguri',sans-serif;font-size:.54rem;letter-spacing:.5em;color:rgba(140,101,16,.5);text-transform:uppercase;margin-bottom:44px;display:block;}
+.author-note p{font-size:1.04rem;line-height:2.2;color:#1e1208;margin-bottom:1.5em;text-align:justify;word-break:keep-all;hyphens:none;}
+.author-note p:last-child{margin-bottom:0;}
+.an-sign{font-style:italic;color:var(--muted);font-size:.95rem;margin-top:36px;display:block;text-align:right;}
+
+/* PSEUDONYM NOTE */
+.pseudo-note{background:rgba(107,15,15,.05);border-left:2px solid rgba(107,15,15,.2);padding:16px 22px;margin-top:32px;border-radius:0 3px 3px 0;}
+.pseudo-note p{font-family:'Hind Siliguri',sans-serif;font-size:.72rem;color:var(--muted);line-height:1.85;margin:0;text-align:left;}
+
+/* EPIGRAPH */
+.epigraph{padding:80px 112px;text-align:center;border-bottom:1px solid var(--rule2);background:var(--paper);}
+.epigraph p{font-size:.97rem;font-style:italic;color:var(--muted);line-height:2.24;}
+.epigraph cite{display:block;margin-top:20px;font-family:'Hind Siliguri',sans-serif;font-size:.58rem;letter-spacing:.26em;color:var(--rule);font-style:normal;}
+
+/* SECTION */
+.sec{padding:90px 74px 78px;border-bottom:1px solid var(--rule2);position:relative;}
+.sec-hdr{display:flex;align-items:center;gap:22px;margin-bottom:60px;}
+.sec-num{font-family:'Hind Siliguri',sans-serif;font-size:.54rem;letter-spacing:.52em;color:var(--gold);text-transform:uppercase;white-space:nowrap;flex-shrink:0;}
+.sec-line{flex:1;height:1px;background:var(--rule);opacity:.42;}
+.sec-tag{font-family:'Hind Siliguri',sans-serif;font-size:.52rem;letter-spacing:.3em;color:rgba(197,178,138,.56);white-space:nowrap;flex-shrink:0;}
+
+/* PROSE */
+.prose p{font-size:1.09rem;line-height:2.2;color:#1e1208;margin-bottom:1.72em;text-align:justify;word-break:keep-all;overflow-wrap:break-word;hyphens:none;-webkit-hyphens:none;}
+.prose p+p{text-indent:2.2em;}
+.nd{text-indent:0!important;}
+.ctr{text-align:center!important;text-indent:0!important;}
+.it{font-style:italic;color:var(--muted);}
+.bold{font-weight:700;}
+
+.drop::first-letter{font-size:4.8rem;font-weight:700;float:left;line-height:.7;margin-right:12px;margin-top:13px;color:var(--accent);}
+
+.brk{text-align:center;color:var(--rule);letter-spacing:1.3em;margin:58px 0;font-size:.5rem;user-select:none;}
+
+/* POEM */
+.poem{margin:54px 0;padding:38px 52px;background:linear-gradient(135deg,var(--paper2),rgba(235,224,206,.55));border-left:2px solid rgba(140,101,16,.32);border-right:2px solid rgba(140,101,16,.32);text-align:center;position:relative;}
+.poem::before,.poem::after{content:'◆';position:absolute;left:50%;transform:translateX(-50%);font-size:5px;color:rgba(140,101,16,.42);}
+.poem::before{top:-3px;}.poem::after{bottom:-3px;}
+.poem p{font-style:italic;color:var(--muted);font-size:1.02rem;line-height:2.12;margin:0;text-indent:0!important;text-align:center!important;}
+
+/* ATMOSPHERE */
+.atm{text-align:center;margin:54px 0;padding:38px 46px;border-top:1px solid var(--rule2);border-bottom:1px solid var(--rule2);}
+.atm p{font-style:italic;color:var(--muted);font-size:1.04rem;line-height:2.18;text-indent:0!important;text-align:center!important;margin:0;}
+
+/* MEMORY BOX */
+.memory{margin:54px 0;padding:30px 38px;background:rgba(243,232,212,.72);border:1px solid rgba(197,178,138,.48);border-radius:2px;position:relative;}
+.memory-label{font-family:'Hind Siliguri',sans-serif;font-size:.5rem;letter-spacing:.42em;color:rgba(138,100,16,.48);text-transform:uppercase;display:block;margin-bottom:16px;}
+.memory p{font-size:1.02rem;line-height:2.14;color:#281808;margin:0 0 1.25em;text-indent:0!important;word-break:keep-all;overflow-wrap:break-word;hyphens:none;}
+.memory p:last-child{margin-bottom:0;}
+
+/* DARK BOX */
+.dark-box{background:#08020100;margin:0 -74px;padding:62px 74px;position:relative;overflow:hidden;}
+.dark-box::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 65% 60% at 50% 50%,rgba(92,4,4,.22),transparent);pointer-events:none;}
+.dark-box p{font-size:1.02rem;font-style:italic;color:rgba(192,150,60,.66);line-height:2.38;text-align:center;margin:0 auto 1.55em;max-width:480px;position:relative;z-index:1;}
+.dark-box p:last-child{margin-bottom:0;}
+.dark-box strong{color:rgba(215,162,46,.9);font-weight:600;font-style:normal;}
+
+/* TWIST */
+.twist{border-left:3px solid var(--accent);background:linear-gradient(135deg,var(--accent-glow),rgba(107,15,15,.04));padding:28px 32px;margin:54px 0;color:#3c0808;font-style:italic;font-size:1.02rem;line-height:2.12;border-radius:0 5px 5px 0;opacity:0;transform:translateY(22px);transition:opacity 1.05s ease,transform 1.05s ease;}
+.twist.show{opacity:1;transform:translateY(0);}
+
+/* SHATTER */
+.shatter{background:#0a0100;margin:0 -74px;padding:54px 74px;position:relative;overflow:hidden;opacity:0;transform:translateY(18px);transition:opacity 1.05s ease,transform 1.05s ease;}
+.shatter::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 75% 65% at 50% 50%,rgba(108,7,7,.28),transparent);pointer-events:none;}
+.shatter p{font-size:1.02rem;font-style:italic;color:rgba(185,138,48,.62);line-height:2.35;text-align:center;max-width:500px;margin:0 auto 1.55em;position:relative;z-index:1;}
+.shatter p:last-child{margin-bottom:0;}
+.shatter strong{color:rgba(212,160,46,.9);font-style:normal;font-weight:600;}
+.shatter.show{opacity:1;transform:translateY(0);}
+
+/* VERDICT */
+.verdict{text-align:center;padding:46px 0;margin:54px 0;border-top:2px solid rgba(107,15,15,.17);border-bottom:2px solid rgba(107,15,15,.17);opacity:0;transform:scale(.965);transition:opacity .95s ease,transform .95s ease;}
+.verdict p{font-size:1.15rem;font-style:italic;color:var(--accent);line-height:2;font-weight:600;}
+.verdict.show{opacity:1;transform:scale(1);}
+
+/* EPILOGUE */
+.ep-dark{background:#070100;padding:112px 74px;text-align:center;}
+.ep-orn{font-size:1.4rem;color:var(--gold);opacity:.24;margin-bottom:50px;letter-spacing:.68em;}
+.ep-dark p{font-size:.98rem;line-height:2.32;color:rgba(185,146,54,.56);max-width:480px;margin:0 auto 1.75em;}
+.ep-final{color:rgba(202,158,36,.86)!important;font-style:italic;font-size:1.04rem!important;margin-top:58px!important;}
+.ep-light{background:var(--paper2);padding:82px 74px;text-align:center;}
+.ep-light p{font-size:1.02rem;line-height:2.24;color:var(--muted);max-width:500px;margin:0 auto 1.5em;}
+.ep-strong{color:var(--accent2)!important;font-weight:700;font-style:italic;font-size:1.12rem;}
+
+/* BACK BTN */
+#bb{position:fixed;bottom:28px;right:28px;width:48px;height:48px;background:var(--accent);color:#ece0c4;border:none;border-radius:50%;cursor:pointer;font-size:1rem;display:none;align-items:center;justify-content:center;box-shadow:0 4px 32px rgba(107,15,15,.52);z-index:500;transition:transform .2s,box-shadow .2s;}
+#bb:hover{transform:scale(1.12);box-shadow:0 8px 40px rgba(107,15,15,.7);}
+
+@keyframes fup{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
+@keyframes pulse{0%,100%{opacity:.26;}50%{opacity:.84;}}
+
+@media(max-width:640px){
+  .sec{padding:64px 26px 56px;}
+  .dark-box{margin:0 -26px;padding:52px 26px;}
+  .shatter{margin:0 -26px;padding:48px 26px;}
+  .nav{padding:12px 22px;}
+  .epigraph{padding:64px 28px;}
+  .tp{padding:64px 28px;}
+  .ep-dark,.ep-light{padding:72px 28px;}
+  .poem{padding:28px 24px;}
+  .memory{padding:22px 20px;}
+}
+</style>
+</head>
+<body>
+
+<div class="pbar"><div class="pfill" id="pf"></div></div>
+
+<!-- ══════════ COVER ══════════ -->
+<div id="cover" onclick="openBook()">
+<div class="c-wrap">
+  <div class="c-eye">মনস্তাত্ত্বিক থ্রিলার · ইভান ইলিয়াস · ২০২৬</div>
+  <div class="c-title">নীরব সাক্ষী</div>
+  <div class="c-sub">একটি সত্যের ছায়ায় লেখা গল্প</div>
+  <div class="c-ornament"><span></span><i>◆</i><span></span></div>
+  <div class="c-tagline">
+    যতবার বিশ্বাস করেছি,<br>
+    ততবার ভেঙেছে।<br>
+    তবুও আমি দেখেছি —<br>
+    নীরবে।
+  </div>
+  <div class="c-author">— ইভান ইলিয়াস</div>
+  <div class="c-cta">
+    <span class="c-cta-txt">পড়তে শুরু করুন</span>
+    <div class="c-arrow"></div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════ BOOK ══════════ -->
+<div id="book">
+<div class="nav">
+  <span class="nav-book">নীরব সাক্ষী · ইভান ইলিয়াস</span>
+  <span class="nav-loc" id="nloc"></span>
+</div>
+
+<!-- TITLE PAGE -->
+<div class="tp" id="s0">
+  <div class="tp-orn">✦ &nbsp; ✦ &nbsp; ✦</div>
+  <div class="tp-title">নীরব সাক্ষী</div>
+  <div class="tp-genre">মনস্তাত্ত্বিক থ্রিলার · ছোটগল্প</div>
+  <div class="tp-rule"></div>
+  <div class="tp-author">ইভান ইলিয়াস</div>
+  <div class="tp-pseudo">ছদ্মনাম</div>
+  <div class="tp-year">২০২৬</div>
+</div>
+
+<!-- DEDICATION -->
+<div class="dedication" id="ded">
+  <div class="ded-label">উৎসর্গ</div>
+  <div class="ded-main">
+    আমার বাবা ও মাকে —<br><br>
+    যারা সবচেয়ে বেশি ভালোবেসেছেন,<br>
+    এবং সেই ভালোবাসার কারণেই<br>
+    সবচেয়ে বেশি কষ্ট পেয়েছেন।<br><br>
+    তোমাদের ক্লান্ত চোখ দুটো<br>
+    এই গল্পের প্রতিটি লাইনে আছে।
+  </div>
+</div>
+
+<!-- AUTHOR'S NOTE -->
+<div class="author-note" id="an">
+  <span class="an-label">লেখকের কথা</span>
+  <p>এই বইটা লেখার কথা ছিল না।</p>
+  <p>কোনো পরিকল্পনা ছিল না, কোনো প্রস্তুতি ছিল না। ছিল শুধু একটা দীর্ঘ নিঃশ্বাস যেটা বুকের ভেতরে বছরের পর বছর ধরে জমে ছিল — এবং একদিন বেরিয়ে আসতে চাইল। লেখা হলো তার একমাত্র পথ।</p>
+  <p>এই গল্পের প্রতিটি ঘটনা সত্যি। প্রতিটি কান্না সত্যি। প্রতিটি চুপ থাকা সত্যি। শুধু নামগুলো বদলে দেওয়া হয়েছে — কারণ এটা কারো বিরুদ্ধে অভিযোগ নয়। এটা একটা সাক্ষ্য। একজন নীরব সাক্ষীর নিজের জন্য লেখা সাক্ষ্য।</p>
+  <p>আমি জানি পৃথিবীতে অনেক পরিবার আছে যেখানে এরকম কেউ একজন থাকে — যাকে সবাই ভালোবাসে, বিশ্বাস করে, রক্ষা করে। এবং সেই পরিবারেই একজন থাকে যে দেখে, বোঝে, কিন্তু বলতে পারে না। কারণ বললে সে নিষ্ঠুর হয়ে যায়।</p>
+  <p>এই বইটা সেই মানুষটার জন্য।</p>
+  <p>যদি তুমি নিজেকে এই গল্পে খুঁজে পাও — জেনে রেখো, তুমি একা নও।</p>
+  <span class="an-sign">— ইভান ইলিয়াস<br>২০২৬</span>
+</div>
+
+<!-- EPIGRAPH -->
+<div class="epigraph" id="epg">
+  <p>বিশ্বাসঘাতকতার সবচেয়ে পরিশীলিত রূপ হলো এই —<br>
+  যখন তুমি বিশ্বাস করতে চাও,<br>
+  এবং সে সেটা জানে।</p>
+  <cite>— অজ্ঞাত</cite>
+</div>
+
+<!-- ══ ১ ══ -->
+<div class="sec" id="s1">
+<div class="sec-hdr"><span class="sec-num">এক</span><div class="sec-line"></div><span class="sec-tag">শুরু</span></div>
+<div class="prose">
+
+<p class="drop">আমাদের বাড়িতে সন্ধ্যার একটা নিজস্ব গন্ধ ছিল।</p>
+
+<p>মায়ের রান্নার ধোঁয়া, বাবার পুরনো খবরের কাগজের কালি, দূর থেকে ভেসে আসা আজানের শব্দ — সব মিলিয়ে একটা উষ্ণ পরিচিতি, যেটা আমি শুধু "ঘর" বলে চিনতাম। সেই গন্ধটা যখন মনে পড়ে, তখনও বুকের ভেতরে একটা টান লাগে। সেই টানটা কীসের — ভালোবাসার, নাকি কিছু হারানোর — সেটা আজও ঠিক বুঝতে পারি না।</p>
+
+<p>কিন্তু সেই সন্ধ্যার মধ্যে সবচেয়ে নিরাপদ যে জিনিসটা মনে আছে — সেটা ছিল আপুর ঘরের দরজার নিচ দিয়ে বেরিয়ে আসা আলোর একটা সরু রেখা। হলুদ আলো। টেবিলল্যাম্পের। দরজার ফাঁক গলে মেঝেতে পড়ত — এতটুকু, কিন্তু সেই এতটুকুই যথেষ্ট ছিল।</p>
+
+<p>সেই রেখাটা দেখলে মনে হতো — আপু পড়ছে। সব ঠিক আছে। পৃথিবী ঠিক জায়গায় আছে।</p>
+
+</div>
+
+<div class="poem">
+<p>একটা হলুদ আলো ছিল দরজার ফাঁকে,<br>
+শৈশব ভেবেছিল — এটাই নিরাপত্তা।<br>
+বড় হয়ে বুঝলাম — আলো আর উষ্ণতা<br>
+সবসময় একই জিনিস নয়।</p>
+</div>
+
+<div class="prose">
+
+<p>আপুর নাম নীলিমা। আমার চেয়ে সাত বছরের বড়। আমি যখন থেকে পৃথিবী চিনতে শুরু করেছি, তখন থেকেই সে আমার পৃথিবীর একটা বড় অংশ জুড়ে আছে। প্রথমদিন স্কুলে যাওয়ার সময় হাত ধরে নিয়ে গিয়েছিল। রাতে ভয় লাগলে পাশে শুয়ে গল্প বলত। কখনো বকত, কখনো আদর করত — কিন্তু সবসময় ছিল। এবং সেই "ছিল"-টাই আমার কাছে অনেক বড় ছিল।</p>
+
+<p>পাড়ায় তার সুনাম ছিল আকাশছোঁয়া। মসজিদের ইমাম সাহেব একবার বাবাকে বললেন, "ইলিয়াস ভাই, আপনার বড় মেয়েটা যেন ফেরেশতার মতো। এই যুগে এরকম মানুষ বিরল।" বাবা বাড়ি ফিরে আপুর মাথায় হাত দিলেন। আপু হাসল।</p>
+
+<p>সেই হাসি দেখে আমি তখন ভেবেছিলাম — কী সুন্দর। কিন্তু বছরের পর বছর পর একটা জিনিস বুঝেছি — সেই হাসিটা ঠোঁট পর্যন্ত আসত। চোখে কখনো পৌঁছাত না।</p>
+
+<p>কিন্তু এটা বুঝতে আমার অনেক বছর লেগেছে। এবং প্রতিটা বছর একটা মূল্য দিয়ে কিনতে হয়েছে।</p>
+
+</div>
+</div>
+
+<!-- ══ ২ ══ -->
+<div class="sec" id="s2">
+<div class="sec-hdr"><span class="sec-num">দুই</span><div class="sec-line"></div><span class="sec-tag">২০০৯ · রহমত কাকা</span></div>
+<div class="prose">
+
+<p class="drop">সেই গল্পটা আমি নিজে দেখিনি। আমার বয়স তখন দুই কি তিন। কিন্তু এতবার শুনেছি যে নিজের স্মৃতির মতো লাগে।</p>
+
+<p>পাড়ার মুদি দোকানদার রহমত কাকা একদিন বিকেলে আমাদের বাড়িতে এলেন। হাতে তাঁর সেই পুরনো লাল মলাটের খাতা — যেখানে সব হিসাব লেখা থাকত। মানুষটা বয়স্ক, পিঠ একটু বাঁকা, কিন্তু চোখ দুটো তীক্ষ্ণ। পাড়ার সবাই জানত — রহমত কাকার হিসাবে কখনো ভুল হয় না।</p>
+
+<p>কাকা বললেন, "ইলিয়াস ভাই, নীলিমা মেয়ে দুই হাজার টাকার বাকি করেছে। শোধ করে দেন।"</p>
+
+<p>দুই হাজার টাকা। সেই সময়ে অনেক।</p>
+
+<p>বাবা চমকে গেলেন। ডাকলেন আপুকে।</p>
+
+<p>আপু বেরিয়ে এলো। ধীর পায়ে। শান্ত মুখে। তারপর রহমত কাকার চোখে সরাসরি তাকাল — একটুও না সরিয়ে — এবং বলল, "বাবা, আমি কোনো বাকি করিনি। রহমত কাকা ভুল বলছেন।"</p>
+
+<p>শান্ত গলায়। কোনো কাঁপন নেই। কোনো ইতস্তত নেই।</p>
+
+<p>বাবা মেয়েকে বিশ্বাস করলেন। কাকাকে বললেন হিসাবে ভুল হয়েছে। কাকা লজ্জিত হয়ে ফিরে গেলেন।</p>
+
+</div>
+
+<div class="atm">
+<p>সেই মুহূর্তটা আমি দেখিনি।<br>
+কিন্তু এই গল্পের যে অংশটা আমাকে<br>
+বছরের পর বছর তাড়া করেছে —<br>
+সেটা পরের অংশ।</p>
+</div>
+
+<div class="prose">
+
+<p>কিছুদিন পর সত্য বেরিয়ে পড়ল। আপুর বান্ধবীরা মুখ খুলল। হ্যাঁ, নীলিমাই বাকি করেছিল। চকলেট, চিপস, কসমেটিক্স।</p>
+
+<p>বাবাকে রহমত কাকার বাড়িতে গিয়ে মাথা নিচু করে ক্ষমা চাইতে হলো। সেদিন বাবার মুখটা দেখেছিলাম — লাল হয়ে গিয়েছিল লজ্জায়। বাড়িতে মার পড়ল। আপু কাঁদল। কিছুদিন চুপ থাকল। তারপর সব আগের মতো।</p>
+
+</div>
+
+<div class="twist" data-r>
+কিন্তু কেউ এই জিনিসটা নিয়ে ভাবল না —<br><br>
+নয় বছরের একটি মেয়ে একজন প্রবীণ মানুষের চোখে সরাসরি তাকিয়ে, এক মুহূর্তও না থেমে, এতটা নিখুঁতভাবে মিথ্যা বলল। স্বাভাবিক শিশু ধরা পড়লে চোখ নামিয়ে নেয়, গলা কাঁপে, কাঁদে। নীলিমা একটুও কাঁপেনি।<br><br>
+এই দক্ষতা শেখানো যায় না। ভেতর থেকে আসে।<br><br>
+সেদিন যদি কেউ সত্যিই বুঝত — হয়তো পরের বিশটা বছর অন্যরকম হতো।
+</div>
+</div>
+
+<!-- ══ ৩ ══ -->
+<div class="sec" id="s3">
+<div class="sec-hdr"><span class="sec-num">তিন</span><div class="sec-line"></div><span class="sec-tag">২০০৯–২০১৬ · অভ্যাস</span></div>
+<div class="prose">
+
+<p class="drop">রহমত কাকার ঘটনাটা যদি শুধু একটাই ঘটনা হতো, তাহলে হয়তো এই গল্প লেখার দরকার হতো না। কিন্তু সেটা ছিল শুধু শুরু।</p>
+
+<p>বছরের পর বছর ধরে ঘর থেকে টাকা উধাও হতো। মায়ের শাড়ির ভাঁজে রাখা টাকা কমে যেত। রান্নাঘরের ড্রয়ার হালকা হয়ে যেত। বাবার মানিব্যাগ থেকে খসে পড়ত। প্রতিবার জিজ্ঞেস করলে আপু সরাসরি তাকাত — চোখে কোনো ভয় নেই, গলায় কোনো কম্পন নেই — এবং বলত, "আমি নিইনি। তোমরা রাখনি বলেই গেছে।"</p>
+
+<p>কখনো কান্না যোগ হতো। "তোমরা সবসময় আমাকেই সন্দেহ করো। আমি কি এই বাড়ির মানুষ না?" সেই কান্না দেখে মা গলে যেতেন। বাবা বিব্রত হতেন।</p>
+
+<p>একবার বাবা কোরআন শরীফ এনে আপুর হাতে দিলেন। বললেন হাত রেখে বলো। ঘরে পিনপতন নিস্তব্ধতা।</p>
+
+<p>আপু হাত রাখল। বলল — "আল্লাহর কসম, আমি নিইনি।"</p>
+
+<p>কোনো কাঁপন নেই। কোনো দ্বিধা নেই। পরে প্রমাণ হলো — সেই নিয়েছিল।</p>
+
+</div>
+
+<div class="dark-box">
+<p>যার বিবেক নেই, তার কাছে শপথ শুধু একটি শব্দ।</p>
+<p>সে কোরআন ছুঁয়ে মিথ্যা বলতে পারে —<br>কারণ শপথের ভার সে অনুভব করে না।</p>
+<p>এবং সেটাই তাকে সবচেয়ে বিপজ্জনক করে তোলে।</p>
+</div>
+
+<div class="prose">
+
+<p>কিন্তু পাড়ায় তখনো নীলিমার সুনাম অটুট। মিষ্টি ব্যবহার, মিষ্টি কথা। বাবার বন্ধুরা বলতেন, "ইলিয়াস ভাই, মেয়েটার মুখে নূর আছে।"</p>
+
+<p>আমি দেখতাম — যে মুখ দিয়ে কোরআন ছুঁয়ে মিথ্যা বলা হয়েছিল, সেই মুখেই পাড়ার মানুষকে মিষ্টি করে সালাম দেওয়া হচ্ছে।</p>
+
+<p>দুটো মুখ। একটাই মানুষ।</p>
+
+<p>এবং আমি প্রতিদিন নিজেকে জিজ্ঞেস করতাম — আমি কি সন্দেহবাদী? আমি কি ভুল? হয়তো আমি আপুকে অকারণে সন্দেহ করছি। হয়তো আমি খারাপ ভাই। এই প্রশ্নগুলো আমাকে চুপ করিয়ে রাখত। বছরের পর বছর।</p>
+
+</div>
+
+<div class="poem">
+<p>যে মানুষটা তোমাকে সন্দেহ করতে শেখায়<br>
+নিজের বোধকে —<br>
+সে আসলে তোমার ভেতরে<br>
+একটা কারাগার বানাচ্ছে।</p>
+</div>
+
+</div>
+
+<!-- ══ ৪ ══ -->
+<div class="sec" id="s4">
+<div class="sec-hdr"><span class="sec-num">চার</span><div class="sec-line"></div><span class="sec-tag">২০১৮ · বিয়ে ও বরতলা</span></div>
+<div class="prose">
+
+<p class="drop">২০১৮ সালে বাড়িতে আনন্দের হাওয়া এলো।</p>
+
+<p>কুমিল্লার একটা ছেলের সঙ্গে আপুর বিয়ে ঠিক হলো। আমার বয়স তখন এগারো। বিয়েটা হবে কুমিল্লায় — বড় মামার বাসায়, নানুর কাছে। ঢাকা থেকে সবাই মিলে কুমিল্লা গেলাম।</p>
+
+<p>বড় মামা এই বিয়েতে সবকিছু নিজে হাতে দেখলেন। রান্না হলো জমকালো — গরুর গোশত, পোলাও, চিংড়ি, রুই। কোকাকোলা সেভেন আপ সারি করে রাখা। নানুর বাসায় সেদিন একটা আলাদা গন্ধ ছিল — মশলার, ঘিয়ের, উৎসবের। সেই গন্ধটা আজও মনে আছে।</p>
+
+<p>নানু এবং খালামণিরা আপু আর তার বরকে একে একে আংটি পরিয়ে দিলেন। প্রায় সাত-আটটা আংটি পেল দুজন মিলে। আপুর হাত চকচক করছিল আংটির আলোয়।</p>
+
+<p>ছেলেটাকে দেখলাম সেখানে। বয়স বড়জোর পঁচিশ-ছাব্বিশ। চেহারায় শান্ত ভাব — চোখে সরলতা, মুখে বিনয়। মাকে প্রণাম করল মাথা নিচু করে। বাবাকে "চাচা" ডাকল। আমার দিকে তাকিয়ে একটু হাসল। মনে হলো — এই মানুষটার ক্ষতি করার ক্ষমতা নেই।</p>
+
+<p>বিদায়ের পালায় আপু মায়ের বুকে মাথা রাখল। মা তাকে জড়িয়ে ধরলেন — দুজনে একে অপরের পিঠে হাত রেখে, নিঃশব্দে কাঁদছেন। বাবা একপাশে দাঁড়িয়ে কঠিন থাকার চেষ্টা করছেন, পারছেন না। ফারজানা আপু ফুঁপিয়ে উঠল। আমি উঠানের কোণে দাঁড়িয়ে দেখলাম। গলায় কিছু একটা আটকে গেল।</p>
+
+</div>
+
+<div class="brk">✦ &nbsp; ✦ &nbsp; ✦</div>
+
+<div class="prose">
+<p>বরযাত্রী নিয়ে রওনা হলো ছেলেদের গ্রামের দিকে। গ্রামের নাম বরতলা। আমি আর ফারজানা আপু গেলাম তাদের সাথে।</p>
+</div>
+
+<div class="memory">
+<span class="memory-label">স্মৃতি · বরতলা</span>
+
+<p>বরতলায় তিনটা দিন কাটিয়েছিলাম।</p>
+
+<p>ওরা আতিথেয়তায় খুব একটা পারদর্শী ছিল না। প্রথম দিন রাতে আমাদের নিজেদের বাড়ি থেকে পাঠানো খাবারই খেতে দিল — বিয়েবাড়ি থেকে যা নিয়ে এসেছিলাম। বিকেলে নাস্তাও দিত না। বাজারটা পাঁচ-দশ মিনিটের হাঁটা পথে।</p>
+
+<p>যাওয়ার আগে আব্বু আমার হাতে লুকিয়ে পাঁচশো টাকা গুঁজে দিয়েছিলেন। বললেন, "মন চাইলে কিছু খেয়ে নিস।" আমি প্রতিদিন বিকেলে সেই বাজারে যেতাম। চিপস কিনতাম, বিস্কুট কিনতাম। একাই বসে খেতাম — ছোট্ট একটা স্বাধীনতা, যেটা সেই বয়সে অনেক বড় মনে হতো।</p>
+
+<p>ওখানে আমার বয়সের একটা ছেলের সাথে পরিচয় হলো। এখন আর নাম মনে নেই, চেহারাও ভুলে গেছি। কিন্তু সেই তিনটা দিন সে আমার সাথেই ছিল। গল্প করতাম, ঘুরে বেড়াতাম। অচেনা জায়গায় একটা বন্ধু পেলে যেটা হয় — সেটাই হলো।</p>
+
+<p>একদিন সন্ধ্যায় আমরা সবাই মিলে মোবাইলে লুডু খেললাম। আমি, ফারজানা আপু, সেই ছেলে আর আরো কয়েকজন। একটা মুহূর্তে ফারজানা আপুর গুটি খাওয়ার সুযোগ পেয়েছিলাম, কিন্তু আমি পারিনি — উল্টো সে আমার একটা গুটি খেয়ে নিল। আমি রাগে চিৎকার করে উঠলাম। সবাই থেমে গেল। তারপর কেন জানি খেলাটাই শেষ হয়ে গেল সেখানে।</p>
+
+<p>তিনটা দিন এভাবেই কেটে গেল — ছোটখাটো ঝগড়া, বিকেলের চিপস, অচেনা একটা ছেলের সাথে ক্ষণিকের বন্ধুত্ব। পরে বুঝেছি — সেই তিনটা দিন ছিল গল্পের সবচেয়ে নিরীহ অধ্যায়।</p>
+
+<p>আম্মু-আব্বু পরে এলেন। আম্মু আমার মুখ দেখে বললেন, "তোর চোখ কেমন ভেতরে ঢুকে গেছে। ঠিকমতো খাসনি তো?" আমি কিছু বললাম না। তারপর সবাই মিলে খাওয়া হলো, আর আমরা ঢাকায় ফিরলাম।</p>
+</div>
+
+<div class="prose">
+
+<p>ঢাকায় ফেরার পর বাড়িটা অনেক বড় লাগল। আপুর ঘরের দরজা বন্ধ, ভেতরে কেউ নেই। টেবিলল্যাম্প নেভানো। মেঝেতে সেই পরিচিত হলুদ রেখাটা নেই।</p>
+
+<p>বাবা বললেন, "মেয়ে বিদায় হলে ঘর এরকম হয়।" তারপর নিজেই চুপ করে গেলেন।</p>
+
+</div>
+
+<div class="brk">✦ &nbsp; ✦ &nbsp; ✦</div>
+
+<div class="prose">
+
+<p class="nd bold">পাঁচ দিন পর।</p>
+
+<p>মাত্র পাঁচটা দিন।</p>
+
+<p>সন্ধ্যায় দরজায় শব্দ হলো। মা খুললেন। নীলিমা আপু দাঁড়িয়ে — পিঠে ব্যাগ, চোখ ফোলা, গালে কান্নার শুকনো দাগ। মাথার চুল এলোমেলো। শাড়িতে ভাঁজ নেই।</p>
+
+<p>মা চিৎকার করে ছুটে গেলেন — "নীলিমা!" বাবা ছুটে এলেন। ফারজানা এলো। আমি দরজার আড়াল থেকে দেখলাম।</p>
+
+<p>আপু ঘরে ঢুকতেই মেঝেতে বসে পড়ল। মা দুহাতে ধরলেন। তারপর আপু কথা বলা শুরু করল — থেমে থেমে, কান্নার মাঝে মাঝে। শ্বশুরবাড়িতে নাকি তাকে সকাল থেকে রাত পর্যন্ত কাজ করানো হয়েছে। ঘুমাতে দেওয়া হয়নি। মেরেছে। লাথি মেরে খাট থেকে ফেলে দিয়েছে।</p>
+
+<p>"লাথি মেরে ফেলে দিয়েছে" — এই কথাটা বলতে গিয়ে আপু থেমে গেল। মা চিৎকার করে উঠলেন। বাবার মুখ লাল হলো রাগে।</p>
+
+<p>পুরো বাড়ি একটা মুহূর্তে আপুর পাশে দাঁড়িয়ে গেল।</p>
+
+<p>আমিও কাঁদলাম। সত্যিই কাঁদলাম। কিন্তু কাঁদতে কাঁদতে মাথার একটা কোণে একটাই প্রশ্ন ঘুরছিল — পাঁচ দিন। মাত্র পাঁচ দিনে এত কিছু? সেই শান্ত ছেলেটা — যে বরতলায় বিনয়ের সাথে থেকেছিল — সে লাথি মারল? কিছু একটা মেলানো যাচ্ছে না।</p>
+
+</div>
+
+<div class="shatter" data-r>
+<p>কিন্তু আমি বললাম না।</p>
+<p>কারণ সবাই কাঁদছে। সবাই আপুকে ধরে আছে।<br>এই মুহূর্তে আমি যদি বলি "মিথ্যা হতে পারে" —<br>তাহলে আমি নিষ্ঠুর। আমি খারাপ ভাই।</p>
+<p><strong>তাই চুপ করে রইলাম।</strong></p>
+<p>এবং সেই চুপ থাকার অভ্যাসটাই পরের এক দশক আমার সবচেয়ে বড় বোঝা হলো।</p>
+</div>
+
+<div class="prose">
+
+<p>এরপর জাদুটোনার নাটক শুরু হলো। রাতে হঠাৎ চিৎকার। অদৃশ্য কিছু তাকে ধরছে। চোখ উল্টে যাওয়া। মা ভয় পেলেন। বাবা ভয় পেলেন। হুজুর এলেন। পানি পড়া হলো।</p>
+
+<p>একরাতে আমি একটা ছোট্ট জিনিস দেখলাম।</p>
+
+<p>আপু "অজ্ঞান" হয়ে পড়ে যাচ্ছিল — কিন্তু মাটিতে লাগার ঠিক আগের এক ভগ্নাংশ সেকেন্ডে একটা হাত উঠল। মাথাটা একটু সামলে নিল।</p>
+
+<p>সত্যিকারের অজ্ঞান মানুষ এটা করে না।</p>
+
+<p>আমি কাউকে বললাম না।</p>
+
+<p>শেষে তালাক হলো। এক থেকে দেড় বছরে। তিন লাখ টাকা দেনমোহর আদায় হলো। সেদিন আপুর মুখের দিকে তাকিয়ে একটা অদ্ভুত অনুভব হলো। কাঁদছিল না। বরং একটা স্থিরতা ছিল চোখে — একটা কাজ শেষ হলে মানুষ যেভাবে দীর্ঘশ্বাস ছাড়ে।</p>
+
+<p>বাবা আলাদাভাবে পঞ্চাশ হাজার টাকা দিলেন নতুন জীবনের জন্য। কদিনের মধ্যে শেষ। কোথায়? "খরচ হয়ে গেছে।"</p>
+
+</div>
+
+<div class="verdict" data-r>
+<p>আমরা পরে জানলাম —<br>
+পুরো গল্পটাই মিথ্যা ছিল।<br>
+সেই ছেলেটার একমাত্র অপরাধ —<br>
+সে বিশ্বাস করেছিল।</p>
+</div>
+</div>
+
+<!-- ══ ৫ ══ -->
+<div class="sec" id="s5">
+<div class="sec-hdr"><span class="sec-num">পাঁচ</span><div class="sec-line"></div><span class="sec-tag">২০২০–২০২২ · করোনা ও আবির</span></div>
+<div class="prose">
+
+<p class="drop">২০২০। পৃথিবী থমকে গেল।</p>
+
+<p>করোনা। লকডাউন। রাস্তায় মানুষ নেই, দোকান বন্ধ, ঘরে বন্দী সবাই। কিন্তু আমাদের বাড়ির ভেতরের একটা জিনিস থামল না।</p>
+
+<p>ঘর থেকে টাকা চুরি হতো। মিথ্যা বলা হতো। বাবা-মা বিয়ের কথা তুলতেন, আপু এড়িয়ে যেত। দিন যেত। মাস যেত।</p>
+
+<p>আমরা ভাবতাম — হয়তো সময় দিলে ঠিক হবে। মানুষ বদলায়।</p>
+
+<p>২০২২ সালে আবির চৌধুরীর প্রবেশ। ডাক্তার। হেমায়েতপুরের একটি চক্ষু হাসপাতালের সিইও। শিক্ষিত, প্রতিষ্ঠিত।</p>
+
+<p>বাবা-মা খুশি হলেন। বিয়ে হোক। আপু টালবাহানা করল।</p>
+
+<p>এদিকে আবিরের কাছে সে নিজেকে উপস্থাপন করত এভাবে — "আমার পরিবার আমাকে বোঝে না। আমার সাথে খারাপ ব্যবহার করে। ওদের মধ্যে থেকে শ্বাস নিতে পারি না।" আবির বিশ্বাস করত। কারণ নীলিমার মুখে মিথ্যা কাঁপে না। কখনো কাঁপেনি।</p>
+
+<p>আমি দূর থেকে দেখতাম। ভাবতাম — আবির জানে না সে কার সঙ্গে আছে।</p>
+
+</div>
+
+<div class="twist" data-r>
+আবির ভাবছে সে একজন পীড়িত নারীকে ভালোবাসছে।<br><br>
+আবির জানে না তার পরিবারের সম্পর্কে বলা প্রতিটা কথা মিথ্যা।<br><br>
+এবং আপু সেটা জানে।<br><br>
+এবং সেই জানাটাই তার সবচেয়ে বড় অস্ত্র।<br><br>
+বুদ্ধিমান মানুষ একবার বিশ্বাস করলে সহজে ছাড়ে না — এটাও সে জানে।
+</div>
+</div>
+
+<!-- ══ ৬ ══ -->
+<div class="sec" id="s6">
+<div class="sec-hdr"><span class="sec-num">ছয়</span><div class="sec-line"></div><span class="sec-tag">২০২৪ · ক্যান্সার</span></div>
+<div class="prose">
+
+<p class="drop">তারপর এলো সেই দিনটা।</p>
+
+<p>২০২৪ সালের এক বিকেল। বাইরে আলো নরম হয়ে আসছিল। আমি ঘরে পড়ছিলাম।</p>
+
+<p>মা দরজায় এলেন। ধীরে ঠেলে ঢুকলেন। মুখ দেখেই বুঝলাম কিছু হয়েছে — চোখ লাল, মুখ শুকনো, ঠোঁট কাঁপছে একটু।</p>
+
+<p>এসে আমার পাশে বসলেন। কিছু বললেন না অনেকক্ষণ। শুধু হাত দুটো কোলে রাখলেন।</p>
+
+<p>তারপর আস্তে বললেন — "তোর আপুর ক্যান্সার হয়েছে।"</p>
+
+<p>সেই মুহূর্তে পৃথিবীটা থমকে গেল।</p>
+
+<p>ঘরের সব শব্দ হঠাৎ মরে গেল। বাইরে রাস্তায় রিকশার টুংটাং শোনা যাচ্ছিল — কিন্তু সেটাও যেন অনেক দূরে সরে গেল। মায়ের কণ্ঠটুকু শুধু ঘরে ভাসছে।</p>
+
+<p>ক্যান্সার।</p>
+
+<p>নীলিমা আপু। আমার বড় বোন। যে রাতে ভয় লাগলে পাশে শুয়ে গল্প বলত। যার টেবিলল্যাম্পের আলো ছিল আমার শৈশবের নিরাপত্তা।</p>
+
+<p>আমি কাঁদলাম।</p>
+
+<p>মায়ের পাশে বসে, মাথা নামিয়ে, কাঁদলাম। মা আমার মাথায় হাত দিলেন। তাঁর হাত কাঁপছিল।</p>
+
+<p>সেই রাতে পুরো পরিবার ভেঙে পড়ল। বাবা চুপ হয়ে গেলেন। ফারজানা ফোনে খবর পেয়ে এমনভাবে কাঁদল যে কথা বলতে পারছিল না। আত্মীয়রা আসতে লাগলেন। সবার চোখে জল।</p>
+
+<p>আপু শুয়ে আছে ঘরে। মুখ ক্লান্ত, চোখ দুটো নিষ্প্রভ। মা গিয়ে মাথায় হাত বুলিয়ে দিলেন।</p>
+
+<p>আমিও গেলাম। আপুর পাশে বসলাম। বললাম, "আপু, ঠিক হয়ে যাবে।"</p>
+
+<p>আপু ধীরে হাত বাড়িয়ে আমার হাত ধরল। বলল, "আমি ভয় পাচ্ছি, ইভান।"</p>
+
+<p>গলাটা কাঁপছিল। চোখে জল।</p>
+
+<p>আমি আরো কাঁদলাম।</p>
+
+<p>সেই মুহূর্তে মনের ভেতরে সেই পুরনো সন্দেহের কোনো অস্তিত্ব ছিল না। শুধু ছিল ভালোবাসা। আর ভয়।</p>
+
+</div>
+
+<div class="atm">
+<p>সবচেয়ে নিষ্ঠুর মিথ্যা সেটা নয়<br>
+যেটা তুমি বিশ্বাস করতে চাও না।<br><br>
+সবচেয়ে নিষ্ঠুর মিথ্যা সেটা,<br>
+যেটা না বিশ্বাস করলে<br>
+তুমি নিজেই পাষণ্ড হয়ে যাও।</p>
+</div>
+</div>
+
+<!-- ══ ৭ ══ -->
+<div class="sec" id="s7">
+<div class="sec-hdr"><span class="sec-num">সাত</span><div class="sec-line"></div><span class="sec-tag">রিপোর্ট · মামার কান্না</span></div>
+<div class="prose">
+
+<p class="drop">পরদিন রিপোর্টগুলো এলো।</p>
+
+<p>পাতার পর পাতা — ভয়ঙ্কর সব শব্দ। malignant, biopsy, stage। পরিবার বেশিরভাগ বুঝল না, কিন্তু যা বোঝার বুঝল — অবস্থা গুরুতর।</p>
+
+<p>রিপোর্ট পাঠানো হলো দোলন ভাইয়ের কাছে — আমার খালাতো ভাই, পেশায় ডাক্তার। তিনি দেখলেন। কিছুক্ষণ পর ফোন করলেন। বললেন, "ইভান, অবস্থা ভালো না। দেরি করলে চলবে না।"</p>
+
+<p>বাড়িতে শোকের একটা স্থায়ী আবহ তৈরি হয়ে গেল।</p>
+
+<p>মামা ফোন করলেন। তাঁর গলা শুনেই বুঝলাম — কাঁদছেন। বললেন, "ইভান রে, তোর আপুর এই অবস্থা? আল্লাহ কেন এই মেয়েটাকে এত কষ্ট দেন? সারাজীবন এত কষ্ট সহ্য করল।" গলা ভেঙে পড়ল। কিছুক্ষণ পরে বিশ হাজার টাকা পাঠিয়ে দিলেন।</p>
+
+<p>আমি ফোন রেখে জানালার দিকে তাকিয়ে রইলাম। মামার কান্না এখনো কানে বাজছে। এত ভালোবাসা। এত বিশ্বাস।</p>
+
+<p>তাহলে কেন আমার বুকের ভেতরে একটা কাঁটা বিঁধে আছে?</p>
+
+</div>
+<div class="brk">✦ &nbsp; ✦ &nbsp; ✦</div>
+<div class="prose">
+
+<p>রাতে একা বসে রিপোর্টগুলো আবার খুললাম। একটা একটা করে পড়লাম। তারপর একটা জিনিস খুঁজলাম।</p>
+
+<p>রোগীর নাম।</p>
+
+<p>প্রথম রিপোর্টে নাম নেই।</p>
+<p class="nd">দ্বিতীয়তেও নেই।</p>
+<p class="nd">তৃতীয়, চতুর্থ, পঞ্চম।</p>
+<p class="nd">কোথাও নীলিমার নাম নেই।</p>
+
+<p>বুকের ভেতরে একটা ঠান্ডা কিছু নামল।</p>
+
+<p>মায়ের কাছে গেলাম। বললাম, "মা, রিপোর্টে নামটা নেই।"</p>
+
+<p>মা একটু থামলেন। "ভুলে বাদ পড়েছে।"</p>
+
+<p>"মা, সব কটায়?"</p>
+
+<p>মায়ের মুখ বদলে গেল।</p>
+
+</div>
+
+<div class="shatter" data-r>
+<p>মা আমাকে মারলেন।</p>
+<p>হাতের চড়। গালে। জোরে।</p>
+<p>"তুই তোর বোনকে মরতে দেখতে চাস?<br>নিজের বোনের সম্পর্কে এরকম কথা কীভাবে মুখে আনলি?<br>তুই কি মানুষ?"</p>
+<p><strong>আমি কিছু বললাম না।</strong></p>
+<p>ঘরে ফিরে গেলাম। গালে হাত দিলাম।</p>
+<p>শরীরে ব্যথা পেলাম না।<br>ভেতরে পেলাম।</p>
+</div>
+
+<div class="prose">
+<p>সেই রাতে একটা প্রশ্ন নিয়ে ঘুমাতে গেলাম — হয়তো আমিই ভুল। হয়তো আমিই পাষণ্ড। হয়তো আমার ভেতরে ভালোবাসা নেই।</p>
+<p>কিন্তু রিপোর্টে নাম নেই — এটাও সত্যি।</p>
+<p>দুটো সত্যি। একটাকে বেছে নিতে পারলাম না।</p>
+</div>
+</div>
+
+<!-- ══ ৮ ══ -->
+<div class="sec" id="s8">
+<div class="sec-hdr"><span class="sec-num">আট</span><div class="sec-line"></div><span class="sec-tag">কেমো · রাতের সেবা</span></div>
+<div class="prose">
+
+<p class="drop">সপ্তাহ গেল। মাস গেল।</p>
+
+<p>পাঁচ লাখ টাকা লাগবে কেমোথেরাপির জন্য। বাবা ধার করতে শুরু করলেন। মা গয়না বিক্রির কথা ভাবলেন।</p>
+
+<p>আমি বাধা দিতে গেলাম। বললাম, "একবার অন্য ডাক্তার দেখাই না কেন?"</p>
+
+<p>বাবা বললেন, "তুই কি ডাক্তার?" আত্মীয়রা বললেন, "ছেলেটা নিষ্ঠুর।"</p>
+
+<p>আমি চুপ করে গেলাম।</p>
+
+<p>আপু ওষুধ খেত — প্রচুর ওষুধ, নানা রকম, একটা একটা করে গুনে। শরীর কাহিল দেখাত। চোখের নিচে কালো গহ্বর। দিনের বেশিরভাগ সময় শুয়ে থাকত।</p>
+
+<p>রাতগুলো ভারী হয়ে গেল।</p>
+
+<p>মাঝরাতে উঠত, বাথরুমে যেত, একা হাঁটতে পারত না। ফারজানা আপু রাতের পর রাত পাশে থাকত — ধরে ধরে নিয়ে যেত, ধরে ধরে ফিরিয়ে আনত। একটা কথাও বলত না, কোনো অভিযোগ নেই।</p>
+
+<p>একটা রাতের কথা আমি কখনো ভুলব না।</p>
+
+<p>গভীর রাতে ফারজানা চুপিচুপি আমাকে ডাকল। বলল, "আপু বাথরুমে পৌঁছাতে পারেনি। নিজের পরনের কাপড়েই হয়ে গেছে।" থামল। গলা কাঁপছে। "আমি পরিষ্কার করলাম। আপু কাঁদছিল — বলছিল, 'আমাকে ক্ষমা করো।' কিন্তু ইভান—" চোখ ভিজে গেল ফারজানার — "আপু এইভাবে কষ্ট পাচ্ছে। আমার বুক ফেটে যাচ্ছে।"</p>
+
+<p>আমিও কাঁদলাম।</p>
+
+<p>আমার বড় বোন। যে একদিন হাত ধরে আমাকে স্কুলে নিয়ে গিয়েছিল — সে আজ মধ্যরাতে নিজের অসহায়ত্বে কাঁদছে।</p>
+
+<p>সেই রাতে মনের ভেতরের সব সন্দেহ মরে গেল। শুধু ভালোবাসা জাগল।</p>
+
+<p>আমি নিজেকে বললাম — আমি ভুল ছিলাম। আমি সত্যিই খারাপ ভাই।</p>
+
+</div>
+
+<div class="brk">✦ &nbsp; ✦ &nbsp; ✦</div>
+
+<div class="prose">
+
+<p>তারপর একদিন দুপুরে আপু ফিরল।</p>
+
+<p>বাড়ির রোয়াকের সামনে এসে থামল। মুখ ফ্যাকাশে মোমের মতো। পা টলছে। বুকে একটা বড়সড় সাদা ব্যান্ডেজ বাঁধা। বলল, ভাঙা গলায় — "আবির টাকা দিয়ে কেমোথেরাপি দিয়েছে।"</p>
+
+<p>মা ছুটে বেরিয়ে এলেন। আপু ঘরে ঢুকতে ঢুকতে খাটের উপর পড়ে গেল। মা চিৎকার করলেন। ফারজানা ছুটে এলো।</p>
+
+<p>সবাই কান্নায় ফেটে পড়ল।</p>
+
+<p>কেমোথেরাপির পর শরীর এরকমই হয়। সবাই জানে। সবাই বুঝছে। সবাই ভাঙছে।</p>
+
+<p>আমিও বিশ্বাস করছিলাম। পুরোপুরি।</p>
+
+</div>
+
+<div class="twist" data-r>
+পরে জানলাম —<br><br>
+সেই ওষুধগুলো ক্যান্সারের ওষুধ ছিল না।<br><br>
+সেগুলো ছিল ঘুমের ওষুধ। বেশি মাত্রায়। যেন শরীর কাহিল দেখায়। যেন সবকিছু বিশ্বাসযোগ্য লাগে।<br><br>
+সেই মধ্যরাতের অসহায়ত্ব। ফারজানার কাঁধে ভর দিয়ে বাথরুমে যাওয়া। সেই "আমাকে ক্ষমা করো।"<br><br>
+সব। সব পরিকল্পিত।<br><br>
+যে মুহূর্তে আমি সবচেয়ে বেশি বিশ্বাস করছিলাম —<br>
+সেই মুহূর্তটাও একটা সাজানো দৃশ্য ছিল।
+</div>
+</div>
+
+<!-- ══ ৯ ══ -->
+<div class="sec" id="s9">
+<div class="sec-hdr"><span class="sec-num">নয়</span><div class="sec-line"></div><span class="sec-tag">পতন · সত্য</span></div>
+<div class="prose">
+
+<p class="drop">ফারজানা একদিন জোর করে হাসপাতালে নিয়ে গেল।</p>
+
+<p>আপু প্রথমে রাজি হলো না। "আমি হাঁটতে পারব না।" "চিকিৎসা তো চলছেই।" ফারজানা ছাড়েনি। অনেকক্ষণ বলার পর আপু রাজি হলো।</p>
+
+<p>ডাক্তার পরীক্ষা করলেন। দীর্ঘ সময় নিলেন। তারপর ফারজানাকে আলাদা ডাকলেন।</p>
+
+<p>"আপনার বোনের কোনো শারীরিক অসুখ নেই।"</p>
+
+<p>ফারজানা থমকে গেল।</p>
+
+<p>"এই রিপোর্টগুলো এই রোগীর নয়।" ডাক্তার কিছুক্ষণ চুপ থাকলেন। তারপর নরম গলায় বললেন, "আপনার বোনকে একজন মনোরোগ বিশেষজ্ঞ দেখান।"</p>
+
+</div>
+
+<div class="dark-box">
+<p>বাড়িতে ফিরে ফারজানা মাকে বলল। বাবাকে বলল।</p>
+<p>"ডাক্তার ভুল বলেছে।"<br>"রিপোর্ট অন্যজনের সাথে বদলে গেছে।"<br>কেউ বিশ্বাস করলেন না।</p>
+<p>কিন্তু সত্য একবার বেরিয়ে পড়লে<br>তাকে আর চাপা দেওয়া যায় না।<br>পাথরে পানি পড়ার মতো —<br>ধীরে ধীরে ঢুকতে থাকে।</p>
+</div>
+
+<div class="prose">
+
+<p>যেদিন নিশ্চিত হলো — নীলিমা সেদিন সম্পূর্ণ অন্য মানুষ হয়ে গেল।</p>
+
+<p>লজ্জা পেল না। ক্ষমা চাইল না। কাঁদল না সেই কান্না যেটা ব্যথার।</p>
+
+<p>চিৎকার করল। জিনিসপত্র ছুড়ল। বলল সবাই তার বিরুদ্ধে। তারপর কাঁদল। সেই পরিচিত কান্না — সহানুভূতি পাওয়ার কান্না।</p>
+
+<p>মা স্তব্ধ হয়ে বসে রইলেন। বাবা অন্য ঘরে চলে গেলেন। ফারজানা দেওয়ালে হেলান দিয়ে দাঁড়িয়ে রইল — চোখ শুকনো, কারণ কান্নার শক্তিটুকুও আর নেই।</p>
+
+<p>আমি দেখলাম।</p>
+
+</div>
+
+<div class="shatter" data-r>
+<p>এই রাগ ধরা পড়ার রাগ ছিল না।</p>
+<p>এটা ছিল একটা <strong>অস্ত্র হারানোর রাগ।</strong></p>
+<p>যে মানুষ সারাজীবন কান্না, অসুস্থতা, দুর্বলতাকে<br>হাতিয়ার হিসেবে ব্যবহার করেছে —<br>তার হাতিয়ার কেড়ে নিলে সে হিংস্র হয়ে ওঠে।</p>
+<p>কারণ হাতিয়ার ছাড়া তার আসল মুখটা দেখা যায়।</p>
+<p><strong>এবং সেই মুখে কোনো অনুশোচনা নেই।</strong></p>
+</div>
+
+<div class="prose">
+
+<p>সেই রাতে বাড়িতে এক ধরনের নিস্তব্ধতা নামল। মা কাঁদলেন — কিন্তু এই কান্না আগের মতো নয়। এটা বোঝার কান্না।</p>
+
+<p>বাবা অনেকক্ষণ চুপ থাকলেন। তারপর বললেন, "আমরা কোথায় ভুল করলাম?"</p>
+
+<p>আমার মুখে কথা এলো না।</p>
+
+<p>কারণ উত্তরটা অনেক লম্বা। এবং শুনলে বুক ভাঙে।</p>
+
+<p>আর সেই রাতে আমি প্রথমবারের মতো বুঝলাম — আমি পাগল ছিলাম না। আমি ভুল ছিলাম না। আমি শুধু সময়ের আগে দেখেছিলাম। কিন্তু সময়ের আগে দেখার পুরস্কার হলো — একা থাকা।</p>
+
+</div>
+
+<div class="poem">
+<p>সত্য বলার চেয়ে কঠিন কাজ আছে —<br>
+সত্য দেখার পরেও চুপ থাকা।<br>
+কারণ চুপ না থাকলে<br>
+তুমি নিষ্ঠুর হয়ে যাও।</p>
+</div>
+
+</div>
+
+<!-- ══ ১০ ══ -->
+<div class="sec" id="s10">
+<div class="sec-hdr"><span class="sec-num">দশ</span><div class="sec-line"></div><span class="sec-tag">২০২৬ · বর্তমান</span></div>
+<div class="prose">
+
+<p class="drop">২০২৬ সাল। আমার বয়স উনিশ।</p>
+
+<p>সব উন্মোচনের পরেও সংসার থামেনি। বাবা-মা আবার বিয়ের জন্য চাপ দিতে শুরু করলেন। আবিরের সঙ্গে সম্পর্ক এখনো আছে। বিয়ে হচ্ছে না। দিন যাচ্ছে। ঘরে টানাপোড়েন।</p>
+
+<p>তারপর একদিন আপু ঘরে ঢুকল। শান্ত মুখ। স্থির চোখ।</p>
+
+<p>বলল — "আমি আবিরকে বিয়ে করে ফেলেছি। কোর্ট ম্যারেজ।"</p>
+
+<p>বাড়িতে নিস্তব্ধতা নামল।</p>
+
+<p>মা তাকিয়ে রইলেন। বাবা কিছু বললেন না — উঠে অন্য ঘরে চলে গেলেন। ফারজানা চুপ।</p>
+
+<p>আমিও চুপ করে রইলাম।</p>
+
+<p>কারণ আর কিছু বলার নেই। এটা সত্যি কিনা জানি না। তার কোনো কথাকেই এখন আর নিশ্চিত করে বলা যায় না।</p>
+
+</div>
+
+<div class="twist" data-r>
+শুধু এটুকু জানি —<br><br>
+আবির এখন সেখানে আছে যেখানে একদিন সেই কুমিল্লার ছেলেটা ছিল।<br>
+রহমত কাকা ছিলেন।<br>
+মামা ছিলেন — যিনি কাঁদতে কাঁদতে বিশ হাজার টাকা পাঠিয়েছিলেন।<br><br>
+বিশ্বাসের জায়গায়।<br><br>
+আর বিশ্বাসের জায়গাটাই সবচেয়ে বিপজ্জনক —<br>
+কারণ সেখানে পৌঁছাতে হলে আগে ভালোবাসতে হয়।
+</div>
+
+<div class="prose">
+
+<p>সেই সন্ধ্যায় বারান্দায় একা বসেছিলাম। রাস্তায় বাচ্চারা খেলছে। পাশের বাড়িতে রান্নার গন্ধ। পৃথিবী স্বাভাবিকভাবে চলছে।</p>
+
+<p>হঠাৎ মনে পড়ল শৈশবের কথা।</p>
+
+<p>সেই হলুদ আলোর রেখা। আপুর ঘরের দরজার ফাঁক দিয়ে বেরিয়ে আসত। মেঝেতে পড়ত। এতটুকু। কিন্তু যথেষ্ট।</p>
+
+<p>সেটা দেখলেই মনে হতো — আপু আছে। সব ঠিক আছে।</p>
+
+<p>সেই আলো এখন নেই।</p>
+
+<p>আছে শুধু একটা প্রশ্ন —</p>
+
+<p class="nd it">সেই আলো কি আসলেই ছিল? নাকি আমি দেখতে চেয়েছিলাম বলেই দেখেছিলাম?</p>
+
+</div>
+</div>
+
+<!-- ══ ১১ ══ -->
+<div class="sec" id="s11">
+<div class="sec-hdr"><span class="sec-num">এগারো</span><div class="sec-line"></div><span class="sec-tag">শেষ কথা</span></div>
+<div class="prose">
+
+<p class="drop">এই গল্পটা লিখছি কারণ না লিখলে দম বন্ধ হয়ে যাবে।</p>
+
+<p>উনিশ বছর ধরে একটাই কাজ করেছি — দেখেছি এবং চুপ থেকেছি। বললে বিশ্বাস করা হয়নি। বললে মারা হয়েছে। বললে "নিষ্ঠুর" বলা হয়েছে। বললে "তুই তোর বোনকে ভালোবাসিস না" বলা হয়েছে।</p>
+
+<p>এবং সবচেয়ে কষ্টের কথা — প্রতিবার আমি নিজেকেই সন্দেহ করেছি। হয়তো আমি ভুল। হয়তো আমি খারাপ। হয়তো আমিই সমস্যা।</p>
+
+<p>এই "হয়তো" শব্দটাই সাইকোপ্যাথের সবচেয়ে বড় সহায়। তোমার ভেতরের সন্দেহটাই তোমাকে চুপ করিয়ে রাখে।</p>
+
+<p>বাবার ঘাড়ে এখনো ধার। মায়ের চোখের নিচে ক্লান্তির রেখা আরো গভীর হয়েছে। মামার বিশ হাজার টাকা গেছে — তিনি আজও জানেন না সেই টাকা আসলে কোথায় গেছে।</p>
+
+<p>আর নীলিমা? সে নতুন জীবনে আছে। নতুন মঞ্চ। নতুন দর্শক।</p>
+
+<p>খেলা চলছে।</p>
+
+</div>
+
+<div class="poem">
+<p>কিছু মানুষ থাকে —<br>
+যাদের ছায়া পড়ে না কখনো।<br>
+তুমি বুঝতে পারো না<br>
+তারা আলো নাকি অন্ধকার।<br>
+শুধু বুঝতে পারো —<br>
+তোমার আলো কমে যাচ্ছে।</p>
+</div>
+
+<div class="prose">
+
+<p>যদি কেউ এই গল্পে নিজেকে চেনেন —</p>
+
+<p>যদি কেউ বুঝতে পারেন যে তিনিও একা দেখছেন এবং বলতে পারছেন না —</p>
+
+<p>তাহলে শুধু এটুকু জানুন:</p>
+
+<p class="nd ctr bold">আপনি পাগল নন।</p>
+<p class="nd ctr bold">আপনি ভুল নন।</p>
+<p class="nd ctr bold">আপনি একা নন।</p>
+
+<p>সাহস আসতে সময় লাগে। আমার লেগেছে উনিশ বছর।</p>
+
+<p class="nd it">আর যদি মুখে কোনোদিন না-ও বলা যায় —<br>
+অন্তত লিখে রাখুন। নিজের জন্য।<br><br>
+কারণ লেখাটুকু থেকে যায়।<br>
+সাক্ষ্য হিসেবে।<br>
+নীরব সাক্ষী হিসেবে।</p>
+
+</div>
+</div>
+
+<!-- EPILOGUE -->
+<div class="ep-dark">
+  <div class="ep-orn">◆ &nbsp; ◆ &nbsp; ◆</div>
+  <p>এই গল্পে কোনো ভিলেন নেই।<br>কোনো নায়ক নেই।<br>কোনো সমাধান নেই।</p>
+  <p>শুধু একটা পরিবার আছে।<br>এবং একটা ছেলে আছে<br>যে দেখেছে সব —<br>এবং অবশেষে লিখেছে।</p>
+  <p class="ep-final">— ইভান ইলিয়াস, ২০২৬</p>
+</div>
+
+<div class="ep-light">
+  <p>যদি তোমার জীবনেও এমন কেউ থাকে —<br>
+  যে হাসে, কিন্তু হাসিটা চোখে পৌঁছায় না —<br>
+  তুমি যা দেখছ সেটা সত্যি।</p>
+  <p class="ep-strong">দেখতে পারাটাই প্রথম পদক্ষেপ।</p>
+</div>
+
+</div><!-- /book -->
+<button id="bb" onclick="backToCover()">↑</button>
+
+<script>
+function openBook(){
+  document.getElementById('cover').style.display='none';
+  document.getElementById('book').style.display='block';
+  document.getElementById('bb').style.display='flex';
+  window.scrollTo(0,0);
+}
+function backToCover(){
+  document.getElementById('book').style.display='none';
+  document.getElementById('cover').style.display='flex';
+  document.getElementById('bb').style.display='none';
+  window.scrollTo(0,0);
+}
+
+window.addEventListener('scroll',()=>{
+  const s=document.documentElement;
+  document.getElementById('pf').style.width=(s.scrollTop/(s.scrollHeight-s.clientHeight)*100)+'%';
+},{passive:true});
+
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('show');});
+},{threshold:0.15});
+document.querySelectorAll('[data-r]').forEach(el=>obs.observe(el));
+
+const secs=[
+  {id:'s0',l:'শিরোনাম'},{id:'ded',l:'উৎসর্গ'},
+  {id:'an',l:'লেখকের কথা'},{id:'epg',l:'উদ্ধৃতি'},
+  {id:'s1',l:'এক · শুরু'},
+  {id:'s2',l:'দুই · ২০০৯'},{id:'s3',l:'তিন · অভ্যাস'},
+  {id:'s4',l:'চার · ২০১৮'},{id:'s5',l:'পাঁচ · আবির'},
+  {id:'s6',l:'ছয় · ক্যান্সার'},{id:'s7',l:'সাত · রিপোর্ট'},
+  {id:'s8',l:'আট · কেমো'},{id:'s9',l:'নয় · পতন'},
+  {id:'s10',l:'দশ · ২০২৬'},{id:'s11',l:'এগারো · শেষ কথা'},
+];
+window.addEventListener('scroll',()=>{
+  let cur='';
+  secs.forEach(s=>{
+    const el=document.getElementById(s.id);
+    if(el&&el.getBoundingClientRect().top<=80)cur=s.l;
+  });
+  document.getElementById('nloc').textContent=cur;
+},{passive:true});
+</script>
+</body>
+</html>
