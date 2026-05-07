@@ -309,30 +309,145 @@ a{color:inherit;text-decoration:none;}
 .btn-icon:hover{color:var(--gold);border-color:var(--border-g);}
 
 /* ══════════════════════════════════════
-   GAME SECTION
+   GAME SECTION — ENHANCED
 ══════════════════════════════════════ */
-.game-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:16px;}
+
+/* Games Banner / Showcase Header */
+.games-showcase-banner{
+  position:relative;
+  border-radius:20px;
+  overflow:hidden;
+  padding:28px 32px;
+  margin-bottom:20px;
+  background:linear-gradient(135deg,#150a04 0%,#1a0e06 50%,#120d1a 100%);
+  border:1px solid rgba(192,98,42,0.25);
+  display:flex;align-items:center;justify-content:space-between;gap:20px;
+  flex-wrap:wrap;
+}
+.games-showcase-banner::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 40% 80% at 5% 50%, rgba(192,98,42,0.1) 0%, transparent 60%),
+    radial-gradient(ellipse 30% 60% at 95% 50%, rgba(124,92,191,0.08) 0%, transparent 60%);
+}
+.gsb-left{display:flex;align-items:center;gap:16px;position:relative;z-index:1;}
+.gsb-icon{
+  width:56px;height:56px;border-radius:16px;flex-shrink:0;
+  background:linear-gradient(135deg,rgba(192,98,42,0.3),rgba(212,168,67,0.15));
+  border:1px solid rgba(192,98,42,0.35);
+  display:grid;place-items:center;font-size:26px;
+}
+.gsb-text{}
+.gsb-label{font-size:10px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:var(--rust);margin-bottom:4px;}
+.gsb-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--text);}
+.gsb-sub{font-size:12.5px;color:var(--muted);margin-top:2px;}
+.gsb-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap;position:relative;z-index:1;}
+.gsb-count-pill{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:8px 16px;border-radius:20px;
+  background:rgba(192,98,42,0.12);border:1px solid rgba(192,98,42,0.25);
+  font-size:12px;font-weight:700;color:var(--rust);
+}
+.gsb-count-pill i{font-size:10px;}
+
+.game-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-bottom:16px;}
 .game-card{
   background:var(--bg2);border:1px solid var(--border);
-  border-radius:20px;overflow:hidden;
+  border-radius:22px;overflow:hidden;
   display:flex;flex-direction:column;
   transition:all .4s var(--ease);position:relative;
 }
-.game-card:hover{border-color:rgba(192,98,42,0.3);box-shadow:0 28px 70px rgba(0,0,0,0.5);transform:translateY(-6px);}
-.game-card::before{
+/* HIGHLIGHTED game cards with glow effect */
+.game-card.game-highlight{
+  border-color:rgba(192,98,42,0.3);
+  box-shadow:0 0 0 1px rgba(192,98,42,0.08), 0 8px 40px rgba(0,0,0,0.4);
+}
+.game-card.game-highlight:hover{
+  border-color:rgba(212,168,67,0.55);
+  box-shadow:
+    0 0 0 1px rgba(212,168,67,0.15),
+    0 32px 80px rgba(0,0,0,0.55),
+    0 0 60px rgba(192,98,42,0.12);
+  transform:translateY(-8px);
+}
+.game-card:not(.game-highlight):hover{border-color:rgba(192,98,42,0.3);box-shadow:0 28px 70px rgba(0,0,0,0.5);transform:translateY(-6px);}
+
+/* Animated shimmer top border */
+.game-card.game-highlight::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,transparent,var(--rust),var(--gold),var(--rust),transparent);
+  background-size:200% 100%;
+  animation:shimmer-game 3s linear infinite;
+  border-radius:22px 22px 0 0;
+  z-index:2;
+}
+@keyframes shimmer-game{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
+.game-card:not(.game-highlight)::before{
   content:'';position:absolute;top:0;left:0;right:0;height:2px;
   background:linear-gradient(90deg,var(--rust),var(--gold));
   transform:scaleX(0);transform-origin:left;transition:transform .4s var(--ease);
 }
-.game-card:hover::before{transform:scaleX(1);}
+.game-card:not(.game-highlight):hover::before{transform:scaleX(1);}
+
+/* "LIVE" badge on highlight cards */
+.game-live-badge{
+  position:absolute;top:14px;right:14px;z-index:3;
+  display:inline-flex;align-items:center;gap:5px;
+  padding:4px 10px;border-radius:20px;
+  background:rgba(212,168,67,0.18);
+  border:1px solid rgba(212,168,67,0.35);
+  font-size:10px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--gold);
+  backdrop-filter:blur(8px);
+}
+.game-live-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);animation:pulse 2s ease-in-out infinite;}
+
 .gc-visual{
-  height:130px;background:linear-gradient(135deg,#180e08,#251610);
+  height:150px;background:linear-gradient(135deg,#180e08,#251610);
   display:flex;align-items:center;justify-content:center;
   position:relative;overflow:hidden;border-bottom:1px solid var(--border);
 }
-.gc-emoji{font-size:52px;z-index:1;transition:transform .4s;filter:drop-shadow(0 4px 20px rgba(192,98,42,0.5));}
+.gc-visual.pong-vis{
+  background:linear-gradient(135deg,#08101a,#0e1825);
+}
+.gc-emoji{font-size:56px;z-index:1;transition:transform .4s;filter:drop-shadow(0 4px 20px rgba(192,98,42,0.5));}
+.gc-emoji.pong-em{filter:drop-shadow(0 4px 20px rgba(74,127,165,0.6));}
 .game-card:hover .gc-emoji{transform:scale(1.2) rotate(-5deg);}
-.gc-glow{position:absolute;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(192,98,42,0.2),transparent 70%);}
+.gc-glow{position:absolute;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(192,98,42,0.22),transparent 70%);}
+.gc-glow.pong-glow{background:radial-gradient(circle,rgba(74,127,165,0.25),transparent 70%);}
+
+/* Pong scanline decoration */
+.pong-scanlines{
+  position:absolute;inset:0;pointer-events:none;z-index:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(74,127,165,0.04) 3px,rgba(74,127,165,0.04) 4px);
+}
+.pong-ball-anim{
+  position:absolute;width:10px;height:10px;border-radius:50%;
+  background:#fff;box-shadow:0 0 12px rgba(74,127,165,0.9),0 0 24px rgba(74,127,165,0.5);
+  animation:ball-bounce 2.2s ease-in-out infinite;z-index:0;
+}
+@keyframes ball-bounce{
+  0%{left:25%;top:20%;}
+  25%{left:70%;top:65%;}
+  50%{left:55%;top:15%;}
+  75%{left:20%;top:70%;}
+  100%{left:25%;top:20%;}
+}
+.pong-paddle-l,.pong-paddle-r{
+  position:absolute;width:5px;height:38px;border-radius:3px;
+  background:rgba(74,127,165,0.7);box-shadow:0 0 10px rgba(74,127,165,0.5);
+  z-index:0;
+}
+.pong-paddle-l{left:12px;top:50%;transform:translateY(-50%);animation:paddle-l 2.2s ease-in-out infinite;}
+.pong-paddle-r{right:12px;top:50%;transform:translateY(-50%);animation:paddle-r 2.2s ease-in-out infinite;}
+@keyframes paddle-l{0%,100%{top:30%;}50%{top:62%;}}
+@keyframes paddle-r{0%,100%{top:65%;}50%{top:25%;}}
+.pong-divider{
+  position:absolute;left:50%;top:0;bottom:0;width:2px;transform:translateX(-50%);
+  background:repeating-linear-gradient(to bottom,rgba(255,255,255,0.15) 0,rgba(255,255,255,0.15) 8px,transparent 8px,transparent 16px);
+  z-index:0;
+}
+
 .gc-body{padding:24px;flex:1;display:flex;flex-direction:column;gap:10px;}
 .gc-badge{
   display:inline-flex;align-items:center;gap:5px;
@@ -341,6 +456,7 @@ a{color:inherit;text-decoration:none;}
   border:1px solid rgba(192,98,42,0.22);background:rgba(192,98,42,0.07);
   width:fit-content;
 }
+.gc-badge.pong-badge{color:var(--steel);border-color:rgba(74,127,165,0.22);background:rgba(74,127,165,0.07);}
 .gc-h{font-family:'Playfair Display',serif;font-size:20px;font-weight:800;line-height:1.2;}
 .gc-p{font-size:13px;color:var(--muted);line-height:1.75;flex:1;}
 .gc-actions{display:flex;gap:8px;margin-top:8px;}
@@ -353,6 +469,11 @@ a{color:inherit;text-decoration:none;}
   box-shadow:0 4px 16px rgba(192,98,42,0.25);
 }
 .btn-play:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(192,98,42,0.4);}
+.btn-play.pong-play{
+  background:linear-gradient(135deg,var(--steel),#3669a0);
+  box-shadow:0 4px 16px rgba(74,127,165,0.25);
+}
+.btn-play.pong-play:hover{box-shadow:0 10px 28px rgba(74,127,165,0.4);}
 .btn-play-soon{
   display:inline-flex;align-items:center;gap:9px;
   padding:12px 22px;border-radius:11px;
@@ -360,6 +481,27 @@ a{color:inherit;text-decoration:none;}
   color:var(--muted);font-size:13px;font-weight:600;
   background:var(--bg3);cursor:not-allowed;
 }
+
+/* Hack code block inside game card */
+.hack-codes{
+  display:flex;flex-direction:column;gap:8px;margin:8px 0;
+}
+.hack-code-row{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:8px 12px;
+  border-radius:8px;
+  border-left:3px solid;
+}
+.hack-code-row.green{background:rgba(57,255,20,0.05);border-color:#39ff14;}
+.hack-code-row.cyan{background:rgba(0,200,255,0.05);border-color:#00ccff;}
+.hack-code-row.amber{background:rgba(255,215,0,0.05);border-color:#ffd700;}
+.hack-code-row.red{background:rgba(255,40,40,0.05);border-color:#ff4444;}
+.hack-code-key{font-family:monospace;font-weight:700;font-size:11px;white-space:nowrap;letter-spacing:1px;min-width:90px;padding-top:1px;}
+.hack-code-row.green .hack-code-key{color:#39ff14;}
+.hack-code-row.cyan .hack-code-key{color:#00ccff;}
+.hack-code-row.amber .hack-code-key{color:#ffd700;}
+.hack-code-row.red .hack-code-key{color:#ff4444;}
+.hack-code-desc{font-size:11.5px;color:var(--muted);line-height:1.6;}
 
 /* ══════════════════════════════════════
    PORTFOLIO (self-reference) card
@@ -660,7 +802,7 @@ a{color:inherit;text-decoration:none;}
 /* ── Stage (overflow hidden) ── */
 .ss-stage{
   position:relative;
-  height:420px; /* fixed height so slides are big and visible */
+  height:420px;
   overflow:hidden;
 }
 
@@ -716,7 +858,6 @@ a{color:inherit;text-decoration:none;}
   border-radius:30px;
   overflow:hidden;
   background:#0a0a0a;
-  /* Realistic layered bezel */
   box-shadow:
     0 0 0 2px #1a1a1a,
     0 0 0 4px #0d0d0d,
@@ -730,7 +871,6 @@ a{color:inherit;text-decoration:none;}
     0 30px 80px rgba(0,0,0,0.75),
     0 0 50px rgba(212,168,67,0.18);
 }
-/* Notch */
 .ss-phone::before{
   content:'';
   position:absolute;top:0;left:50%;transform:translateX(-50%);
@@ -739,7 +879,6 @@ a{color:inherit;text-decoration:none;}
   border-radius:0 0 14px 14px;
   z-index:10;
 }
-/* Volume button */
 .ss-phone::after{
   content:'';
   position:absolute;left:-4px;top:72px;
@@ -747,7 +886,6 @@ a{color:inherit;text-decoration:none;}
   background:rgba(255,255,255,0.08);
   border-radius:2px 0 0 2px;
 }
-/* Screenshot image */
 .ss-img{
   width:100%;
   height:100%;
@@ -760,7 +898,6 @@ a{color:inherit;text-decoration:none;}
 }
 .ss-slide:hover .ss-img{ transform:scale(1.03); }
 
-/* Zoom hint on active */
 .ss-zoom-hint{
   position:absolute;
   bottom:10px;right:10px;
@@ -861,14 +998,12 @@ a{color:inherit;text-decoration:none;}
   opacity:1;pointer-events:all;
 }
 
-/* Inner layout */
 .lb-inner{
   display:flex;align-items:center;justify-content:center;
   gap:20px;width:100%;height:100%;padding:60px 20px 80px;
   position:relative;
 }
 
-/* Phone in lightbox */
 .lb-phone-wrap{
   position:relative;
   height:min(85vh, 680px);
@@ -886,7 +1021,6 @@ a{color:inherit;text-decoration:none;}
 .lb-overlay.lb-open .lb-phone-wrap{
   transform:scale(1);
 }
-/* notch */
 .lb-phone-wrap::before{
   content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
   width:80px;height:12px;background:#080808;border-radius:0 0 16px 16px;z-index:10;
@@ -899,7 +1033,6 @@ a{color:inherit;text-decoration:none;}
 }
 .lb-img.lb-loading{ opacity:0; }
 
-/* Label strip */
 .lb-label-strip{
   position:absolute;bottom:-44px;left:50%;transform:translateX(-50%);
   white-space:nowrap;
@@ -908,7 +1041,6 @@ a{color:inherit;text-decoration:none;}
 }
 .lb-label-strip strong{ color:var(--gold); }
 
-/* Arrows */
 .lb-arrow{
   width:52px;height:52px;border-radius:50%;flex-shrink:0;
   background:rgba(255,255,255,0.05);
@@ -926,7 +1058,6 @@ a{color:inherit;text-decoration:none;}
 }
 .lb-arrow.lb-disabled{ opacity:0.15;pointer-events:none; }
 
-/* Close button */
 .lb-close{
   position:absolute;top:18px;right:20px;
   width:44px;height:44px;border-radius:12px;
@@ -942,7 +1073,6 @@ a{color:inherit;text-decoration:none;}
   color:#ff6b6b;transform:scale(1.05);
 }
 
-/* Counter */
 .lb-counter{
   position:absolute;top:22px;left:50%;transform:translateX(-50%);
   font-size:13px;font-weight:700;color:var(--muted);
@@ -950,7 +1080,6 @@ a{color:inherit;text-decoration:none;}
 }
 .lb-counter strong{ color:var(--gold); }
 
-/* Dots row inside lightbox */
 .lb-dots{
   position:absolute;bottom:24px;left:50%;transform:translateX(-50%);
   display:flex;gap:7px;align-items:center;
@@ -964,10 +1093,6 @@ a{color:inherit;text-decoration:none;}
   width:22px;border-radius:3px;
   background:var(--gold);
 }
-
-/* ══════════════════════════════════════
-   RESPONSIVE
-══════════════════════════════════════ */
 
 /* ══════════════════════════════════════
    RESPONSIVE
@@ -1007,6 +1132,7 @@ a{color:inherit;text-decoration:none;}
   .coming-row{flex-direction:column;align-items:flex-start;}
   .app-body{padding:28px 22px;}
   .app-cta-row{flex-direction:column;align-items:flex-start;}
+  .gsb-right{width:100%;}
 }
 </style>
 </head>
@@ -1069,7 +1195,7 @@ a{color:inherit;text-decoration:none;}
       </div>
       <div class="stat-sep"></div>
       <div class="stat">
-        <div class="stat-n">1+</div>
+        <div class="stat-n">2</div>
         <div class="stat-l">Games</div>
       </div>
       <div class="stat-sep"></div>
@@ -1369,76 +1495,87 @@ a{color:inherit;text-decoration:none;}
     <div class="sec-label-line"></div>
   </div>
 
-  <div class="game-grid">
-
-<!-- Game 1 -->  
-<div class="game-card reveal">  
-  <div class="gc-visual">  
-    <div class="gc-glow"></div>  
-    <div class="gc-emoji">🎮</div>  
-  </div>  
-  <div class="gc-body">  
-    <div class="gc-badge"><i class="fa-solid fa-circle-play"></i> Game</div>  
-   <div class="gc-h">Snake Cyber — by Riyad Bin Alom</div>
-
-<div class="gc-p">
-
-  <p>Snake Cyber is a cyberpunk reimagining of the classic Nokia Snake game, built with an Acid Green theme, CRT scanline effect, and retro phosphor glow that gives the entire experience a distinct identity. The game is designed in the form of a Nokia phone — control the snake using the on-screen D-pad, keyboard Arrow keys, WASD, or mobile swipe gestures.</p>
-
-  <p>Eat food to grow, earn points, and survive without hitting your own tail. Chain multiple foods quickly to build a combo bonus. Each level pushes the snake faster — so stay sharp.</p>
-
-  <p>The game features a secret <strong>HACK CODE</strong> system, accessible anytime via the <strong>⌨ HACK</strong> button at the top of the phone. Four codes are hidden in the game:</p>
-
-  <div style="display:flex;flex-direction:column;gap:10px;margin:14px 0;">
-
-    <div style="display:flex;align-items:flex-start;gap:12px;padding:10px 14px;background:rgba(57,255,20,0.06);border-left:3px solid #39ff14;border-radius:0 8px 8px 0;">
-      <span style="font-family:monospace;font-weight:700;color:#39ff14;font-size:13px;white-space:nowrap;letter-spacing:1px;min-width:80px;">RIYAD1</span>
-      <span>Activates <strong>God Mode</strong> and doubles all points. You become unstoppable — walls and tail mean nothing.</span>
+  <!-- ── GAMES SHOWCASE BANNER ── -->
+  <div class="games-showcase-banner reveal">
+    <div class="gsb-left">
+      <div class="gsb-icon">🕹️</div>
+      <div class="gsb-text">
+        <div class="gsb-label">Game Arcade</div>
+        <div class="gsb-title">Riyad's Game Collection</div>
+        <div class="gsb-sub">Two original games, built from scratch — play them free, right here.</div>
+      </div>
     </div>
-
-    <div style="display:flex;align-items:flex-start;gap:12px;padding:10px 14px;background:rgba(0,200,255,0.06);border-left:3px solid #00ccff;border-radius:0 8px 8px 0;">
-      <span style="font-family:monospace;font-weight:700;color:#00ccff;font-size:13px;white-space:nowrap;letter-spacing:1px;min-width:80px;">SLOWMO</span>
-      <span>Reduces the snake's speed. Perfect for beginners or anyone who needs more time to react.</span>
+    <div class="gsb-right">
+      <div class="gsb-count-pill"><i class="fa-solid fa-circle-check"></i> 2 Games Live</div>
+      <div class="gsb-count-pill" style="color:var(--violet);border-color:rgba(124,92,191,0.25);background:rgba(124,92,191,0.1);"><i class="fa-solid fa-clock"></i> More Coming</div>
     </div>
-
-    <div style="display:flex;align-items:flex-start;gap:12px;padding:10px 14px;background:rgba(255,215,0,0.06);border-left:3px solid #ffd700;border-radius:0 8px 8px 0;">
-      <span style="font-family:monospace;font-weight:700;color:#ffd700;font-size:13px;white-space:nowrap;letter-spacing:1px;min-width:80px;">CYBER3X</span>
-      <span>Triples every point you earn. Stack this strategically and watch your score skyrocket.</span>
-    </div>
-
-    <div style="display:flex;align-items:flex-start;gap:12px;padding:10px 14px;background:rgba(255,40,40,0.06);border-left:3px solid #ff2828;border-radius:0 8px 8px 0;">
-  <span style="font-family:monospace;font-weight:700;color:#ff4444;font-size:13px;white-space:nowrap;letter-spacing:1px;min-width:130px;">RIYADBINALOM</span>
-  <span>The most dangerous code. Walls become visible and instantly deadly. One wrong turn near the edge — game over. <strong>Only for the brave.</strong></span>
-</div>
-
   </div>
 
-  <p>Enter any code via the <strong>⌨ HACK</strong> button, press <strong>GO</strong>, and it activates instantly. To remove an active code, open the panel and press <strong>DEACTIVATE</strong>.</p>
+  <div class="game-grid">
 
-</div>
- 
-    <div class="gc-actions">  
-      <a href="snake-game.html" class="btn-play"><i class="fa-solid fa-play"></i> Play Now</a>  
-      <span class="btn-ghost"><i class="fa-solid fa-circle-info"></i> Info</span>  
-    </div>  
-  </div>  
-</div>
-
-    <!-- Game 2 placeholder -->
-    <div class="game-card reveal rd1" style="opacity:0.5;">
-      <div class="gc-visual" style="background:linear-gradient(135deg,#130c18,#1d1028);">
-        <div class="gc-glow" style="background:radial-gradient(circle,rgba(124,92,191,0.2),transparent 70%);"></div>
-        <div class="gc-emoji" style="filter:drop-shadow(0 4px 20px rgba(124,92,191,0.5));">🧩</div>
+    <!-- ── Game 1: Snake Cyber ── -->
+    <div class="game-card game-highlight reveal">
+      <div class="game-live-badge"><span class="game-live-dot"></span> Live</div>
+      <div class="gc-visual">
+        <div class="gc-glow"></div>
+        <div class="gc-emoji">🎮</div>
       </div>
       <div class="gc-body">
-        <div class="gc-badge" style="color:var(--violet);border-color:rgba(124,92,191,0.22);background:rgba(124,92,191,0.07);"><i class="fa-solid fa-wand-magic-sparkles"></i> Coming Soon</div>
-        <div class="gc-h">Next Game</div>
+        <div class="gc-badge"><i class="fa-solid fa-circle-play"></i> Snake Game</div>
+        <div class="gc-h">Snake Cyber — by Riyad Bin Alom</div>
+        <div class="gc-p">
+          <p style="margin-bottom:10px;">A cyberpunk reimagining of the classic Nokia Snake game. Acid Green theme, CRT scanline effect, and retro phosphor glow. Control via D-pad, keyboard, or swipe. Eat, grow, survive — and enter secret HACK codes for special powers.</p>
+
+          <div class="hack-codes">
+            <div class="hack-code-row green">
+              <span class="hack-code-key">RIYAD1</span>
+              <span class="hack-code-desc"><strong>God Mode</strong> — walls &amp; tail mean nothing. Points doubled.</span>
+            </div>
+            <div class="hack-code-row cyan">
+              <span class="hack-code-key">SLOWMO</span>
+              <span class="hack-code-desc">Reduces snake speed — perfect for beginners.</span>
+            </div>
+            <div class="hack-code-row amber">
+              <span class="hack-code-key">CYBER3X</span>
+              <span class="hack-code-desc">Triple points. Watch your score skyrocket.</span>
+            </div>
+            <div class="hack-code-row red">
+              <span class="hack-code-key">RIYADBINALOM</span>
+              <span class="hack-code-desc">Walls become instantly deadly. <strong>Only for the brave.</strong></span>
+            </div>
+          </div>
+        </div>
+        <div class="gc-actions">
+          <a href="snake-game.html" class="btn-play"><i class="fa-solid fa-play"></i> Play Now</a>
+          <span class="btn-ghost"><i class="fa-solid fa-circle-info"></i> Info</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Game 2: Pong ── -->
+    <div class="game-card game-highlight reveal rd1">
+      <div class="game-live-badge" style="color:var(--steel);border-color:rgba(74,127,165,0.4);background:rgba(74,127,165,0.15);"><span class="game-live-dot" style="background:var(--steel);"></span> New</div>
+      <div class="gc-visual pong-vis">
+        <!-- Animated pong decorations -->
+        <div class="pong-scanlines"></div>
+        <div class="pong-divider"></div>
+        <div class="pong-paddle-l"></div>
+        <div class="pong-paddle-r"></div>
+        <div class="pong-ball-anim"></div>
+        <div class="gc-glow pong-glow"></div>
+        <div class="gc-emoji pong-em" style="position:relative;z-index:2;">🏓</div>
+      </div>
+      <div class="gc-body">
+        <div class="gc-badge pong-badge"><i class="fa-solid fa-table-tennis-paddle-ball"></i> Pong Game · New!</div>
+        <div class="gc-h">Pong — Classic Reimagined</div>
         <p class="gc-p">
-          Something new is being built in the lab.
-          A new challenge, a new experience. Stay tuned.
+          The legendary two-paddle classic — rebuilt with a sleek modern coat. Smooth ball physics, responsive controls, and that satisfying &quot;tok&quot; every time the ball connects. Whether you're going solo against the AI or challenging a friend, this is pure arcade joy.
+          <br><br>
+          Simple to pick up. Hard to put down. The oldest game in the book, made fresh again.
         </p>
         <div class="gc-actions">
-          <span class="btn-play-soon"><i class="fa-solid fa-clock"></i> Not Yet Available</span>
+          <a href="pong.html" class="btn-play pong-play"><i class="fa-solid fa-play"></i> Play Now</a>
+          <span class="btn-ghost"><i class="fa-solid fa-circle-info"></i> Info</span>
         </div>
       </div>
     </div>
@@ -1452,6 +1589,7 @@ a{color:inherit;text-decoration:none;}
     <div class="coming-pill"><i class="fa-solid fa-store"></i> Business Tool</div>
     <div class="coming-pill"><i class="fa-solid fa-scroll"></i> Bangla Blog Platform</div>
     <div class="coming-pill"><i class="fa-solid fa-mobile-screen"></i> HISAB iOS</div>
+    <div class="coming-pill"><i class="fa-solid fa-gamepad"></i> Game #3</div>
     <div class="coming-pill"><i class="fa-solid fa-ellipsis"></i> More</div>
   </div>
 
@@ -1491,9 +1629,8 @@ a{color:inherit;text-decoration:none;}
   var LABELS = ['Home Screen','Dashboard','Add Expense','Income Track','Analytics','Budget View','History','Settings'];
   var SRCS   = ['pho1.jpg','pho2.jpg','pho3.jpg','pho4.jpg','pho5.jpg','pho6.jpg','pho7.jpg','pho8.jpg'];
   var TOTAL  = 8;
-  var SLIDE_W = 220; // px per slide slot (width + padding)
+  var SLIDE_W = 220;
 
-  // Slider elements
   var track   = document.getElementById('ssTrack');
   var stage   = document.getElementById('ssStage');
   var slides  = Array.from(track.querySelectorAll('.ss-slide'));
@@ -1502,7 +1639,6 @@ a{color:inherit;text-decoration:none;}
   var btnPrev = document.getElementById('ssPrev');
   var btnNext = document.getElementById('ssNext');
 
-  // Lightbox elements
   var lbOverlay  = document.getElementById('lbOverlay');
   var lbImg      = document.getElementById('lbImg');
   var lbLabel    = document.getElementById('lbLabel');
@@ -1519,14 +1655,12 @@ a{color:inherit;text-decoration:none;}
   var isDragging = false;
   var dragStartX = 0, dragDeltaX = 0;
 
-  // ── Compute track offset so current slide is centered ──
   function getTrackOffset(idx) {
     var stageW = stage.offsetWidth;
     var slideCenter = idx * SLIDE_W + (SLIDE_W / 2);
     return slideCenter - stageW / 2;
   }
 
-  // ── Apply visual state to all slides ──
   function updateSlides(idx) {
     slides.forEach(function(s, i) {
       s.classList.remove('ss-active', 'ss-neighbor');
@@ -1536,20 +1670,17 @@ a{color:inherit;text-decoration:none;}
     });
   }
 
-  // ── Update dots ──
   function updateDots(idx) {
     dots.forEach(function(d, i) {
       d.classList.toggle('ss-dot-active', i === idx);
     });
   }
 
-  // ── Arrow state ──
   function updateArrows(idx) {
     btnPrev.classList.toggle('ss-disabled', idx === 0);
     btnNext.classList.toggle('ss-disabled', idx === TOTAL - 1);
   }
 
-  // ── Main goTo ──
   function goTo(idx, instant) {
     idx = Math.max(0, Math.min(TOTAL - 1, idx));
     current = idx;
@@ -1562,7 +1693,6 @@ a{color:inherit;text-decoration:none;}
     if (numEl) numEl.textContent = idx + 1;
   }
 
-  // ── Auto-play ──
   function startAuto() {
     stopAuto();
     autoTimer = setInterval(function() {
@@ -1573,16 +1703,13 @@ a{color:inherit;text-decoration:none;}
     if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
   }
 
-  // ── Arrow clicks ──
   btnPrev.addEventListener('click', function() { stopAuto(); goTo(current - 1); startAuto(); });
   btnNext.addEventListener('click', function() { stopAuto(); goTo(current + 1); startAuto(); });
 
-  // ── Dot clicks ──
   dots.forEach(function(d, i) {
     d.addEventListener('click', function() { stopAuto(); goTo(i); startAuto(); });
   });
 
-  // ── Slide click: non-active → focus; active → open lightbox ──
   slides.forEach(function(s, i) {
     s.addEventListener('click', function(e) {
       if (isDragging || Math.abs(dragDeltaX) > 5) return;
@@ -1594,11 +1721,9 @@ a{color:inherit;text-decoration:none;}
     });
   });
 
-  // ── Pause on hover ──
   stage.addEventListener('mouseenter', stopAuto);
   stage.addEventListener('mouseleave', startAuto);
 
-  // ── Drag (mouse + touch) ──
   function onDragStart(x) {
     isDragging = true; dragStartX = x; dragDeltaX = 0;
     stopAuto();
@@ -1617,7 +1742,6 @@ a{color:inherit;text-decoration:none;}
     else if (dragDeltaX > 50)  goTo(current - 1);
     else                        goTo(current);
     startAuto();
-    // reset delta after tiny delay so click handler sees it
     setTimeout(function(){ dragDeltaX = 0; }, 50);
   }
 
@@ -1628,23 +1752,18 @@ a{color:inherit;text-decoration:none;}
   track.addEventListener('touchmove',  function(e){ onDragMove(e.touches[0].clientX);  }, {passive:true});
   track.addEventListener('touchend',   onDragEnd);
 
-  // ── Keyboard (slider) ──
   document.addEventListener('keydown', function(e) {
-    if (lbOverlay.classList.contains('lb-open')) return; // handled by lightbox
+    if (lbOverlay.classList.contains('lb-open')) return;
     if (e.key === 'ArrowLeft')  { stopAuto(); goTo(current - 1); startAuto(); }
     if (e.key === 'ArrowRight') { stopAuto(); goTo(current + 1); startAuto(); }
   });
 
-  // ── Resize ──
   var resizeTO;
   window.addEventListener('resize', function() {
     clearTimeout(resizeTO);
     resizeTO = setTimeout(function(){ goTo(current, true); }, 120);
   });
 
-  // ──────────────────────────────────────────────
-  //  LIGHTBOX
-  // ──────────────────────────────────────────────
   function openLightbox(idx) {
     stopAuto();
     lbCurrent = idx;
@@ -1675,7 +1794,6 @@ a{color:inherit;text-decoration:none;}
   function lbGoTo(idx) {
     idx = Math.max(0, Math.min(TOTAL - 1, idx));
     lbCurrent = idx;
-    // Animate phone: quick scale dip
     lbPhone.style.transform = 'scale(0.94)';
     setTimeout(function(){
       renderLightbox(idx);
@@ -1687,17 +1805,14 @@ a{color:inherit;text-decoration:none;}
   lbPrev.addEventListener('click',  function(){ lbGoTo(lbCurrent - 1); });
   lbNext.addEventListener('click',  function(){ lbGoTo(lbCurrent + 1); });
 
-  // Lightbox dot clicks
   lbDotItems.forEach(function(d, i) {
     d.addEventListener('click', function(){ lbGoTo(i); });
   });
 
-  // Close on backdrop click
   lbOverlay.addEventListener('click', function(e) {
     if (e.target === lbOverlay) closeLightbox();
   });
 
-  // Lightbox keyboard
   document.addEventListener('keydown', function(e) {
     if (!lbOverlay.classList.contains('lb-open')) return;
     if (e.key === 'Escape')      closeLightbox();
@@ -1705,7 +1820,6 @@ a{color:inherit;text-decoration:none;}
     if (e.key === 'ArrowRight')  lbGoTo(lbCurrent + 1);
   });
 
-  // Lightbox swipe
   var lbDragX = 0, lbDragging = false;
   lbOverlay.addEventListener('touchstart', function(e){ lbDragging = true; lbDragX = e.touches[0].clientX; }, {passive:true});
   lbOverlay.addEventListener('touchmove',  function(e){ if(!lbDragging) return; }, {passive:true});
@@ -1717,7 +1831,6 @@ a{color:inherit;text-decoration:none;}
     else if (dx > 50) lbGoTo(lbCurrent - 1);
   });
 
-  // ── Init ──
   goTo(0, true);
   setTimeout(startAuto, 1000);
 })();
