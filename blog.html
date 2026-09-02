@@ -23,6 +23,13 @@ a{color:inherit;text-decoration:none;}
 .navbar{position:sticky;top:0;z-index:200;height:var(--nav-h);display:flex;align-items:center;background:rgba(14,13,11,0.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
 .nav-inner{max-width:var(--maxw);margin:0 auto;padding:0 28px;width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;}
 .nav-brand{display:flex;align-items:center;gap:14px;flex-shrink:0;}
+.nav-admin-icon{
+  width:32px;height:32px;border-radius:8px;
+  background:rgba(212,168,67,0.06);border:1px solid rgba(212,168,67,0.16);
+  color:var(--gold);display:grid;place-items:center;font-size:12px;
+  transition:all .2s;text-decoration:none;flex-shrink:0;
+}
+.nav-admin-icon:hover{background:rgba(212,168,67,0.14);border-color:rgba(212,168,67,0.35);transform:translateY(-1px);}
 .nav-logo{width:42px;height:42px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--rust));display:grid;place-items:center;font-family:'Playfair Display',serif;font-weight:900;font-size:20px;color:#0e0d0b;box-shadow:0 4px 20px rgba(212,168,67,0.25);}
 .nav-name{font-family:'Playfair Display',serif;font-weight:600;font-size:17px;}
 .nav-links{display:flex;align-items:center;gap:4px;}
@@ -184,7 +191,7 @@ a{color:inherit;text-decoration:none;}
   border-radius:14px;
 }
 
-/* ── (unused, kept for future use) ── */
+/* ── নীরব সাক্ষী ARTICLE ── */
 .article-nirab {
   padding: 48px 0;
   border-bottom: 1px solid var(--border2);
@@ -308,6 +315,9 @@ a{color:inherit;text-decoration:none;}
     <div class="nav-brand">
       <div class="nav-logo">R</div>
       <div class="nav-name">Riyad Bin Alom</div>
+      <a href="admin.html" title="Admin" class="nav-admin-icon">
+        <i class="fa-solid fa-pen-nib"></i>
+      </a>
     </div>
     <div class="nav-links">
       <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
@@ -344,23 +354,6 @@ a{color:inherit;text-decoration:none;}
     <!-- ARTICLES -->
     <main>
 <!-- ADMIN:INSERT-AFTER -->
-
-<!-- POST:post-1788390164058:START -->
-      <article class="article reveal visible">
-        <div class="article-meta">
-          <span class="article-tag">Test</span>
-          <span class="article-date">2026</span>
-        </div>
-        <h1 class="article-h1">FIRST POST</h1>
-
-        <p class="article-p">My first post with admin panal</p>
-
-        <div class="article-quote">
-          <p>Admin</p>
-        </div>
-      </article>
-<!-- POST:post-1788390164058:END -->
-
 
 <!-- POST:post-1:START -->
       <!-- Article 1 -->
