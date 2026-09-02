@@ -1,212 +1,222 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Admin Panel — Riyad Bin Alom</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>Admin · Riyad Bin Alom</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 <style>
 :root{
-  --bg:#0e0d0b;--bg2:#141210;--bg3:#1a1713;
-  --text:#e8e0d0;--muted:#a09080;--gold:#d4a843;--rust:#c0622a;
-  --emerald:#27ae74;--danger:#e05a4e;
-  --border:rgba(212,168,67,0.12);--border2:rgba(232,224,208,0.06);
-  --card:rgba(255,255,255,0.025);--maxw:920px;--nav-h:72px;
+  --bg:#0a0a0c;
+  --panel:#111114;
+  --panel2:#17171b;
+  --line:#232328;
+  --line-soft:#1c1c20;
+  --text:#f2f2f4;
+  --sub:#8b8b95;
+  --dim:#5a5a63;
+  --accent:#6e6bff;
+  --accent2:#a78bfa;
+  --accent-soft:rgba(110,107,255,0.1);
+  --good:#3ecf8e;
+  --bad:#f2545b;
+  --warn:#f5b942;
+  --radius:14px;
+  --maxw:980px;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-html{scroll-behavior:smooth;}
-body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;min-height:100vh;}
-body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:0.35;}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  line-height:1.6;
+  font-size:14.5px;
+}
+h1,h2,h3,.brand,.card-title,.btn{font-family:'Space Grotesk',sans-serif;}
 a{color:inherit;text-decoration:none;}
 
-/* NAVBAR */
-.navbar{position:sticky;top:0;z-index:200;height:var(--nav-h);display:flex;align-items:center;background:rgba(14,13,11,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
-.nav-inner{max-width:var(--maxw);margin:0 auto;padding:0 24px;width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;}
-.nav-brand{display:flex;align-items:center;gap:12px;}
-.nav-logo{width:42px;height:42px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--rust));display:grid;place-items:center;font-family:'Playfair Display',serif;font-weight:900;font-size:20px;color:#0e0d0b;box-shadow:0 4px 20px rgba(212,168,67,0.25);}
-.nav-name{font-family:'Playfair Display',serif;font-weight:600;font-size:16px;}
-.nav-badge{
-  font-size:10px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;
-  color:var(--gold);padding:5px 12px;border-radius:20px;
-  border:1px solid var(--border);background:rgba(212,168,67,0.06);
+/* Subtle grid background */
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px);
+  background-size:32px 32px;
 }
-.conn-dot{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--muted);}
-.conn-dot .dot{width:7px;height:7px;border-radius:50%;background:var(--danger);transition:background .3s;}
-.conn-dot.on .dot{background:var(--emerald);box-shadow:0 0 8px rgba(39,174,116,0.6);}
-
-.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;position:relative;z-index:1;}
-
-/* HERO */
-.page-hero{padding:56px 0 40px;border-bottom:1px solid var(--border2);}
-.page-eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:11px;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;}
-.page-eyebrow::before{content:'';width:28px;height:1px;background:var(--gold);opacity:0.7;}
-.page-h1{font-family:'Playfair Display',serif;font-size:clamp(32px,5vw,50px);font-weight:900;line-height:1.05;letter-spacing:-0.02em;margin-bottom:10px;}
-.page-sub{color:var(--muted);font-size:15px;max-width:60ch;}
-
-/* SECTION */
-.section{padding:40px 0;}
-.card{
-  background:var(--card);border:1px solid var(--border2);border-radius:18px;
-  padding:28px;margin-bottom:20px;
-  transition:border-color .3s;
+body::after{
+  content:'';position:fixed;top:-10%;left:50%;transform:translateX(-50%);
+  width:600px;height:400px;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse, rgba(110,107,255,0.08) 0%, transparent 70%);
 }
-.card:hover{border-color:var(--border);}
-.card-head{display:flex;align-items:center;gap:12px;margin-bottom:22px;}
-.card-icon{width:38px;height:38px;border-radius:10px;background:rgba(212,168,67,0.08);border:1px solid rgba(212,168,67,0.15);display:grid;place-items:center;color:var(--gold);font-size:15px;flex-shrink:0;}
-.card-title{font-family:'Playfair Display',serif;font-size:19px;font-weight:700;}
-.card-note{font-size:12.5px;color:var(--muted);margin-top:2px;}
 
-label{display:block;font-size:11.5px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;margin-top:18px;}
+/* TOPBAR */
+.topbar{
+  position:sticky;top:0;z-index:100;
+  height:64px;display:flex;align-items:center;
+  background:rgba(10,10,12,0.85);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--line);
+}
+.topbar-inner{max-width:var(--maxw);margin:0 auto;padding:0 24px;width:100%;display:flex;align-items:center;justify-content:space-between;}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;}
+.brand-mark{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;font-size:13px;font-weight:700;color:#fff;}
+.status-pill{
+  display:inline-flex;align-items:center;gap:7px;
+  font-size:12px;font-weight:500;color:var(--dim);
+  padding:6px 12px;border-radius:20px;border:1px solid var(--line);
+}
+.status-pill .dot{width:6px;height:6px;border-radius:50%;background:var(--bad);transition:background .3s;}
+.status-pill.live .dot{background:var(--good);box-shadow:0 0 6px rgba(62,207,142,0.6);}
+.status-pill.live{color:var(--sub);}
+
+.wrap{max-width:var(--maxw);margin:0 auto;padding:36px 24px 80px;position:relative;z-index:1;}
+
+/* Tabs */
+.tabs{display:flex;gap:4px;margin-bottom:28px;border-bottom:1px solid var(--line);}
+.tab{
+  padding:11px 4px;margin-right:22px;font-size:13.5px;font-weight:600;color:var(--dim);
+  cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;
+}
+.tab.active{color:var(--text);border-color:var(--accent);}
+.tab:hover:not(.active){color:var(--sub);}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;animation:fadeIn .3s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+/* Panel */
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:26px;margin-bottom:18px;}
+.panel-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px;}
+.panel-title{font-size:16px;font-weight:600;}
+.panel-sub{font-size:12.5px;color:var(--dim);margin-top:3px;}
+
+label{display:block;font-size:12px;font-weight:600;color:var(--sub);margin-bottom:7px;margin-top:16px;}
 label:first-of-type{margin-top:0;}
-input[type="text"],input[type="password"],textarea,select{
-  width:100%;background:rgba(255,255,255,0.03);border:1px solid var(--border2);
-  border-radius:12px;padding:13px 16px;color:var(--text);
-  font-family:'DM Sans',sans-serif;font-size:14.5px;outline:none;transition:all .2s;
+input[type="text"],input[type="password"],textarea{
+  width:100%;background:var(--panel2);border:1px solid var(--line);
+  border-radius:10px;padding:11px 14px;color:var(--text);
+  font-family:'Inter',sans-serif;font-size:13.5px;outline:none;transition:all .18s;
 }
-input::placeholder,textarea::placeholder{color:rgba(160,144,128,0.4);}
-input:focus,textarea:focus,select:focus{border-color:rgba(212,168,67,0.4);background:rgba(212,168,67,0.03);box-shadow:0 0 0 4px rgba(212,168,67,0.06);}
-textarea{min-height:160px;resize:vertical;line-height:1.8;font-family:'DM Sans',sans-serif;}
+input::placeholder,textarea::placeholder{color:var(--dim);}
+input:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft);}
+textarea{min-height:150px;resize:vertical;line-height:1.75;}
 
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-.token-row{display:flex;gap:10px;align-items:flex-end;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.token-row{display:flex;gap:8px;}
 .token-row > div{flex:1;}
-.eye-btn{
-  width:48px;height:48px;flex-shrink:0;border-radius:12px;
-  border:1px solid var(--border2);background:rgba(255,255,255,0.03);
-  color:var(--muted);cursor:pointer;font-size:15px;transition:all .2s;
+.icon-square{
+  width:42px;height:42px;flex-shrink:0;border-radius:10px;
+  border:1px solid var(--line);background:var(--panel2);
+  color:var(--dim);cursor:pointer;font-size:14px;transition:all .18s;
+  display:grid;place-items:center;
 }
-.eye-btn:hover{color:var(--gold);border-color:var(--border);}
+.icon-square:hover{color:var(--text);border-color:#33333a;}
 
-/* Lang toggle pills */
-.lang-toggle{display:flex;gap:8px;margin-top:8px;}
-.lang-pill{
-  flex:1;padding:11px;border-radius:11px;text-align:center;cursor:pointer;
-  border:1px solid var(--border2);color:var(--muted);font-size:13.5px;font-weight:600;
-  background:rgba(255,255,255,0.02);transition:all .2s;
-}
-.lang-pill.active{color:#0e0d0b;background:linear-gradient(135deg,var(--gold),var(--rust));border-color:transparent;}
+.hint{font-size:11.5px;color:var(--dim);margin-top:8px;display:flex;align-items:center;gap:6px;}
+.hint i{font-size:10px;}
+
+/* Lang segmented */
+.seg{display:inline-flex;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:3px;margin-top:8px;}
+.seg-btn{padding:8px 18px;border-radius:8px;font-size:12.5px;font-weight:600;color:var(--dim);cursor:pointer;transition:all .18s;}
+.seg-btn.active{background:var(--accent);color:#fff;}
 
 /* Buttons */
 .btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:9px;
-  padding:14px 26px;border-radius:12px;border:none;
-  font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;
-  transition:all .25s;width:100%;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:12px 22px;border-radius:10px;border:none;cursor:pointer;
+  font-size:13.5px;font-weight:600;transition:all .2s;
 }
-.btn-gold{background:linear-gradient(135deg,var(--gold),var(--rust));color:#0e0d0b;box-shadow:0 6px 24px rgba(212,168,67,0.22);}
-.btn-gold:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(212,168,67,0.32);}
-.btn-gold:disabled{opacity:0.55;cursor:not-allowed;transform:none;box-shadow:none;}
-.btn-ghost{background:rgba(255,255,255,0.03);border:1px solid var(--border2);color:var(--muted);width:auto;padding:12px 20px;font-size:13px;}
-.btn-ghost:hover{color:var(--gold);border-color:var(--border);}
+.btn-primary{background:var(--accent);color:#fff;}
+.btn-primary:hover{background:#5b58f0;}
+.btn-primary:disabled{opacity:0.5;cursor:not-allowed;}
+.btn-outline{background:transparent;border:1px solid var(--line);color:var(--sub);}
+.btn-outline:hover{border-color:#33333a;color:var(--text);}
 .btn-row{display:flex;gap:10px;margin-top:22px;}
-.btn-row .btn{width:auto;flex:1;}
 
-/* Status message */
-.status{margin-top:16px;padding:13px 16px;border-radius:12px;font-size:13.5px;display:none;align-items:center;gap:10px;}
-.status.show{display:flex;}
-.status.success{background:rgba(39,174,116,0.08);color:var(--emerald);border:1px solid rgba(39,174,116,0.25);}
-.status.error{background:rgba(224,90,78,0.08);color:var(--danger);border:1px solid rgba(224,90,78,0.25);}
-.status.loading{background:rgba(212,168,67,0.08);color:var(--gold);border:1px solid rgba(212,168,67,0.25);}
-.status.info{background:rgba(74,127,165,0.08);color:#6ab0d4;border:1px solid rgba(74,127,165,0.25);}
-
-/* Preview card */
-.preview-label{font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
-.preview-box{
-  background:var(--bg2);border:1px solid var(--border2);border-radius:14px;
-  padding:26px;
-}
-.pv-meta{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
-.pv-tag{font-size:10.5px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold);padding:3px 10px;border-radius:20px;border:1px solid rgba(212,168,67,0.2);background:rgba(212,168,67,0.06);}
-.pv-date{font-size:12px;color:var(--muted);}
-.pv-h1{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;margin-bottom:14px;color:var(--text);}
-.pv-p{font-size:14px;color:var(--muted);line-height:1.8;margin-bottom:10px;}
-.pv-empty{color:rgba(160,144,128,0.45);font-style:italic;font-size:13.5px;}
-
-/* Post rows */
-.post-row{
-  display:flex;align-items:center;justify-content:space-between;gap:12px;
-  padding:16px 0;border-bottom:1px solid var(--border2);
-}
-.post-row:last-child{border-bottom:none;}
-.post-row-main{flex:1;min-width:0;}
-.post-row-title{font-size:14px;color:var(--text);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.post-row-meta{display:flex;align-items:center;gap:8px;margin-top:5px;}
-.post-row-badge{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);padding:3px 9px;border-radius:20px;border:1px solid rgba(212,168,67,0.2);background:rgba(212,168,67,0.05);white-space:nowrap;}
-.post-row-date{font-size:11.5px;color:var(--muted);}
-.post-row-locked{font-size:10px;color:var(--muted);opacity:0.6;font-style:italic;}
-.post-row-actions{display:flex;gap:8px;flex-shrink:0;}
-.icon-btn{
-  width:36px;height:36px;border-radius:9px;border:1px solid var(--border2);
-  background:rgba(255,255,255,0.02);color:var(--muted);cursor:pointer;
-  font-size:13px;transition:all .2s;display:grid;place-items:center;
-}
-.icon-btn:hover{color:var(--gold);border-color:var(--border);}
-.icon-btn.danger:hover{color:var(--danger);border-color:rgba(224,90,78,0.35);background:rgba(224,90,78,0.06);}
-.empty-note{color:var(--muted);font-size:13px;text-align:center;padding:20px 0;}
+/* Alert */
+.alert{margin-top:14px;padding:11px 14px;border-radius:10px;font-size:13px;display:none;align-items:center;gap:9px;}
+.alert.show{display:flex;}
+.alert-ok{background:rgba(62,207,142,0.08);color:var(--good);border:1px solid rgba(62,207,142,0.2);}
+.alert-bad{background:rgba(242,84,91,0.08);color:var(--bad);border:1px solid rgba(242,84,91,0.2);}
+.alert-load{background:var(--accent-soft);color:var(--accent2);border:1px solid rgba(110,107,255,0.22);}
 
 /* Editing banner */
-.editing-banner{
-  display:none;align-items:center;gap:10px;
-  padding:12px 16px;border-radius:12px;margin-bottom:18px;
-  background:rgba(212,168,67,0.08);border:1px solid rgba(212,168,67,0.22);
-  color:var(--gold);font-size:13px;font-weight:600;
-}
-.editing-banner.show{display:flex;}
+.edit-banner{display:none;align-items:center;justify-content:space-between;gap:10px;padding:11px 15px;border-radius:10px;margin-bottom:18px;background:rgba(245,185,66,0.08);border:1px solid rgba(245,185,66,0.22);color:var(--warn);font-size:12.5px;font-weight:600;}
+.edit-banner.show{display:flex;}
 
-.footer{padding:36px 0;border-top:1px solid var(--border2);text-align:center;color:var(--muted);font-size:13px;}
-.footer span{color:var(--gold);}
+/* Preview */
+.preview{background:var(--panel2);border:1px solid var(--line-soft);border-radius:12px;padding:22px;margin-top:20px;}
+.preview-tag{font-size:12px;color:var(--dim);margin-bottom:12px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;}
+.pv-meta{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
+.pv-badge{font-size:10.5px;font-weight:600;color:var(--accent2);padding:3px 10px;border-radius:20px;background:rgba(167,139,250,0.1);border:1px solid rgba(167,139,250,0.2);}
+.pv-date{font-size:11.5px;color:var(--dim);}
+.pv-h{font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:700;margin-bottom:12px;}
+.pv-p{font-size:13.5px;color:var(--sub);line-height:1.8;margin-bottom:9px;}
+.pv-quote{border-left:2px solid var(--accent);padding-left:12px;font-style:italic;color:var(--text);font-size:13.5px;margin-top:10px;}
+.pv-placeholder{color:var(--dim);font-style:italic;font-size:13px;}
+
+/* Post rows */
+.post-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:15px 0;border-bottom:1px solid var(--line-soft);}
+.post-row:last-child{border-bottom:none;}
+.post-main{flex:1;min-width:0;}
+.post-title{font-size:13.5px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.post-meta{display:flex;align-items:center;gap:10px;margin-top:5px;flex-wrap:wrap;}
+.post-badge{font-size:10px;font-weight:600;color:var(--accent2);padding:2px 9px;border-radius:20px;background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.18);}
+.post-time{font-size:11px;color:var(--dim);display:inline-flex;align-items:center;gap:5px;}
+.post-actions{display:flex;gap:6px;flex-shrink:0;}
+.post-btn{width:32px;height:32px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--dim);cursor:pointer;font-size:12px;transition:all .18s;display:grid;place-items:center;}
+.post-btn:hover{color:var(--text);border-color:#33333a;}
+.post-btn.danger:hover{color:var(--bad);border-color:rgba(242,84,91,0.3);background:rgba(242,84,91,0.06);}
+.empty{color:var(--dim);font-size:13px;text-align:center;padding:24px 0;}
+
+.footer-note{text-align:center;font-size:12px;color:var(--dim);margin-top:32px;}
 
 @media(max-width:640px){
-  .row2{grid-template-columns:1fr;}
-  .wrap{padding:0 18px;}
-  .nav-badge{display:none;}
+  .grid2{grid-template-columns:1fr;}
+  .wrap{padding:24px 16px 60px;}
   .btn-row{flex-direction:column;}
+  .btn-row .btn{width:100%;}
 }
 </style>
 </head>
 <body>
 
-<nav class="navbar">
-  <div class="nav-inner">
-    <div class="nav-brand">
-      <div class="nav-logo">R</div>
-      <div class="nav-name">Admin Panel</div>
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="brand-mark">R</div>
+      Admin
     </div>
-    <div style="display:flex;align-items:center;gap:14px;">
-      <span class="nav-badge">Blog Manager</span>
-      <span class="conn-dot" id="connDot"><span class="dot"></span> <span id="connText">Not connected</span></span>
-    </div>
+    <div class="status-pill" id="connPill"><span class="dot"></span> <span id="connLabel">Offline</span></div>
   </div>
-</nav>
+</div>
 
 <div class="wrap">
-  <section class="page-hero">
-    <div class="page-eyebrow">রিয়াদ বিন আলম</div>
-    <h1 class="page-h1">Blog Admin Panel</h1>
-    <p class="page-sub">Post করো, Edit করো, Delete করো — সবকিছু এক জায়গা থেকে, ঠিক Facebook-এর মতো সহজে।</p>
-  </section>
 
-  <div class="section">
+  <div class="tabs">
+    <div class="tab active" data-tab="write" onclick="switchTab('write')">Write</div>
+    <div class="tab" data-tab="posts" onclick="switchTab('posts')">Posts</div>
+    <div class="tab" data-tab="connect" onclick="switchTab('connect')">Connection</div>
+  </div>
 
-    <!-- CONNECTION -->
-    <div class="card">
-      <div class="card-head">
-        <div class="card-icon"><i class="fa-brands fa-github"></i></div>
+  <!-- ══════ CONNECT TAB ══════ -->
+  <div class="tab-panel" id="tab-connect">
+    <div class="panel">
+      <div class="panel-head">
         <div>
-          <div class="card-title">GitHub Connection</div>
-          <div class="card-note">এটা একবার সেভ করলেই হবে — প্রতিবার লাগবে না</div>
+          <div class="panel-title">GitHub Connection</div>
+          <div class="panel-sub">Set up once — stays saved in this browser</div>
         </div>
       </div>
 
       <label>Personal Access Token</label>
       <div class="token-row">
         <div><input type="password" id="token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"></div>
-        <button class="eye-btn" type="button" onclick="toggleTokenVisibility()"><i class="fa-solid fa-eye" id="eyeIcon"></i></button>
+        <button class="icon-square" onclick="toggleTokenVisibility()"><i class="fa-solid fa-eye" id="eyeIcon"></i></button>
       </div>
-      <div class="card-note" style="margin-top:8px;">Token শুধু তোমার browser-এ (localStorage) থাকে — কোথাও পাঠানো হয় না।</div>
+      <div class="hint"><i class="fa-solid fa-lock"></i> Stored only in your browser's localStorage — never sent anywhere else.</div>
 
-      <div class="row2">
+      <div class="grid2">
         <div>
           <label>Repo Owner</label>
           <input type="text" id="owner" value="riyadbinalom78-ai">
@@ -217,93 +227,91 @@ textarea{min-height:160px;resize:vertical;line-height:1.8;font-family:'DM Sans',
         </div>
       </div>
 
-      <button class="btn btn-gold" style="margin-top:20px;" onclick="saveConnection()">
-        <i class="fa-solid fa-plug"></i> Connect করো
-      </button>
-      <div class="status" id="connStatus"></div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="saveConnection()"><i class="fa-solid fa-plug"></i> Connect</button>
+      </div>
+      <div class="alert" id="connStatus"></div>
     </div>
+  </div>
 
-    <!-- NEW / EDIT POST -->
-    <div class="card">
-      <div class="card-head">
-        <div class="card-icon"><i class="fa-solid fa-pen-nib"></i></div>
+  <!-- ══════ WRITE TAB ══════ -->
+  <div class="tab-panel active" id="tab-write">
+    <div class="panel">
+      <div class="panel-head">
         <div>
-          <div class="card-title" id="formTitle">নতুন Post লিখো</div>
-          <div class="card-note">নিচে লিখলেই সরাসরি তোমার blog.html-এ যোগ হয়ে যাবে</div>
+          <div class="panel-title" id="formTitle">New Post</div>
+          <div class="panel-sub">Publishes directly into blog.html</div>
         </div>
       </div>
 
-      <div class="editing-banner" id="editingBanner">
-        <i class="fa-solid fa-pen"></i> <span id="editingBannerText">Edit মোডে আছো</span>
+      <div class="edit-banner" id="editingBanner">
+        <span><i class="fa-solid fa-pen"></i> Editing: <span id="editingBannerText"></span></span>
+        <span style="cursor:pointer;opacity:0.8;" onclick="cancelEdit()">✕</span>
       </div>
 
-      <label>ভাষা</label>
-      <div class="lang-toggle">
-        <div class="lang-pill active" id="langEnBtn" onclick="setLang('en')">English</div>
-        <div class="lang-pill" id="langBnBtn" onclick="setLang('bn')">বাংলা</div>
+      <label>Language</label>
+      <div class="seg">
+        <div class="seg-btn active" id="langEnBtn" onclick="setLang('en')">English</div>
+        <div class="seg-btn" id="langBnBtn" onclick="setLang('bn')">বাংলা</div>
       </div>
 
-      <label>Title / শিরোনাম</label>
-      <input type="text" id="title" placeholder="যেমন: The Silence Between Words" oninput="updatePreview()">
+      <label>Title</label>
+      <input type="text" id="title" placeholder="e.g. The Silence Between Words" oninput="updatePreview()">
 
       <label>Tag / Category</label>
-      <input type="text" id="tag" placeholder="যেমন: Faith · Reflection" oninput="updatePreview()">
+      <input type="text" id="tag" placeholder="e.g. Faith · Reflection" oninput="updatePreview()">
 
-      <label>মূল লেখা (প্রতিটা paragraph আলাদা লাইনে লিখো)</label>
-      <textarea id="content" placeholder="তোমার লেখা এখানে লিখো... প্রতিটা অনুচ্ছেদের মাঝে একটা ফাঁকা লাইন রাখো।" oninput="updatePreview()"></textarea>
+      <label>Content — separate paragraphs with a blank line</label>
+      <textarea id="content" placeholder="Write here..." oninput="updatePreview()"></textarea>
 
-      <label>Closing Quote (ঐচ্ছিক)</label>
-      <input type="text" id="quote" placeholder="একটা highlighted quote, না চাইলে ফাঁকা রাখো" oninput="updatePreview()">
+      <label>Closing quote (optional)</label>
+      <input type="text" id="quote" placeholder="A highlighted line, or leave blank" oninput="updatePreview()">
 
-      <div style="margin-top:24px;">
-        <div class="preview-label"><i class="fa-solid fa-eye"></i> Live Preview</div>
-        <div class="preview-box" id="previewBox">
-          <div class="pv-empty">লেখা শুরু করলেই এখানে preview দেখতে পাবে...</div>
-        </div>
+      <div class="preview">
+        <div class="preview-tag"><i class="fa-solid fa-eye"></i> Preview</div>
+        <div id="previewBox"><div class="pv-placeholder">Start typing to see a preview...</div></div>
       </div>
 
       <div class="btn-row">
-        <button class="btn btn-gold" id="publishBtn" onclick="submitPost()">
-          <i class="fa-solid fa-rocket"></i> <span id="publishBtnText">Publish করো</span>
+        <button class="btn btn-primary" id="publishBtn" onclick="submitPost()">
+          <i class="fa-solid fa-paper-plane"></i> <span id="publishBtnText">Publish</span>
         </button>
-        <button class="btn btn-ghost" id="cancelEditBtn" style="display:none;" onclick="cancelEdit()">
-          <i class="fa-solid fa-xmark"></i> বাতিল
-        </button>
+        <button class="btn btn-outline" id="cancelEditBtn" style="display:none;" onclick="cancelEdit()">Cancel</button>
       </div>
-      <div class="status" id="publishStatus"></div>
+      <div class="alert" id="publishStatus"></div>
     </div>
-
-    <!-- ALL POSTS -->
-    <div class="card">
-      <div class="card-head">
-        <div class="card-icon"><i class="fa-solid fa-list-ul"></i></div>
-        <div>
-          <div class="card-title">Blog-এ থাকা সব Post</div>
-          <div class="card-note">এখান থেকে Edit বা Delete করো</div>
-        </div>
-      </div>
-      <div id="postsList">
-        <div class="empty-note">Connection সেভ করলে এখানে দেখাবে।</div>
-      </div>
-      <button class="btn btn-ghost" style="margin-top:16px;width:100%;" onclick="loadPostsList()">
-        <i class="fa-solid fa-arrows-rotate"></i> Refresh করো
-      </button>
-    </div>
-
   </div>
-</div>
 
-<footer class="footer">
-  © 2026 · <span>Riyad Bin Alom</span> · Admin Panel
-</footer>
+  <!-- ══════ POSTS TAB ══════ -->
+  <div class="tab-panel" id="tab-posts">
+    <div class="panel">
+      <div class="panel-head">
+        <div>
+          <div class="panel-title">All Posts</div>
+          <div class="panel-sub">Edit or delete anything below</div>
+        </div>
+        <button class="btn btn-outline" onclick="loadPostsList()"><i class="fa-solid fa-arrows-rotate"></i> Refresh</button>
+      </div>
+      <div id="postsList"><div class="empty">Connect first to see your posts.</div></div>
+    </div>
+  </div>
+
+  <div class="footer-note">Riyad Bin Alom · Admin Panel</div>
+</div>
 
 <script>
 const API_BASE = 'https://api.github.com';
 const INSERT_MARK = '<!-- ADMIN:INSERT-AFTER -->';
 let currentLang = 'en';
-let editingId = null; // null = creating new post; otherwise = id of post being edited
-let managedPostIds = new Set(); // ids that carry POST:id:START/END markers (editable/deletable)
-let cachedFileSha = null;
+let editingId = null;
+
+/* ── Tabs ── */
+function switchTab(name){
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  if(name === 'posts') loadPostsList();
+}
 
 /* ── Token visibility ── */
 function toggleTokenVisibility(){
@@ -321,7 +329,7 @@ function setLang(lang){
   updatePreview();
 }
 
-/* ── Load saved connection ── */
+/* ── Connection persistence ── */
 function loadConnection(){
   const token = localStorage.getItem('gh_token');
   const owner = localStorage.getItem('gh_owner');
@@ -332,52 +340,49 @@ function loadConnection(){
   if(token){
     setConnected(true);
     loadPostsList();
+  } else {
+    switchTab('connect');
   }
 }
 
 function setConnected(on){
-  const dot = document.getElementById('connDot');
-  const text = document.getElementById('connText');
-  dot.classList.toggle('on', on);
-  text.textContent = on ? 'Connected' : 'Not connected';
+  const pill = document.getElementById('connPill');
+  pill.classList.toggle('live', on);
+  document.getElementById('connLabel').textContent = on ? 'Connected' : 'Offline';
 }
 
 function showStatus(id, msg, type){
   const el = document.getElementById(id);
   el.innerHTML = msg;
-  el.className = 'status show ' + type;
+  el.className = 'alert show ' + type;
 }
 
-/* ── Connection ── */
 async function saveConnection(){
   const token = document.getElementById('token').value.trim();
   const owner = document.getElementById('owner').value.trim();
   const repo = document.getElementById('repo').value.trim();
+  if(!token){ showStatus('connStatus', '<i class="fa-solid fa-triangle-exclamation"></i> Enter a token first', 'alert-bad'); return; }
 
-  if(!token){ showStatus('connStatus', '<i class="fa-solid fa-triangle-exclamation"></i> Token দাও আগে', 'error'); return; }
-
-  showStatus('connStatus', '<i class="fa-solid fa-spinner fa-spin"></i> যাচাই করা হচ্ছে...', 'loading');
-
+  showStatus('connStatus', '<i class="fa-solid fa-spinner fa-spin"></i> Verifying...', 'alert-load');
   try {
     const res = await fetch(`${API_BASE}/repos/${owner}/${repo}`, {
       headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github+json' }
     });
-    if(!res.ok) throw new Error('Repo access করা যায়নি — token বা repo নাম চেক করো');
-
+    if(!res.ok) throw new Error('Could not access the repo — check token or repo name');
     localStorage.setItem('gh_token', token);
     localStorage.setItem('gh_owner', owner);
     localStorage.setItem('gh_repo', repo);
-
     setConnected(true);
-    showStatus('connStatus', '<i class="fa-solid fa-circle-check"></i> সফলভাবে connect হয়েছে!', 'success');
+    showStatus('connStatus', '<i class="fa-solid fa-circle-check"></i> Connected successfully', 'alert-ok');
     loadPostsList();
+    setTimeout(() => switchTab('write'), 700);
   } catch(e){
     setConnected(false);
-    showStatus('connStatus', '<i class="fa-solid fa-circle-xmark"></i> ' + e.message, 'error');
+    showStatus('connStatus', '<i class="fa-solid fa-circle-xmark"></i> ' + e.message, 'alert-bad');
   }
 }
 
-/* ── GitHub file helpers ── */
+/* ── GitHub helpers ── */
 async function getFile(path){
   const token = localStorage.getItem('gh_token');
   const owner = localStorage.getItem('gh_owner');
@@ -388,20 +393,14 @@ async function getFile(path){
   if(res.status === 404) return null;
   if(!res.ok) throw new Error(`GitHub error: ${res.status}`);
   const data = await res.json();
-  return {
-    sha: data.sha,
-    content: decodeURIComponent(escape(atob(data.content.replace(/\n/g, ''))))
-  };
+  return { sha: data.sha, content: decodeURIComponent(escape(atob(data.content.replace(/\n/g, '')))) };
 }
 
 async function putFile(path, contentStr, sha, message){
   const token = localStorage.getItem('gh_token');
   const owner = localStorage.getItem('gh_owner');
   const repo = localStorage.getItem('gh_repo');
-  const body = {
-    message: message,
-    content: btoa(unescape(encodeURIComponent(contentStr)))
-  };
+  const body = { message, content: btoa(unescape(encodeURIComponent(contentStr))) };
   if(sha) body.sha = sha;
   const res = await fetch(`${API_BASE}/repos/${owner}/${repo}/contents/${path}`, {
     method: 'PUT',
@@ -415,27 +414,33 @@ async function putFile(path, contentStr, sha, message){
   return res.json();
 }
 
-/* ── Build article HTML matching the site's design ── */
 function escapeHtml(str){
   const div = document.createElement('div');
   div.textContent = str;
   return div.innerHTML;
 }
 
-function buildArticleBlock(id, title, tag, content, quote, lang){
-  const dateStr = new Date().getFullYear();
+function formatDateTime(d){
+  const datePart = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  const timePart = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+  return `${datePart} · ${timePart}`;
+}
+
+/* ── Build article block (preserves original date-time if editing) ── */
+function buildArticleBlock(id, title, tag, content, quote, lang, dateTimeStr){
   const h1Class = lang === 'bn' ? 'article-h1-bn' : 'article-h1';
   const paragraphs = content.split(/\n\s*\n/).map(p => p.trim()).filter(Boolean);
   const pHtml = paragraphs.map(p => `        <p class="article-p">${escapeHtml(p)}</p>`).join('\n\n');
   const quoteHtml = quote && quote.trim()
     ? `\n\n        <div class="article-quote">\n          <p>${escapeHtml(quote.trim())}</p>\n        </div>`
     : '';
+  const finalDateTime = dateTimeStr || formatDateTime(new Date());
 
   return `<!-- POST:${id}:START -->
       <article class="article reveal visible">
         <div class="article-meta">
           <span class="article-tag">${escapeHtml(tag || 'Reflection')}</span>
-          <span class="article-date">${dateStr}</span>
+          <span class="article-date">${escapeHtml(finalDateTime)}</span>
         </div>
         <h1 class="${h1Class}">${escapeHtml(title)}</h1>
 
@@ -445,7 +450,7 @@ ${pHtml}${quoteHtml}
 `;
 }
 
-/* ── Live preview ── */
+/* ── Preview ── */
 function updatePreview(){
   const title = document.getElementById('title').value.trim();
   const tag = document.getElementById('tag').value.trim();
@@ -454,31 +459,28 @@ function updatePreview(){
   const box = document.getElementById('previewBox');
 
   if(!title && !content){
-    box.innerHTML = '<div class="pv-empty">লেখা শুরু করলেই এখানে preview দেখতে পাবে...</div>';
+    box.innerHTML = '<div class="pv-placeholder">Start typing to see a preview...</div>';
     return;
   }
-
   const paragraphs = content.split(/\n\s*\n/).map(p => p.trim()).filter(Boolean);
-  let html = `<div class="pv-meta"><span class="pv-tag">${escapeHtml(tag || 'Reflection')}</span><span class="pv-date">${new Date().getFullYear()}</span></div>`;
-  html += `<div class="pv-h1">${escapeHtml(title || 'শিরোনাম এখানে দেখাবে')}</div>`;
-  if(paragraphs.length){
-    paragraphs.forEach(p => { html += `<div class="pv-p">${escapeHtml(p)}</div>`; });
-  } else {
-    html += `<div class="pv-p" style="opacity:0.5;font-style:italic;">লেখা এখানে দেখাবে...</div>`;
-  }
-  if(quote){
-    html += `<div class="pv-p" style="border-left:3px solid var(--gold);padding-left:14px;font-style:italic;color:var(--text);margin-top:14px;">${escapeHtml(quote)}</div>`;
-  }
+  let html = `<div class="pv-meta"><span class="pv-badge">${escapeHtml(tag || 'Reflection')}</span><span class="pv-date">${formatDateTime(new Date())}</span></div>`;
+  html += `<div class="pv-h">${escapeHtml(title || 'Your title here')}</div>`;
+  if(paragraphs.length){ paragraphs.forEach(p => { html += `<div class="pv-p">${escapeHtml(p)}</div>`; }); }
+  else { html += `<div class="pv-p" style="opacity:0.5;font-style:italic;">Your text will appear here...</div>`; }
+  if(quote){ html += `<div class="pv-quote">${escapeHtml(quote)}</div>`; }
   box.innerHTML = html;
 }
 
-/* ── Form mode switching ── */
-function enterEditMode(id, title, tag, contentText, quoteText, lang){
+/* ── Edit mode ── */
+let editingOriginalDateTime = null;
+
+function enterEditMode(id, title, tag, contentText, quoteText, lang, dateTimeStr){
   editingId = id;
-  document.getElementById('formTitle').textContent = 'Post Edit করো';
+  editingOriginalDateTime = dateTimeStr;
+  document.getElementById('formTitle').textContent = 'Edit Post';
   document.getElementById('editingBanner').classList.add('show');
-  document.getElementById('editingBannerText').textContent = `"${title}" edit করছ`;
-  document.getElementById('publishBtnText').textContent = 'Update করো';
+  document.getElementById('editingBannerText').textContent = title;
+  document.getElementById('publishBtnText').textContent = 'Save Changes';
   document.getElementById('cancelEditBtn').style.display = 'inline-flex';
 
   document.getElementById('title').value = title;
@@ -487,14 +489,15 @@ function enterEditMode(id, title, tag, contentText, quoteText, lang){
   document.getElementById('quote').value = quoteText;
   setLang(lang);
   updatePreview();
-  window.scrollTo({ top: document.querySelector('.card:nth-of-type(2)')?.offsetTop - 90 || 0, behavior: 'smooth' });
+  switchTab('write');
 }
 
 function cancelEdit(){
   editingId = null;
-  document.getElementById('formTitle').textContent = 'নতুন Post লিখো';
+  editingOriginalDateTime = null;
+  document.getElementById('formTitle').textContent = 'New Post';
   document.getElementById('editingBanner').classList.remove('show');
-  document.getElementById('publishBtnText').textContent = 'Publish করো';
+  document.getElementById('publishBtnText').textContent = 'Publish';
   document.getElementById('cancelEditBtn').style.display = 'none';
   document.getElementById('title').value = '';
   document.getElementById('tag').value = '';
@@ -504,147 +507,117 @@ function cancelEdit(){
   updatePreview();
 }
 
-/* ── Create or Update (routes based on editingId) ── */
 async function submitPost(){
-  if(editingId){
-    await updatePost();
-  } else {
-    await publishPost();
-  }
+  if(editingId){ await updatePost(); } else { await publishPost(); }
 }
 
-/* ── Publish new post ── */
 async function publishPost(){
   const title = document.getElementById('title').value.trim();
   const tag = document.getElementById('tag').value.trim();
   const content = document.getElementById('content').value.trim();
   const quote = document.getElementById('quote').value.trim();
 
-  if(!localStorage.getItem('gh_token')){
-    showStatus('publishStatus', '<i class="fa-solid fa-triangle-exclamation"></i> আগে GitHub Connection সেভ করো', 'error');
-    return;
-  }
-  if(!title || !content){
-    showStatus('publishStatus', '<i class="fa-solid fa-triangle-exclamation"></i> Title আর লেখা আবশ্যক', 'error');
-    return;
-  }
+  if(!localStorage.getItem('gh_token')){ showStatus('publishStatus', '<i class="fa-solid fa-triangle-exclamation"></i> Connect to GitHub first', 'alert-bad'); return; }
+  if(!title || !content){ showStatus('publishStatus', '<i class="fa-solid fa-triangle-exclamation"></i> Title and content are required', 'alert-bad'); return; }
 
   const btn = document.getElementById('publishBtn');
   btn.disabled = true;
-  showStatus('publishStatus', '<i class="fa-solid fa-spinner fa-spin"></i> Publish হচ্ছে...', 'loading');
+  showStatus('publishStatus', '<i class="fa-solid fa-spinner fa-spin"></i> Publishing...', 'alert-load');
 
   try {
     const file = await getFile('blog.html');
-    if(!file) throw new Error('blog.html খুঁজে পাওয়া যায়নি repo-তে');
-    if(!file.content.includes(INSERT_MARK)) throw new Error('blog.html-এ admin marker পাওয়া যায়নি');
+    if(!file) throw new Error('blog.html not found in repo');
+    if(!file.content.includes(INSERT_MARK)) throw new Error('Admin marker not found in blog.html');
 
     const newId = 'post-' + Date.now();
     const block = buildArticleBlock(newId, title, tag, content, quote, currentLang);
     const updatedContent = file.content.replace(INSERT_MARK, INSERT_MARK + '\n\n' + block);
 
     await putFile('blog.html', updatedContent, file.sha, `Add blog post: ${title}`);
-
-    showStatus('publishStatus', '<i class="fa-solid fa-circle-check"></i> Publish হয়ে গেছে! ১-২ মিনিটের মধ্যে site-এ দেখাবে।', 'success');
+    showStatus('publishStatus', '<i class="fa-solid fa-circle-check"></i> Published! Live in a minute or two.', 'alert-ok');
     cancelEdit();
     loadPostsList();
   } catch(e){
-    showStatus('publishStatus', '<i class="fa-solid fa-circle-xmark"></i> ' + e.message, 'error');
+    showStatus('publishStatus', '<i class="fa-solid fa-circle-xmark"></i> ' + e.message, 'alert-bad');
   } finally {
     btn.disabled = false;
   }
 }
 
-/* ── Update existing post ── */
 async function updatePost(){
   const title = document.getElementById('title').value.trim();
   const tag = document.getElementById('tag').value.trim();
   const content = document.getElementById('content').value.trim();
   const quote = document.getElementById('quote').value.trim();
 
-  if(!title || !content){
-    showStatus('publishStatus', '<i class="fa-solid fa-triangle-exclamation"></i> Title আর লেখা আবশ্যক', 'error');
-    return;
-  }
+  if(!title || !content){ showStatus('publishStatus', '<i class="fa-solid fa-triangle-exclamation"></i> Title and content are required', 'alert-bad'); return; }
 
   const btn = document.getElementById('publishBtn');
   btn.disabled = true;
-  showStatus('publishStatus', '<i class="fa-solid fa-spinner fa-spin"></i> Update হচ্ছে...', 'loading');
+  showStatus('publishStatus', '<i class="fa-solid fa-spinner fa-spin"></i> Saving...', 'alert-load');
 
   try {
     const file = await getFile('blog.html');
-    if(!file) throw new Error('blog.html খুঁজে পাওয়া যায়নি');
+    if(!file) throw new Error('blog.html not found');
 
     const startTag = `<!-- POST:${editingId}:START -->`;
     const endTag = `<!-- POST:${editingId}:END -->`;
     const startIdx = file.content.indexOf(startTag);
     const endIdx = file.content.indexOf(endTag);
-    if(startIdx === -1 || endIdx === -1) throw new Error('এই post-টা খুঁজে পাওয়া যায়নি — হয়তো আগে থেকেই মুছে গেছে');
+    if(startIdx === -1 || endIdx === -1) throw new Error('This post could not be found — it may have already been deleted');
 
-    const newBlock = buildArticleBlock(editingId, title, tag, content, quote, currentLang).trim();
-    const updatedContent =
-      file.content.slice(0, startIdx) +
-      newBlock +
-      file.content.slice(endIdx + endTag.length);
+    const newBlock = buildArticleBlock(editingId, title, tag, content, quote, currentLang, editingOriginalDateTime).trim();
+    const updatedContent = file.content.slice(0, startIdx) + newBlock + file.content.slice(endIdx + endTag.length);
 
     await putFile('blog.html', updatedContent, file.sha, `Update blog post: ${title}`);
-
-    showStatus('publishStatus', '<i class="fa-solid fa-circle-check"></i> Update হয়ে গেছে!', 'success');
+    showStatus('publishStatus', '<i class="fa-solid fa-circle-check"></i> Saved!', 'alert-ok');
     cancelEdit();
     loadPostsList();
   } catch(e){
-    showStatus('publishStatus', '<i class="fa-solid fa-circle-xmark"></i> ' + e.message, 'error');
+    showStatus('publishStatus', '<i class="fa-solid fa-circle-xmark"></i> ' + e.message, 'alert-bad');
   } finally {
     btn.disabled = false;
   }
 }
 
-/* ── Delete post ── */
 async function deletePost(id, title){
-  if(!confirm(`"${title}" post-টা কি সত্যিই মুছে ফেলতে চাও? এটা ফিরিয়ে আনা যাবে না।`)) return;
-
+  if(!confirm(`Delete "${title}"? This cannot be undone.`)) return;
   try {
     const file = await getFile('blog.html');
-    if(!file) throw new Error('blog.html খুঁজে পাওয়া যায়নি');
-
+    if(!file) throw new Error('blog.html not found');
     const startTag = `<!-- POST:${id}:START -->`;
     const endTag = `<!-- POST:${id}:END -->`;
     const startIdx = file.content.indexOf(startTag);
     const endIdx = file.content.indexOf(endTag);
-    if(startIdx === -1 || endIdx === -1) throw new Error('এই post-টা খুঁজে পাওয়া যায়নি');
-
-    const updatedContent =
-      file.content.slice(0, startIdx) +
-      file.content.slice(endIdx + endTag.length);
-
+    if(startIdx === -1 || endIdx === -1) throw new Error('Post not found');
+    const updatedContent = file.content.slice(0, startIdx) + file.content.slice(endIdx + endTag.length);
     await putFile('blog.html', updatedContent, file.sha, `Delete blog post: ${title}`);
-
     if(editingId === id) cancelEdit();
     loadPostsList();
   } catch(e){
-    alert('মুছতে সমস্যা হয়েছে: ' + e.message);
+    alert('Could not delete: ' + e.message);
   }
 }
 
-/* ── Load edit data for a post ── */
 async function startEditPost(id){
   try {
     const file = await getFile('blog.html');
-    if(!file) throw new Error('blog.html পাওয়া যায়নি');
-
+    if(!file) throw new Error('blog.html not found');
     const startTag = `<!-- POST:${id}:START -->`;
     const endTag = `<!-- POST:${id}:END -->`;
     const startIdx = file.content.indexOf(startTag);
     const endIdx = file.content.indexOf(endTag);
-    if(startIdx === -1 || endIdx === -1) throw new Error('এই post-টা খুঁজে পাওয়া যায়নি');
+    if(startIdx === -1 || endIdx === -1) throw new Error('Post not found');
 
     const blockHtml = file.content.slice(startIdx + startTag.length, endIdx);
     const parser = new DOMParser();
     const doc = parser.parseFromString(`<div>${blockHtml}</div>`, 'text/html');
     const article = doc.querySelector('article');
-    if(!article) throw new Error('Post পড়তে সমস্যা হয়েছে');
+    if(!article) throw new Error('Could not read this post');
 
     const h1 = article.querySelector('.article-h1, .article-h1-bn');
     const tagEl = article.querySelector('.article-tag');
+    const dateEl = article.querySelector('.article-date');
     const quoteEl = article.querySelector('.article-quote p');
     const paragraphs = Array.from(article.querySelectorAll('.article-p')).map(p => p.textContent.trim());
     const lang = h1 && h1.classList.contains('article-h1-bn') ? 'bn' : 'en';
@@ -655,24 +628,24 @@ async function startEditPost(id){
       tagEl ? tagEl.textContent.trim() : '',
       paragraphs.join('\n\n'),
       quoteEl ? quoteEl.textContent.trim() : '',
-      lang
+      lang,
+      dateEl ? dateEl.textContent.trim() : null
     );
   } catch(e){
-    alert('Edit-এর জন্য load করতে সমস্যা: ' + e.message);
+    alert('Could not load post for editing: ' + e.message);
   }
 }
 
-/* ── List all managed posts ── */
 async function loadPostsList(){
   const listEl = document.getElementById('postsList');
   if(!localStorage.getItem('gh_token')){
-    listEl.innerHTML = '<div class="empty-note">Connection সেভ করলে এখানে দেখাবে।</div>';
+    listEl.innerHTML = '<div class="empty">Connect first to see your posts.</div>';
     return;
   }
-  listEl.innerHTML = '<div class="empty-note"><i class="fa-solid fa-spinner fa-spin"></i> লোড হচ্ছে...</div>';
+  listEl.innerHTML = '<div class="empty"><i class="fa-solid fa-spinner fa-spin"></i> Loading...</div>';
   try {
     const file = await getFile('blog.html');
-    if(!file) throw new Error('blog.html পাওয়া যায়নি');
+    if(!file) throw new Error('blog.html not found');
 
     const regex = /<!-- POST:([\w-]+):START -->([\s\S]*?)<!-- POST:\1:END -->/g;
     let match;
@@ -690,27 +663,26 @@ async function loadPostsList(){
       const h1 = article.querySelector('.article-h1, .article-h1-bn');
       const tagEl = article.querySelector('.article-tag');
       const dateEl = article.querySelector('.article-date');
-      const titleText = h1 ? h1.textContent.trim() : '(শিরোনাম নেই)';
+      const titleText = h1 ? h1.textContent.trim() : '(untitled)';
 
       html += `<div class="post-row">
-        <div class="post-row-main">
-          <div class="post-row-title">${escapeHtml(titleText)}</div>
-          <div class="post-row-meta">
-            <span class="post-row-badge">${tagEl ? escapeHtml(tagEl.textContent.trim()) : ''}</span>
-            <span class="post-row-date">${dateEl ? escapeHtml(dateEl.textContent.trim()) : ''}</span>
+        <div class="post-main">
+          <div class="post-title">${escapeHtml(titleText)}</div>
+          <div class="post-meta">
+            <span class="post-badge">${tagEl ? escapeHtml(tagEl.textContent.trim()) : ''}</span>
+            <span class="post-time"><i class="fa-regular fa-clock"></i> ${dateEl ? escapeHtml(dateEl.textContent.trim()) : ''}</span>
           </div>
         </div>
-        <div class="post-row-actions">
-          <button class="icon-btn" onclick="startEditPost('${id}')" title="Edit"><i class="fa-solid fa-pen"></i></button>
-          <button class="icon-btn danger" onclick="deletePost('${id}', ${JSON.stringify(titleText)})" title="Delete"><i class="fa-solid fa-trash"></i></button>
+        <div class="post-actions">
+          <button class="post-btn" onclick="startEditPost('${id}')" title="Edit"><i class="fa-solid fa-pen"></i></button>
+          <button class="post-btn danger" onclick="deletePost('${id}', ${JSON.stringify(titleText)})" title="Delete"><i class="fa-solid fa-trash"></i></button>
         </div>
       </div>`;
       count++;
     }
-
-    listEl.innerHTML = count ? html : '<div class="empty-note">কোনো post পাওয়া যায়নি।</div>';
+    listEl.innerHTML = count ? html : '<div class="empty">No posts found.</div>';
   } catch(e){
-    listEl.innerHTML = `<div class="empty-note" style="color:var(--danger);">লোড করতে সমস্যা: ${escapeHtml(e.message)}</div>`;
+    listEl.innerHTML = `<div class="empty" style="color:var(--bad);">Error loading: ${escapeHtml(e.message)}</div>`;
   }
 }
 
