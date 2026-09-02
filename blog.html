@@ -184,7 +184,7 @@ a{color:inherit;text-decoration:none;}
   border-radius:14px;
 }
 
-/* ── নীরব সাক্ষী ARTICLE ── */
+/* ── (unused, kept for future use) ── */
 .article-nirab {
   padding: 48px 0;
   border-bottom: 1px solid var(--border2);
@@ -343,7 +343,9 @@ a{color:inherit;text-decoration:none;}
 
     <!-- ARTICLES -->
     <main>
+<!-- ADMIN:INSERT-AFTER -->
 
+<!-- POST:post-1:START -->
       <!-- Article 1 -->
       <article class="article reveal">
         <div class="article-meta">
@@ -374,7 +376,9 @@ a{color:inherit;text-decoration:none;}
           <p>I am looking for souls that don't need a script to exist. Until I find them, I will embrace this solitude — lonely, yes, but honest.</p>
         </div>
       </article>
+<!-- POST:post-1:END -->
 
+<!-- POST:post-2:START -->
       <!-- Article 2 -->
       <article class="article reveal">
         <div class="article-meta">
@@ -407,7 +411,9 @@ a{color:inherit;text-decoration:none;}
           <p>I would rather walk a lonely path with my values intact than run a crowded race toward a finish line that doesn't exist.</p>
         </div>
       </article>
+<!-- POST:post-2:END -->
 
+<!-- POST:post-3:START -->
       <!-- Article 3 -->
       <article class="article reveal">
         <div class="article-meta">
@@ -436,7 +442,9 @@ a{color:inherit;text-decoration:none;}
 
         <div class="article-footer">— Reflections on solitude and faith.</div>
       </article>
+<!-- POST:post-3:END -->
 
+<!-- POST:post-4:START -->
       <!-- Article 4 (Bengali) -->
       <article class="article reveal">
         <div class="article-meta">
@@ -461,31 +469,7 @@ a{color:inherit;text-decoration:none;}
 
         <div class="article-signoff">সব বাতিঘর সমুদ্রে থাকে না — কিছু থাকে মানুষের ভেতরেও।</div>
       </article>
-
-      <!-- Article 5 — নীরব সাক্ষী (Mysterious / Incomplete) -->
-      <article class="article-nirab reveal">
-        <div class="article-meta">
-          <span class="article-nirab-tag">বাংলা · গল্প</span>
-          <span class="article-date" style="opacity:0.45;">2026</span>
-        </div>
-        <h1 class="article-nirab-title">নীরব সাক্ষী</h1>
-
-        <div class="nirab-body">
-          <div class="nirab-lines">
-            <div class="nirab-line">একটি ঘরে একটি আলো ছিল।</div>
-            <div class="nirab-line">একটি ছেলে সেই আলো দেখে বড় হয়েছে।</div>
-            <div class="nirab-line">বড় হতে হতে বুঝেছে —</div>
-            <div class="nirab-line">আলো আর উষ্ণতা সবসময় একই জিনিস নয়।</div>
-            <div class="nirab-line">কেউ কেউ এত সুন্দর করে মিথ্যা বলে যে সত্য বলাটাই অপরাধ হয়ে যায়।</div>
-            <div class="nirab-line">এটা সেই ছেলের গল্প —</div>
-            <div class="nirab-line">যে দেখেছিল।</div>
-            <div class="nirab-line">কিন্তু বলতে পারেনি।</div>
-          </div>
-          <div class="nirab-fade"></div>
-        </div>
-
-        <div class="nirab-dots">· · ·</div>
-      </article>
+<!-- POST:post-4:END -->
 
     </main>
 
@@ -508,11 +492,6 @@ a{color:inherit;text-decoration:none;}
         <div class="sidebar-link">
           <span class="sidebar-link-dot"></span>
           <span class="sidebar-link-text">বাতিঘর</span>
-        </div>
-        <!-- Nirab Sakshi — no link, dimmed -->
-        <div class="sidebar-link-nirab">
-          <span class="sidebar-link-dot"></span>
-          <span class="sidebar-link-text">নীরব সাক্ষী</span>
         </div>
       </div>
 
@@ -563,32 +542,6 @@ mobileMenu.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{menu
 /* ── Scroll reveal ── */
 const io=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:0.07});
 document.querySelectorAll('.reveal').forEach(r=>io.observe(r));
-
-/* ── Secret: 7-second hold anywhere → nirab-sakshi.html ── */
-let holdTimer = null;
-
-function startHold(e) {
-  // Ignore if user is holding a link/button (normal navigation)
-  if (e.target.closest('a, button')) return;
-  clearTimeout(holdTimer);
-  holdTimer = setTimeout(() => {
-    window.location.href = 'nirab-sakshi.html';
-  }, 7000);
-}
-
-function cancelHold() {
-  clearTimeout(holdTimer);
-  holdTimer = null;
-}
-
-document.addEventListener('mousedown', startHold);
-document.addEventListener('mouseup', cancelHold);
-document.addEventListener('mouseleave', cancelHold);
-document.addEventListener('touchstart', startHold, { passive: true });
-document.addEventListener('touchend', cancelHold);
-document.addEventListener('touchcancel', cancelHold);
-// Cancel if user scrolls (intentional scroll, not a hold)
-document.addEventListener('scroll', cancelHold, { passive: true });
 </script>
 </body>
 </html>
