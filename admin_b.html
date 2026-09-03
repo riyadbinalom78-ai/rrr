@@ -169,28 +169,6 @@ textarea{min-height:150px;resize:vertical;line-height:1.75;}
 .post-btn.danger:hover{color:var(--bad);border-color:rgba(242,84,91,0.3);background:rgba(242,84,91,0.06);}
 .empty{color:var(--dim);font-size:13px;text-align:center;padding:24px 0;}
 
-/* Image upload */
-.img-drop{
-  border:1.5px dashed var(--line);border-radius:12px;
-  padding:24px;text-align:center;cursor:pointer;
-  transition:all .2s;background:var(--panel2);margin-top:8px;
-  position:relative;
-}
-.img-drop:hover{border-color:var(--accent);background:rgba(110,107,255,0.04);}
-.img-drop.has-img{padding:0;border-style:solid;overflow:hidden;}
-.img-drop input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;}
-.img-drop-icon{font-size:22px;color:var(--dim);margin-bottom:8px;}
-.img-drop-text{font-size:12.5px;color:var(--dim);}
-.img-preview-wrap{position:relative;}
-.img-preview-wrap img{width:100%;max-height:220px;object-fit:cover;display:block;}
-.img-remove-btn{
-  position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:8px;
-  background:rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.15);color:#fff;
-  display:grid;place-items:center;cursor:pointer;font-size:11px;z-index:2;backdrop-filter:blur(6px);
-}
-.img-remove-btn:hover{background:rgba(242,84,91,0.8);}
-.img-uploading{position:absolute;inset:0;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;gap:8px;z-index:3;}
-
 .footer-note{text-align:center;font-size:12px;color:var(--dim);margin-top:32px;}
 
 /* Custom confirm modal (native confirm() is unreliable in some in-app browsers) */
@@ -308,15 +286,6 @@ textarea{min-height:150px;resize:vertical;line-height:1.75;}
       <textarea id="content" placeholder="Write here..." oninput="updatePreview()"></textarea>
 
       <label>Image (optional)</label>
-      <div class="img-drop" id="imgDrop">
-        <input type="file" id="imgInput" accept="image/*" onchange="handleImageSelect(event)">
-        <div id="imgDropInner">
-          <div class="img-drop-icon"><i class="fa-regular fa-image"></i></div>
-          <div class="img-drop-text">Tap to choose an image, or drag one here</div>
-        </div>
-      </div>
-
-      <label>Image (optional)</label>
       <input type="file" id="imageFile" accept="image/*" onchange="handleImageSelect(event)" style="padding:9px 14px;">
       <div id="imagePreviewWrap" style="display:none;margin-top:10px;align-items:center;gap:10px;" >
         <img id="imagePreviewImg" style="max-width:120px;max-height:120px;border-radius:8px;object-fit:cover;display:block;">
@@ -398,9 +367,6 @@ let existingImagePath = null;
 let selectedVideoFile = null;
 let existingVideoPath = null;
 let videoMode = 'yt';
-let pendingImage = null; // { base64, ext, mime } — newly selected, not yet uploaded
-let existingImageSrc = null; // path of image already attached to the post being edited
-let imageRemoved = false;
 
 /* ── Tabs ── */
 function switchTab(name){
@@ -563,85 +529,6 @@ async function putFile(path, contentStr, sha, message){
     throw new Error(err.message || `GitHub error: ${res.status}`);
   }
   return res.json();
-}
-
-/* PUT raw binary content (already base64-encoded, e.g. images) */
-async function putFileRaw(path, base64Content, message){
-  const token = localStorage.getItem('gh_token');
-  const owner = localStorage.getItem('gh_owner');
-  const repo = localStorage.getItem('gh_repo');
-  // check if file already exists to get its sha (needed for overwrite)
-  let sha = null;
-  try {
-    const existing = await fetch(`${API_BASE}/repos/${owner}/${repo}/contents/${path}`, {
-      headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github+json' }
-    });
-    if(existing.ok){ const d = await existing.json(); sha = d.sha; }
-  } catch(e){}
-  const body = { message, content: base64Content };
-  if(sha) body.sha = sha;
-  const res = await fetch(`${API_BASE}/repos/${owner}/${repo}/contents/${path}`, {
-    method: 'PUT',
-    headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github+json' },
-    body: JSON.stringify(body)
-  });
-  if(!res.ok){
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err.message || `Image upload error: ${res.status}`);
-  }
-  return res.json();
-}
-
-/* ── Image selection / preview ── */
-function handleImageSelect(event){
-  const file = event.target.files[0];
-  if(!file) return;
-  if(file.size > 4 * 1024 * 1024){
-    alert('Image too large — please use something under 4MB.');
-    event.target.value = '';
-    return;
-  }
-  const reader = new FileReader();
-  reader.onload = function(e){
-    const dataUrl = e.target.result; // data:image/jpeg;base64,xxxx
-    const base64 = dataUrl.split(',')[1];
-    const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
-    pendingImage = { base64, ext, mime: file.type };
-    imageRemoved = false;
-    renderImagePreview(dataUrl);
-  };
-  reader.readAsDataURL(file);
-}
-
-function renderImagePreview(srcUrl){
-  const drop = document.getElementById('imgDrop');
-  drop.classList.add('has-img');
-  drop.innerHTML = `
-    <div class="img-preview-wrap">
-      <img src="${srcUrl}" alt="preview">
-      <div class="img-remove-btn" onclick="removeImage(event)"><i class="fa-solid fa-xmark"></i></div>
-    </div>
-  `;
-}
-
-function resetImageDrop(){
-  const drop = document.getElementById('imgDrop');
-  drop.classList.remove('has-img');
-  drop.innerHTML = `
-    <input type="file" id="imgInput" accept="image/*" onchange="handleImageSelect(event)">
-    <div id="imgDropInner">
-      <div class="img-drop-icon"><i class="fa-regular fa-image"></i></div>
-      <div class="img-drop-text">Tap to choose an image, or drag one here</div>
-    </div>
-  `;
-}
-
-function removeImage(e){
-  if(e) e.stopPropagation();
-  pendingImage = null;
-  existingImageSrc = null;
-  imageRemoved = true;
-  resetImageDrop();
 }
 
 async function putBinaryFile(path, base64Content, message){
@@ -1055,8 +942,8 @@ async function loadPostsList(){
           </div>
         </div>
         <div class="post-actions">
-          <button class="post-btn" onclick="startEditPost('${id}')" title="Edit"><i class="fa-solid fa-pen"></i></button>
-          <button class="post-btn danger" onclick="deletePost('${id}', ${JSON.stringify(titleText)})" title="Delete"><i class="fa-solid fa-trash"></i></button>
+          <button class="post-btn" data-action="edit" data-id="${escapeHtml(id)}" title="Edit"><i class="fa-solid fa-pen"></i></button>
+          <button class="post-btn danger" data-action="delete" data-id="${escapeHtml(id)}" data-title="${escapeHtml(titleText)}" title="Delete"><i class="fa-solid fa-trash"></i></button>
         </div>
       </div>`;
       count++;
@@ -1066,6 +953,19 @@ async function loadPostsList(){
     listEl.innerHTML = `<div class="empty" style="color:var(--bad);">Error loading: ${escapeHtml(e.message)}</div>`;
   }
 }
+
+/* Event delegation for post row buttons — avoids inline onclick string-escaping bugs */
+document.getElementById('postsList').addEventListener('click', function(e){
+  const btn = e.target.closest('button[data-action]');
+  if(!btn) return;
+  const action = btn.dataset.action;
+  const id = btn.dataset.id;
+  if(action === 'edit'){
+    startEditPost(id);
+  } else if(action === 'delete'){
+    deletePost(id, btn.dataset.title);
+  }
+});
 
 loadConnection();
 </script>
