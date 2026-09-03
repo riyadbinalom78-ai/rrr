@@ -169,6 +169,28 @@ textarea{min-height:150px;resize:vertical;line-height:1.75;}
 .post-btn.danger:hover{color:var(--bad);border-color:rgba(242,84,91,0.3);background:rgba(242,84,91,0.06);}
 .empty{color:var(--dim);font-size:13px;text-align:center;padding:24px 0;}
 
+/* Image upload */
+.img-drop{
+  border:1.5px dashed var(--line);border-radius:12px;
+  padding:24px;text-align:center;cursor:pointer;
+  transition:all .2s;background:var(--panel2);margin-top:8px;
+  position:relative;
+}
+.img-drop:hover{border-color:var(--accent);background:rgba(110,107,255,0.04);}
+.img-drop.has-img{padding:0;border-style:solid;overflow:hidden;}
+.img-drop input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;}
+.img-drop-icon{font-size:22px;color:var(--dim);margin-bottom:8px;}
+.img-drop-text{font-size:12.5px;color:var(--dim);}
+.img-preview-wrap{position:relative;}
+.img-preview-wrap img{width:100%;max-height:220px;object-fit:cover;display:block;}
+.img-remove-btn{
+  position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:8px;
+  background:rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.15);color:#fff;
+  display:grid;place-items:center;cursor:pointer;font-size:11px;z-index:2;backdrop-filter:blur(6px);
+}
+.img-remove-btn:hover{background:rgba(242,84,91,0.8);}
+.img-uploading{position:absolute;inset:0;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;gap:8px;z-index:3;}
+
 .footer-note{text-align:center;font-size:12px;color:var(--dim);margin-top:32px;}
 
 @media(max-width:640px){
@@ -264,6 +286,39 @@ textarea{min-height:150px;resize:vertical;line-height:1.75;}
       <label>Content — separate paragraphs with a blank line</label>
       <textarea id="content" placeholder="Write here..." oninput="updatePreview()"></textarea>
 
+      <label>Image (optional)</label>
+      <div class="img-drop" id="imgDrop">
+        <input type="file" id="imgInput" accept="image/*" onchange="handleImageSelect(event)">
+        <div id="imgDropInner">
+          <div class="img-drop-icon"><i class="fa-regular fa-image"></i></div>
+          <div class="img-drop-text">Tap to choose an image, or drag one here</div>
+        </div>
+      </div>
+
+      <label>Image (optional)</label>
+      <input type="file" id="imageFile" accept="image/*" onchange="handleImageSelect(event)" style="padding:9px 14px;">
+      <div id="imagePreviewWrap" style="display:none;margin-top:10px;align-items:center;gap:10px;" >
+        <img id="imagePreviewImg" style="max-width:120px;max-height:120px;border-radius:8px;object-fit:cover;display:block;">
+        <button type="button" class="btn btn-outline" style="padding:7px 12px;font-size:12px;" onclick="clearImage()"><i class="fa-solid fa-xmark"></i> Remove</button>
+      </div>
+
+      <label>Video (optional)</label>
+      <div class="seg" style="margin-top:0;">
+        <div class="seg-btn active" id="vidYtBtn" onclick="setVideoMode('yt')">YouTube Link</div>
+        <div class="seg-btn" id="vidUpBtn" onclick="setVideoMode('upload')">Upload File</div>
+      </div>
+      <div id="videoYtWrap" style="margin-top:10px;">
+        <input type="text" id="videoUrl" placeholder="https://youtube.com/watch?v=..." oninput="updatePreview()">
+      </div>
+      <div id="videoUpWrap" style="display:none;margin-top:10px;">
+        <input type="file" id="videoFile" accept="video/*" onchange="handleVideoSelect(event)" style="padding:9px 14px;">
+        <div class="hint"><i class="fa-solid fa-triangle-exclamation"></i> Keep under ~20MB — large videos slow the repo down.</div>
+        <div id="videoPreviewWrap" style="display:none;margin-top:10px;align-items:center;gap:10px;">
+          <span style="font-size:12.5px;color:var(--sub);"><i class="fa-solid fa-file-video"></i> <span id="videoFileName"></span></span>
+          <button type="button" class="btn btn-outline" style="padding:7px 12px;font-size:12px;" onclick="clearVideo()"><i class="fa-solid fa-xmark"></i> Remove</button>
+        </div>
+      </div>
+
       <label>Closing quote (optional)</label>
       <input type="text" id="quote" placeholder="A highlighted line, or leave blank" oninput="updatePreview()">
 
@@ -304,6 +359,14 @@ const API_BASE = 'https://api.github.com';
 const INSERT_MARK = '<!-- ADMIN:INSERT-AFTER -->';
 let currentLang = 'en';
 let editingId = null;
+let selectedImageFile = null;
+let existingImagePath = null;
+let selectedVideoFile = null;
+let existingVideoPath = null;
+let videoMode = 'yt';
+let pendingImage = null; // { base64, ext, mime } — newly selected, not yet uploaded
+let existingImageSrc = null; // path of image already attached to the post being edited
+let imageRemoved = false;
 
 /* ── Tabs ── */
 function switchTab(name){
@@ -327,6 +390,60 @@ function setLang(lang){
   document.getElementById('langEnBtn').classList.toggle('active', lang === 'en');
   document.getElementById('langBnBtn').classList.toggle('active', lang === 'bn');
   updatePreview();
+}
+
+/* ── Image handling ── */
+function handleImageSelect(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  selectedImageFile = file;
+  existingImagePath = null;
+  const reader = new FileReader();
+  reader.onload = function(ev){
+    document.getElementById('imagePreviewImg').src = ev.target.result;
+    document.getElementById('imagePreviewWrap').style.display = 'flex';
+    updatePreview();
+  };
+  reader.readAsDataURL(file);
+}
+function clearImage(){
+  selectedImageFile = null;
+  existingImagePath = null;
+  document.getElementById('imageFile').value = '';
+  document.getElementById('imagePreviewWrap').style.display = 'none';
+  updatePreview();
+}
+
+/* ── Video handling ── */
+function setVideoMode(mode){
+  videoMode = mode;
+  document.getElementById('vidYtBtn').classList.toggle('active', mode === 'yt');
+  document.getElementById('vidUpBtn').classList.toggle('active', mode === 'upload');
+  document.getElementById('videoYtWrap').style.display = mode === 'yt' ? 'block' : 'none';
+  document.getElementById('videoUpWrap').style.display = mode === 'upload' ? 'block' : 'none';
+  updatePreview();
+}
+function handleVideoSelect(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  selectedVideoFile = file;
+  document.getElementById('videoFileName').textContent = file.name + ' (' + (file.size/1024/1024).toFixed(1) + ' MB)';
+  document.getElementById('videoPreviewWrap').style.display = 'flex';
+  updatePreview();
+}
+function clearVideo(){
+  selectedVideoFile = null;
+  existingVideoPath = null;
+  document.getElementById('videoFile').value = '';
+  document.getElementById('videoPreviewWrap').style.display = 'none';
+  updatePreview();
+}
+
+/* ── YouTube helpers ── */
+function extractYouTubeId(url){
+  if(!url) return null;
+  const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([\w-]{11})/);
+  return m ? m[1] : null;
 }
 
 /* ── Connection persistence ── */
@@ -414,7 +531,137 @@ async function putFile(path, contentStr, sha, message){
   return res.json();
 }
 
-function escapeHtml(str){
+/* PUT raw binary content (already base64-encoded, e.g. images) */
+async function putFileRaw(path, base64Content, message){
+  const token = localStorage.getItem('gh_token');
+  const owner = localStorage.getItem('gh_owner');
+  const repo = localStorage.getItem('gh_repo');
+  // check if file already exists to get its sha (needed for overwrite)
+  let sha = null;
+  try {
+    const existing = await fetch(`${API_BASE}/repos/${owner}/${repo}/contents/${path}`, {
+      headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github+json' }
+    });
+    if(existing.ok){ const d = await existing.json(); sha = d.sha; }
+  } catch(e){}
+  const body = { message, content: base64Content };
+  if(sha) body.sha = sha;
+  const res = await fetch(`${API_BASE}/repos/${owner}/${repo}/contents/${path}`, {
+    method: 'PUT',
+    headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github+json' },
+    body: JSON.stringify(body)
+  });
+  if(!res.ok){
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.message || `Image upload error: ${res.status}`);
+  }
+  return res.json();
+}
+
+/* ── Image selection / preview ── */
+function handleImageSelect(event){
+  const file = event.target.files[0];
+  if(!file) return;
+  if(file.size > 4 * 1024 * 1024){
+    alert('Image too large — please use something under 4MB.');
+    event.target.value = '';
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = function(e){
+    const dataUrl = e.target.result; // data:image/jpeg;base64,xxxx
+    const base64 = dataUrl.split(',')[1];
+    const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
+    pendingImage = { base64, ext, mime: file.type };
+    imageRemoved = false;
+    renderImagePreview(dataUrl);
+  };
+  reader.readAsDataURL(file);
+}
+
+function renderImagePreview(srcUrl){
+  const drop = document.getElementById('imgDrop');
+  drop.classList.add('has-img');
+  drop.innerHTML = `
+    <div class="img-preview-wrap">
+      <img src="${srcUrl}" alt="preview">
+      <div class="img-remove-btn" onclick="removeImage(event)"><i class="fa-solid fa-xmark"></i></div>
+    </div>
+  `;
+}
+
+function resetImageDrop(){
+  const drop = document.getElementById('imgDrop');
+  drop.classList.remove('has-img');
+  drop.innerHTML = `
+    <input type="file" id="imgInput" accept="image/*" onchange="handleImageSelect(event)">
+    <div id="imgDropInner">
+      <div class="img-drop-icon"><i class="fa-regular fa-image"></i></div>
+      <div class="img-drop-text">Tap to choose an image, or drag one here</div>
+    </div>
+  `;
+}
+
+function removeImage(e){
+  if(e) e.stopPropagation();
+  pendingImage = null;
+  existingImageSrc = null;
+  imageRemoved = true;
+  resetImageDrop();
+}
+
+async function putBinaryFile(path, base64Content, message){
+  const token = localStorage.getItem('gh_token');
+  const owner = localStorage.getItem('gh_owner');
+  const repo = localStorage.getItem('gh_repo');
+  const body = { message, content: base64Content };
+  const res = await fetch(`${API_BASE}/repos/${owner}/${repo}/contents/${path}`, {
+    method: 'PUT',
+    headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github+json' },
+    body: JSON.stringify(body)
+  });
+  if(!res.ok){
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.message || `GitHub error: ${res.status}`);
+  }
+  return res.json();
+}
+
+function readFileAsBase64(file){
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result.split(',')[1]);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+function sanitizeFilename(name){
+  return name.replace(/[^\w.\-]+/g, '-').toLowerCase();
+}
+
+/* Uploads any pending image/video files to the repo's /uploads folder and
+   returns { imagePath, videoPath } (existing/unchanged values pass through) */
+async function uploadPendingMedia(){
+  let imagePath = existingImagePath;
+  let videoPath = existingVideoPath;
+
+  if(selectedImageFile){
+    const b64 = await readFileAsBase64(selectedImageFile);
+    const fname = `uploads/${Date.now()}-${sanitizeFilename(selectedImageFile.name)}`;
+    await putBinaryFile(fname, b64, `Upload image: ${selectedImageFile.name}`);
+    imagePath = fname;
+  }
+  if(videoMode === 'upload' && selectedVideoFile){
+    const b64 = await readFileAsBase64(selectedVideoFile);
+    const fname = `uploads/${Date.now()}-${sanitizeFilename(selectedVideoFile.name)}`;
+    await putBinaryFile(fname, b64, `Upload video: ${selectedVideoFile.name}`);
+    videoPath = fname;
+  } else if(videoMode === 'yt'){
+    videoPath = null;
+  }
+  return { imagePath, videoPath };
+}
   const div = document.createElement('div');
   div.textContent = str;
   return div.innerHTML;
@@ -427,7 +674,7 @@ function formatDateTime(d){
 }
 
 /* ── Build article block (preserves original date-time if editing) ── */
-function buildArticleBlock(id, title, tag, content, quote, lang, dateTimeStr){
+function buildArticleBlock(id, title, tag, content, quote, lang, dateTimeStr, imagePath, videoPath, videoUrl){
   const h1Class = lang === 'bn' ? 'article-h1-bn' : 'article-h1';
   const paragraphs = content.split(/\n\s*\n/).map(p => p.trim()).filter(Boolean);
   const pHtml = paragraphs.map(p => `        <p class="article-p">${escapeHtml(p)}</p>`).join('\n\n');
@@ -436,13 +683,26 @@ function buildArticleBlock(id, title, tag, content, quote, lang, dateTimeStr){
     : '';
   const finalDateTime = dateTimeStr || formatDateTime(new Date());
 
+  let mediaHtml = '';
+  if(imagePath){
+    mediaHtml += `\n\n        <div class="article-image">\n          <img src="${escapeHtml(imagePath)}" alt="${escapeHtml(title)}">\n        </div>`;
+  }
+  if(videoPath){
+    mediaHtml += `\n\n        <div class="article-video">\n          <video controls src="${escapeHtml(videoPath)}"></video>\n        </div>`;
+  } else if(videoUrl){
+    const ytId = extractYouTubeId(videoUrl);
+    if(ytId){
+      mediaHtml += `\n\n        <div class="article-video">\n          <iframe src="https://www.youtube.com/embed/${ytId}" title="video" allowfullscreen loading="lazy"></iframe>\n        </div>`;
+    }
+  }
+
   return `<!-- POST:${id}:START -->
       <article class="article reveal visible">
         <div class="article-meta">
           <span class="article-tag">${escapeHtml(tag || 'Reflection')}</span>
           <span class="article-date">${escapeHtml(finalDateTime)}</span>
         </div>
-        <h1 class="${h1Class}">${escapeHtml(title)}</h1>
+        <h1 class="${h1Class}">${escapeHtml(title)}</h1>${mediaHtml}
 
 ${pHtml}${quoteHtml}
       </article>
@@ -465,6 +725,21 @@ function updatePreview(){
   const paragraphs = content.split(/\n\s*\n/).map(p => p.trim()).filter(Boolean);
   let html = `<div class="pv-meta"><span class="pv-badge">${escapeHtml(tag || 'Reflection')}</span><span class="pv-date">${formatDateTime(new Date())}</span></div>`;
   html += `<div class="pv-h">${escapeHtml(title || 'Your title here')}</div>`;
+
+  if(selectedImageFile || existingImagePath){
+    const src = document.getElementById('imagePreviewImg').src;
+    html += `<img src="${src}" style="max-width:160px;border-radius:8px;margin-bottom:12px;display:block;">`;
+  }
+  if(videoMode === 'upload' && selectedVideoFile){
+    html += `<div style="font-size:12px;color:var(--dim);margin-bottom:10px;"><i class="fa-solid fa-file-video"></i> ${escapeHtml(selectedVideoFile.name)}</div>`;
+  } else if(videoMode === 'yt'){
+    const url = document.getElementById('videoUrl').value.trim();
+    const ytId = extractYouTubeId(url);
+    if(ytId){
+      html += `<div style="border-radius:8px;overflow:hidden;margin-bottom:12px;aspect-ratio:16/9;max-width:280px;"><iframe width="100%" height="100%" src="https://www.youtube.com/embed/${ytId}" style="border:none;"></iframe></div>`;
+    }
+  }
+
   if(paragraphs.length){ paragraphs.forEach(p => { html += `<div class="pv-p">${escapeHtml(p)}</div>`; }); }
   else { html += `<div class="pv-p" style="opacity:0.5;font-style:italic;">Your text will appear here...</div>`; }
   if(quote){ html += `<div class="pv-quote">${escapeHtml(quote)}</div>`; }
@@ -503,6 +778,10 @@ function cancelEdit(){
   document.getElementById('tag').value = '';
   document.getElementById('content').value = '';
   document.getElementById('quote').value = '';
+  clearImage();
+  clearVideo();
+  document.getElementById('videoUrl').value = '';
+  setVideoMode('yt');
   setLang('en');
   updatePreview();
 }
@@ -529,8 +808,15 @@ async function publishPost(){
     if(!file) throw new Error('blog.html not found in repo');
     if(!file.content.includes(INSERT_MARK)) throw new Error('Admin marker not found in blog.html');
 
+    if(selectedImageFile || (videoMode === 'upload' && selectedVideoFile)){
+      showStatus('publishStatus', '<i class="fa-solid fa-spinner fa-spin"></i> Uploading media...', 'alert-load');
+    }
+    const { imagePath, videoPath } = await uploadPendingMedia();
+    const videoUrlVal = videoMode === 'yt' ? document.getElementById('videoUrl').value.trim() : '';
+
+    showStatus('publishStatus', '<i class="fa-solid fa-spinner fa-spin"></i> Publishing...', 'alert-load');
     const newId = 'post-' + Date.now();
-    const block = buildArticleBlock(newId, title, tag, content, quote, currentLang);
+    const block = buildArticleBlock(newId, title, tag, content, quote, currentLang, null, imagePath, videoPath, videoUrlVal);
     const updatedContent = file.content.replace(INSERT_MARK, INSERT_MARK + '\n\n' + block);
 
     await putFile('blog.html', updatedContent, file.sha, `Add blog post: ${title}`);
@@ -566,7 +852,14 @@ async function updatePost(){
     const endIdx = file.content.indexOf(endTag);
     if(startIdx === -1 || endIdx === -1) throw new Error('This post could not be found — it may have already been deleted');
 
-    const newBlock = buildArticleBlock(editingId, title, tag, content, quote, currentLang, editingOriginalDateTime).trim();
+    if(selectedImageFile || (videoMode === 'upload' && selectedVideoFile)){
+      showStatus('publishStatus', '<i class="fa-solid fa-spinner fa-spin"></i> Uploading media...', 'alert-load');
+    }
+    const { imagePath, videoPath } = await uploadPendingMedia();
+    const videoUrlVal = videoMode === 'yt' ? document.getElementById('videoUrl').value.trim() : '';
+
+    showStatus('publishStatus', '<i class="fa-solid fa-spinner fa-spin"></i> Saving...', 'alert-load');
+    const newBlock = buildArticleBlock(editingId, title, tag, content, quote, currentLang, editingOriginalDateTime, imagePath, videoPath, videoUrlVal).trim();
     const updatedContent = file.content.slice(0, startIdx) + newBlock + file.content.slice(endIdx + endTag.length);
 
     await putFile('blog.html', updatedContent, file.sha, `Update blog post: ${title}`);
@@ -619,8 +912,33 @@ async function startEditPost(id){
     const tagEl = article.querySelector('.article-tag');
     const dateEl = article.querySelector('.article-date');
     const quoteEl = article.querySelector('.article-quote p');
+    const imgEl = article.querySelector('.article-image img');
+    const videoEl = article.querySelector('.article-video video');
+    const iframeEl = article.querySelector('.article-video iframe');
     const paragraphs = Array.from(article.querySelectorAll('.article-p')).map(p => p.textContent.trim());
     const lang = h1 && h1.classList.contains('article-h1-bn') ? 'bn' : 'en';
+
+    clearImage();
+    clearVideo();
+    document.getElementById('videoUrl').value = '';
+    setVideoMode('yt');
+
+    if(imgEl){
+      existingImagePath = imgEl.getAttribute('src');
+      document.getElementById('imagePreviewImg').src = existingImagePath;
+      document.getElementById('imagePreviewWrap').style.display = 'flex';
+    }
+    if(videoEl){
+      setVideoMode('upload');
+      existingVideoPath = videoEl.getAttribute('src');
+      document.getElementById('videoFileName').textContent = '(existing video — choose a new file to replace it)';
+      document.getElementById('videoPreviewWrap').style.display = 'flex';
+    } else if(iframeEl){
+      const src = iframeEl.getAttribute('src') || '';
+      const idMatch = src.match(/embed\/([\w-]{11})/);
+      if(idMatch) document.getElementById('videoUrl').value = `https://youtube.com/watch?v=${idMatch[1]}`;
+      setVideoMode('yt');
+    }
 
     enterEditMode(
       id,
