@@ -193,9 +193,30 @@ textarea{min-height:150px;resize:vertical;line-height:1.75;}
 
 .footer-note{text-align:center;font-size:12px;color:var(--dim);margin-top:32px;}
 
+/* Custom confirm modal (native confirm() is unreliable in some in-app browsers) */
+.modal-overlay{
+  display:none;position:fixed;inset:0;z-index:1000;
+  background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);
+  align-items:center;justify-content:center;padding:20px;
+}
+.modal-overlay.show{display:flex;}
+.modal-box{
+  background:var(--panel);border:1px solid var(--line);border-radius:16px;
+  padding:26px;max-width:360px;width:100%;
+}
+.modal-icon{width:44px;height:44px;border-radius:12px;background:rgba(242,84,91,0.1);border:1px solid rgba(242,84,91,0.25);display:grid;place-items:center;color:var(--bad);font-size:17px;margin-bottom:14px;}
+.modal-title{font-size:15.5px;font-weight:700;margin-bottom:8px;}
+.modal-text{font-size:13px;color:var(--sub);line-height:1.6;margin-bottom:20px;}
+.modal-text strong{color:var(--text);}
+.modal-btns{display:flex;gap:10px;}
+.modal-btns .btn{flex:1;}
+.btn-danger{background:var(--bad);color:#fff;}
+.btn-danger:hover{background:#d84449;}
+
 @media(max-width:640px){
   .grid2{grid-template-columns:1fr;}
   .wrap{padding:24px 16px 60px;}
+  .topbar-inner{padding:0 16px;}
   .btn-row{flex-direction:column;}
   .btn-row .btn{width:100%;}
 }
@@ -352,6 +373,19 @@ textarea{min-height:150px;resize:vertical;line-height:1.75;}
   </div>
 
   <div class="footer-note">Riyad Bin Alom · Admin Panel</div>
+</div>
+
+<!-- Custom delete confirmation modal -->
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal-box">
+    <div class="modal-icon"><i class="fa-solid fa-trash"></i></div>
+    <div class="modal-title">Delete this post?</div>
+    <div class="modal-text">"<strong id="deleteModalTitle"></strong>" will be permanently removed. This cannot be undone.</div>
+    <div class="modal-btns">
+      <button class="btn btn-outline" onclick="closeDeleteModal()">Cancel</button>
+      <button class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -875,8 +909,31 @@ async function updatePost(){
   }
 }
 
-async function deletePost(id, title){
-  if(!confirm(`Delete "${title}"? This cannot be undone.`)) return;
+let pendingDeleteId = null;
+let pendingDeleteTitle = null;
+
+function deletePost(id, title){
+  pendingDeleteId = id;
+  pendingDeleteTitle = title;
+  document.getElementById('deleteModalTitle').textContent = title;
+  document.getElementById('deleteModal').classList.add('show');
+}
+
+function closeDeleteModal(){
+  pendingDeleteId = null;
+  pendingDeleteTitle = null;
+  document.getElementById('deleteModal').classList.remove('show');
+}
+
+document.getElementById('confirmDeleteBtn').addEventListener('click', async function(){
+  const id = pendingDeleteId;
+  const title = pendingDeleteTitle;
+  if(!id) return;
+
+  const btn = this;
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Deleting...';
+
   try {
     const file = await getFile('blog.html');
     if(!file) throw new Error('blog.html not found');
@@ -888,11 +945,15 @@ async function deletePost(id, title){
     const updatedContent = file.content.slice(0, startIdx) + file.content.slice(endIdx + endTag.length);
     await putFile('blog.html', updatedContent, file.sha, `Delete blog post: ${title}`);
     if(editingId === id) cancelEdit();
+    closeDeleteModal();
     loadPostsList();
   } catch(e){
     alert('Could not delete: ' + e.message);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = 'Delete';
   }
-}
+});
 
 async function startEditPost(id){
   try {
