@@ -863,18 +863,53 @@ function textToHtml(raw){
 ══════════════════════════════════════ */
 const pendingPhotos = {};
 
-function previewPhoto(event, wrapId){
+/* Resize + re-encode any photo (including large or unusual formats) as a
+   compact JPEG before upload — avoids upload failures and keeps the repo small. */
+function compressImage(file, maxDim = 1400, quality = 0.82){
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error('Could not read that file'));
+    reader.onload = e => {
+      const img = new Image();
+      img.onerror = () => reject(new Error('That file could not be read as an image'));
+      img.onload = () => {
+        let { width, height } = img;
+        if(width > maxDim || height > maxDim){
+          if(width > height){ height = Math.round(height * (maxDim / width)); width = maxDim; }
+          else { width = Math.round(width * (maxDim / height)); height = maxDim; }
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width; canvas.height = height;
+        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+        canvas.toBlob(blob => {
+          if(!blob) return reject(new Error('Could not process this image'));
+          resolve(blob);
+        }, 'image/jpeg', quality);
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+async function previewPhoto(event, wrapId){
   const file = event.target.files[0];
   if(!file) return;
   const inputId = event.target.id;
-  pendingPhotos[inputId] = file;
-  const reader = new FileReader();
-  reader.onload = e => {
-    const wrap = document.getElementById(wrapId);
-    wrap.style.display = 'flex';
-    wrap.querySelector('img').src = e.target.result;
-  };
-  reader.readAsDataURL(file);
+  const statusId = wrapId.replace('-preview','') === 'home-photo' ? 'homePhotoStatus' : wrapId.replace('-preview','') === 'about-photo' ? 'aboutPhotoStatus' : 'skillPhotoStatus';
+  try {
+    const compressed = await compressImage(file);
+    pendingPhotos[inputId] = compressed;
+    const reader = new FileReader();
+    reader.onload = e => {
+      const wrap = document.getElementById(wrapId);
+      wrap.style.display = 'flex';
+      wrap.querySelector('img').src = e.target.result;
+    };
+    reader.readAsDataURL(compressed);
+  } catch(err){
+    showAlert(statusId, '<i class="fa-solid fa-circle-xmark"></i> ' + err.message, 'alert-bad');
+  }
 }
 
 async function uploadFixedPhoto(inputId, filename, statusId){
@@ -888,7 +923,7 @@ async function uploadFixedPhoto(inputId, filename, statusId){
     await putBinaryFile(filename, b64, existing ? existing.sha : null, `Update photo: ${filename}`);
     showAlert(statusId, '<i class="fa-solid fa-circle-check"></i> Photo updated! Live in a minute.', 'alert-ok');
   } catch(e){
-    showAlert(statusId, '<i class="fa-solid fa-circle-xmark"></i> ' + e.message, 'alert-bad');
+    showAlert(statusId, '<i class="fa-solid fa-circle-xmark"></i> Upload failed — ' + e.message, 'alert-bad');
   }
 }
 
@@ -1470,18 +1505,23 @@ function blogSetLang(lang){
   blogUpdatePreview();
 }
 
-function blogHandleImageSelect(e){
+async function blogHandleImageSelect(e){
   const file = e.target.files[0];
   if(!file) return;
-  blogSelectedImageFile = file;
-  blogExistingImagePath = null;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    document.getElementById('blogImagePreviewImg').src = ev.target.result;
-    document.getElementById('blogImagePreviewWrap').style.display = 'flex';
-    blogUpdatePreview();
-  };
-  reader.readAsDataURL(file);
+  try {
+    const compressed = await compressImage(file);
+    blogSelectedImageFile = compressed;
+    blogExistingImagePath = null;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      document.getElementById('blogImagePreviewImg').src = ev.target.result;
+      document.getElementById('blogImagePreviewWrap').style.display = 'flex';
+      blogUpdatePreview();
+    };
+    reader.readAsDataURL(compressed);
+  } catch(err){
+    showAlert('blogPublishStatus', '<i class="fa-solid fa-circle-xmark"></i> ' + err.message, 'alert-bad');
+  }
 }
 function blogClearImage(){
   blogSelectedImageFile = null; blogExistingImagePath = null;
@@ -1601,8 +1641,8 @@ async function blogUploadPendingMedia(){
   let videoPath = blogExistingVideoPath;
   if(blogSelectedImageFile){
     const b64 = await readFileAsBase64(blogSelectedImageFile);
-    const fname = `uploads/${Date.now()}-${sanitizeFilename(blogSelectedImageFile.name)}`;
-    await putBinaryFile(fname, b64, null, `Upload image: ${blogSelectedImageFile.name}`);
+    const fname = `uploads/${Date.now()}-photo.jpg`;
+    await putBinaryFile(fname, b64, null, `Upload image: ${fname}`);
     imagePath = fname;
   }
   if(blogVideoMode === 'upload' && blogSelectedVideoFile){
