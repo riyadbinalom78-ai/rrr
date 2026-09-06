@@ -1,0 +1,1800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Admin · Riyad Bin Alom</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+<style>
+:root{
+  --bg:#f7f7f8; --panel:#ffffff; --panel2:#fafafa; --line:#e6e6e8; --line-soft:#eeeeef;
+  --text:#111114; --sub:#5b5b63; --dim:#9a9aa2;
+  --accent:#111114; --accent-soft:#eeeeef;
+  --good:#1f9d5a; --good-soft:#e8f7ee;
+  --bad:#d1453d; --bad-soft:#fbebea;
+  --warn:#b8860b; --warn-soft:#fdf3e0;
+  --radius:14px; --maxw:900px; --topbar-h:62px;
+  --shadow:0 1px 2px rgba(20,20,25,0.04), 0 8px 24px rgba(20,20,25,0.05);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6;font-size:14.5px;}
+h1,h2,h3,.brand,.btn,.summary-title{font-family:'Space Grotesk',sans-serif;}
+a{color:inherit;text-decoration:none;}
+button{font-family:inherit;}
+
+/* ══════════════ PASSWORD GATE ══════════════ */
+.gate{position:fixed;inset:0;z-index:2000;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px;}
+.gate-card{width:100%;max-width:360px;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:36px 32px;box-shadow:var(--shadow);text-align:center;}
+.gate-mark{width:52px;height:52px;border-radius:14px;background:var(--text);color:#fff;display:grid;place-items:center;font-size:20px;font-weight:700;margin:0 auto 20px;font-family:'Space Grotesk',sans-serif;}
+.gate-title{font-size:18px;font-weight:700;margin-bottom:6px;}
+.gate-sub{font-size:12.5px;color:var(--dim);margin-bottom:24px;}
+.gate-card input{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:14.5px;text-align:center;letter-spacing:0.05em;outline:none;transition:all .18s;}
+.gate-card input:focus{border-color:var(--text);box-shadow:0 0 0 3px var(--accent-soft);}
+.gate-card .btn{width:100%;margin-top:14px;}
+.gate-err{font-size:12.5px;color:var(--bad);margin-top:12px;display:none;}
+.gate-err.show{display:block;}
+
+/* ══════════════ APP SHELL ══════════════ */
+.app{display:none;}
+.app.show{display:block;}
+
+.topbar{position:sticky;top:0;z-index:150;height:var(--topbar-h);background:rgba(255,255,255,0.9);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);display:flex;align-items:center;}
+.topbar-inner{max-width:var(--maxw);margin:0 auto;padding:0 20px;width:100%;display:flex;align-items:center;justify-content:space-between;gap:14px;}
+.topbar-left{display:flex;align-items:center;gap:12px;}
+.ham-btn{width:38px;height:38px;border-radius:9px;border:1px solid var(--line);background:var(--panel);color:var(--text);cursor:pointer;display:grid;place-items:center;font-size:15px;transition:all .15s;}
+.ham-btn:hover{background:var(--accent-soft);}
+.brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:14.5px;}
+.brand-mark{width:26px;height:26px;border-radius:7px;background:var(--text);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:700;}
+.section-tag{font-size:12px;color:var(--dim);font-weight:600;padding:5px 12px;border-radius:20px;border:1px solid var(--line);}
+.conn-pill{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;font-weight:600;color:var(--dim);padding:6px 11px;border-radius:20px;border:1px solid var(--line);}
+.conn-pill .dot{width:6px;height:6px;border-radius:50%;background:var(--bad);}
+.conn-pill.live .dot{background:var(--good);}
+.conn-pill.live{color:var(--good);border-color:rgba(31,157,90,0.25);background:var(--good-soft);}
+
+/* Slide-in drawer */
+.drawer-overlay{position:fixed;inset:0;background:rgba(15,15,18,0.35);z-index:300;display:none;}
+.drawer-overlay.open{display:block;}
+.drawer{position:fixed;top:0;left:0;bottom:0;width:280px;max-width:82vw;background:var(--panel);z-index:301;transform:translateX(-100%);transition:transform .28s cubic-bezier(.32,.72,0,1);box-shadow:0 0 40px rgba(0,0,0,0.15);display:flex;flex-direction:column;}
+.drawer.open{transform:translateX(0);}
+.drawer-head{padding:22px 22px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;}
+.drawer-close{width:32px;height:32px;border-radius:8px;border:1px solid var(--line);background:none;cursor:pointer;color:var(--sub);display:grid;place-items:center;}
+.drawer-nav{flex:1;overflow-y:auto;padding:12px;}
+.drawer-item{display:flex;align-items:center;gap:12px;padding:13px 14px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:500;color:var(--sub);transition:all .15s;margin-bottom:2px;}
+.drawer-item:hover{background:var(--panel2);color:var(--text);}
+.drawer-item.active{background:var(--text);color:#fff;}
+.drawer-item i{width:18px;text-align:center;font-size:13px;}
+.drawer-item-num{margin-left:auto;font-size:10.5px;color:var(--dim);}
+.drawer-item.active .drawer-item-num{color:rgba(255,255,255,0.6);}
+.drawer-div{height:1px;background:var(--line);margin:10px 4px;}
+.drawer-foot{padding:16px;border-top:1px solid var(--line);}
+
+.wrap{max-width:var(--maxw);margin:0 auto;padding:28px 20px 90px;}
+
+.page-section{display:none;}
+.page-section.active{display:block;animation:fadeIn .25s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+.page-head{margin-bottom:22px;}
+.page-title{font-size:21px;font-weight:700;}
+.page-sub{font-size:12.5px;color:var(--dim);margin-top:4px;}
+
+/* ══════════════ PANELS / CARDS ══════════════ */
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:22px;margin-bottom:14px;box-shadow:var(--shadow);}
+.panel-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:10px;flex-wrap:wrap;}
+.panel-title{font-size:14.5px;font-weight:700;}
+.panel-note{font-size:11.5px;color:var(--dim);margin-top:2px;}
+
+label{display:block;font-size:11.5px;font-weight:600;color:var(--sub);margin-bottom:6px;margin-top:14px;}
+label:first-of-type{margin-top:0;}
+input[type="text"],input[type="password"],textarea,select{
+  width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:9px;
+  padding:10px 13px;color:var(--text);font-family:'Inter',sans-serif;font-size:13.5px;
+  outline:none;transition:all .16s;
+}
+input::placeholder,textarea::placeholder{color:var(--dim);}
+input:focus,textarea:focus,select:focus{border-color:var(--text);box-shadow:0 0 0 3px var(--accent-soft);}
+textarea{min-height:64px;resize:vertical;line-height:1.65;}
+input[type="file"]{padding:8px 10px;font-size:12.5px;}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.grid3{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.row-inline{display:flex;gap:8px;}
+.row-inline > div{flex:1;}
+
+.hint{font-size:11px;color:var(--dim);margin-top:6px;display:flex;align-items:center;gap:5px;}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 18px;border-radius:9px;border:none;cursor:pointer;font-size:13px;font-weight:600;transition:all .16s;}
+.btn-dark{background:var(--text);color:#fff;}
+.btn-dark:hover{background:#000;}
+.btn-dark:disabled{opacity:0.45;cursor:not-allowed;}
+.btn-outline{background:transparent;border:1px solid var(--line);color:var(--sub);}
+.btn-outline:hover{border-color:#c8c8cc;color:var(--text);}
+.btn-danger{background:var(--bad);color:#fff;}
+.btn-danger:hover{background:#b83a33;}
+.btn-sm{padding:7px 12px;font-size:12px;}
+.btn-icon{width:32px;height:32px;padding:0;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--sub);}
+.btn-icon:hover{color:var(--text);border-color:#c8c8cc;}
+.btn-icon.danger:hover{color:var(--bad);border-color:rgba(209,69,61,0.35);background:var(--bad-soft);}
+.btn-row{display:flex;gap:9px;margin-top:16px;flex-wrap:wrap;}
+
+/* Alerts */
+.alert{margin-top:12px;padding:10px 13px;border-radius:9px;font-size:12.5px;display:none;align-items:center;gap:8px;}
+.alert.show{display:flex;}
+.alert-ok{background:var(--good-soft);color:var(--good);border:1px solid rgba(31,157,90,0.2);}
+.alert-bad{background:var(--bad-soft);color:var(--bad);border:1px solid rgba(209,69,61,0.2);}
+.alert-load{background:var(--accent-soft);color:var(--sub);border:1px solid var(--line);}
+
+/* Collapsible mini-sections inside a page */
+details.mini{border:1px solid var(--line);border-radius:12px;margin-bottom:10px;overflow:hidden;background:var(--panel2);}
+details.mini[open]{background:var(--panel);}
+details.mini summary{list-style:none;cursor:pointer;padding:13px 16px;display:flex;align-items:center;justify-content:space-between;font-weight:600;font-size:13px;-webkit-tap-highlight-color:transparent;}
+details.mini summary::-webkit-details-marker{display:none;}
+details.mini summary .chev{color:var(--dim);font-size:11px;transition:transform .2s;}
+details.mini[open] summary .chev{transform:rotate(180deg);}
+.mini-body{padding:2px 16px 16px;border-top:1px solid var(--line-soft);}
+
+/* Item rows (skills, sites, games, work-items) */
+.item-row{border:1px solid var(--line);border-radius:11px;padding:13px 14px;margin-bottom:8px;background:var(--panel2);}
+.item-row-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:2px;}
+.item-row-title{font-size:13px;font-weight:600;}
+.item-row-actions{display:flex;gap:6px;flex-shrink:0;}
+.item-empty{font-size:12.5px;color:var(--dim);text-align:center;padding:18px 0;}
+
+/* Tag chips (coming soon / features) */
+.chip-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.chip{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:500;padding:5px 10px 5px 12px;border-radius:20px;background:var(--panel2);border:1px solid var(--line);}
+.chip button{background:none;border:none;color:var(--dim);cursor:pointer;font-size:10px;padding:2px;}
+.chip button:hover{color:var(--bad);}
+
+/* Modal (delete confirm) */
+.modal-overlay{display:none;position:fixed;inset:0;z-index:1000;background:rgba(15,15,18,0.4);align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.show{display:flex;}
+.modal-box{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:24px;max-width:340px;width:100%;box-shadow:var(--shadow);}
+.modal-icon{width:40px;height:40px;border-radius:11px;background:var(--bad-soft);color:var(--bad);display:grid;place-items:center;font-size:15px;margin-bottom:12px;}
+.modal-title{font-size:14.5px;font-weight:700;margin-bottom:6px;}
+.modal-text{font-size:12.5px;color:var(--sub);line-height:1.6;margin-bottom:18px;}
+.modal-text strong{color:var(--text);}
+.modal-btns{display:flex;gap:9px;}
+.modal-btns .btn{flex:1;}
+
+/* Lang / mode segmented toggle */
+.seg{display:inline-flex;background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:3px;margin-top:6px;}
+.seg-btn{padding:7px 15px;border-radius:7px;font-size:12px;font-weight:600;color:var(--dim);cursor:pointer;transition:all .15s;}
+.seg-btn.active{background:var(--text);color:#fff;}
+
+/* Preview boxes */
+.preview{background:var(--panel2);border:1px dashed var(--line);border-radius:10px;padding:16px;margin-top:14px;}
+.preview-tag{font-size:10.5px;color:var(--dim);margin-bottom:10px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;}
+.photo-preview{display:flex;align-items:center;gap:12px;margin-top:8px;}
+.photo-preview img{width:64px;height:64px;border-radius:10px;object-fit:cover;border:1px solid var(--line);}
+
+/* Blog tabs (sub-navigation within Blog section) */
+.subtabs{display:flex;gap:4px;margin-bottom:16px;border-bottom:1px solid var(--line);}
+.subtab{padding:9px 4px;margin-right:18px;font-size:13px;font-weight:600;color:var(--dim);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;}
+.subtab.active{color:var(--text);border-color:var(--text);}
+.subpanel{display:none;}
+.subpanel.active{display:block;}
+
+.editing-flag{display:none;align-items:center;justify-content:space-between;gap:10px;padding:9px 13px;border-radius:9px;margin-bottom:14px;background:var(--warn-soft);color:var(--warn);font-size:12px;font-weight:600;}
+.editing-flag.show{display:flex;}
+
+@media(max-width:640px){
+  .grid2,.grid3{grid-template-columns:1fr;}
+  .wrap{padding:20px 14px 90px;}
+  .topbar-inner{padding:0 14px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════ PASSWORD GATE ══════════════ -->
+<div class="gate" id="gate">
+  <div class="gate-card">
+    <div class="gate-mark">R</div>
+    <div class="gate-title">Admin Access</div>
+    <div class="gate-sub">Enter the password to continue</div>
+    <input type="password" id="gatePw" placeholder="Password" autocomplete="off">
+    <button class="btn btn-dark" onclick="checkPassword()">Unlock</button>
+    <div class="gate-err" id="gateErr"><i class="fa-solid fa-triangle-exclamation"></i> Incorrect password</div>
+  </div>
+</div>
+
+<!-- ══════════════ APP SHELL ══════════════ -->
+<div class="app" id="app">
+
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-left">
+        <button class="ham-btn" onclick="openDrawer()"><i class="fa-solid fa-bars"></i></button>
+        <div class="brand"><div class="brand-mark">R</div> Admin</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="section-tag" id="currentSectionTag">My Profile</span>
+        <span class="conn-pill" id="connPill"><span class="dot"></span><span id="connLabel">Offline</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+  <div class="drawer" id="drawer">
+    <div class="drawer-head">
+      <div class="brand"><div class="brand-mark">R</div> Navigation</div>
+      <button class="drawer-close" onclick="closeDrawer()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="drawer-nav">
+      <div class="drawer-item" data-sec="profile" onclick="goSection('profile')"><i class="fa-solid fa-user-gear"></i> My Profile</div>
+      <div class="drawer-div"></div>
+      <div class="drawer-item" data-sec="home" onclick="goSection('home')"><i class="fa-solid fa-house"></i> Home <span class="drawer-item-num">index</span></div>
+      <div class="drawer-item" data-sec="about" onclick="goSection('about')"><i class="fa-solid fa-user"></i> About</div>
+      <div class="drawer-item" data-sec="skill" onclick="goSection('skill')"><i class="fa-solid fa-code"></i> Skill</div>
+      <div class="drawer-item" data-sec="blog" onclick="goSection('blog')"><i class="fa-solid fa-pen-nib"></i> Blog</div>
+      <div class="drawer-item" data-sec="lab" onclick="goSection('lab')"><i class="fa-solid fa-rocket"></i> Lab</div>
+      <div class="drawer-item" data-sec="contact" onclick="goSection('contact')"><i class="fa-solid fa-envelope"></i> Contact</div>
+    </div>
+    <div class="drawer-foot">
+      <button class="btn btn-outline" style="width:100%;" onclick="lockPanel()"><i class="fa-solid fa-lock"></i> Lock Panel</button>
+    </div>
+  </div>
+
+  <div class="wrap">
+
+    <!-- ══════════════ MY PROFILE ══════════════ -->
+    <section class="page-section active" id="sec-profile">
+      <div class="page-head">
+        <div class="page-title">My Profile</div>
+        <div class="page-sub">Connect once — every section below uses this same connection.</div>
+      </div>
+      <div class="panel">
+        <label>Personal Access Token</label>
+        <div class="row-inline">
+          <div><input type="password" id="token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"></div>
+          <button class="btn-icon" onclick="toggleTokenVisibility()"><i class="fa-solid fa-eye" id="eyeIcon"></i></button>
+        </div>
+        <div class="hint"><i class="fa-solid fa-lock"></i> Stored only in this browser's storage.</div>
+        <div class="grid2">
+          <div><label>Repo Owner</label><input type="text" id="owner" value="riyadbinalom78-ai"></div>
+          <div><label>Repo Name</label><input type="text" id="repo" value="rrr"></div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-dark" onclick="saveConnection()"><i class="fa-solid fa-plug"></i> Connect</button>
+        </div>
+        <div class="alert" id="connStatus"></div>
+      </div>
+    </section>
+
+    <!-- ══════════════ HOME (index.html) ══════════════ -->
+    <section class="page-section" id="sec-home">
+      <div class="page-head">
+        <div class="page-title">Home</div>
+        <div class="page-sub">Edits index.html directly.</div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><div><div class="panel-title">Profile Photo</div><div class="panel-note">Replaces the hero photo (riyad.jpg)</div></div></div>
+        <input type="file" id="home-photo" accept="image/*" onchange="previewPhoto(event,'home-photo-preview')">
+        <div class="photo-preview" id="home-photo-preview" style="display:none;"><img id="home-photo-img"><span style="font-size:12px;color:var(--dim);">New photo selected</span></div>
+        <div class="btn-row"><button class="btn btn-outline btn-sm" onclick="uploadFixedPhoto('home-photo','riyad.jpg','homePhotoStatus')"><i class="fa-solid fa-upload"></i> Upload Photo</button></div>
+        <div class="alert" id="homePhotoStatus"></div>
+      </div>
+
+      <details class="mini" open><summary>Hero Text <i class="fa-solid fa-chevron-down chev"></i></summary>
+        <div class="mini-body">
+          <label>Eyebrow label</label><input type="text" class="fld-home" data-key="hero-eyebrow">
+          <label>Subtitle (2 lines)</label><textarea class="fld-home" data-key="hero-subtitle" data-multiline="1"></textarea>
+          <label>Small label</label><input type="text" class="fld-home" data-key="hero-small">
+          <label>Description</label><textarea class="fld-home" data-key="hero-desc" data-bold="1"></textarea>
+          <div class="hint">Use **word** for bold.</div>
+        </div>
+      </details>
+
+      <details class="mini"><summary>Stats Row <i class="fa-solid fa-chevron-down chev"></i></summary>
+        <div class="mini-body">
+          <div class="grid3">
+            <div><div class="hint">Stat 1 number</div><input type="text" class="fld-home" data-key="stat1-n"></div>
+            <div><div class="hint">Stat 1 label</div><input type="text" class="fld-home" data-key="stat1-l"></div>
+            <div><div class="hint">Stat 2 number</div><input type="text" class="fld-home" data-key="stat2-n"></div>
+            <div><div class="hint">Stat 2 label</div><input type="text" class="fld-home" data-key="stat2-l"></div>
+            <div><div class="hint">Stat 3 number</div><input type="text" class="fld-home" data-key="stat3-n"></div>
+            <div><div class="hint">Stat 3 label</div><input type="text" class="fld-home" data-key="stat3-l"></div>
+          </div>
+        </div>
+      </details>
+
+      <details class="mini"><summary>About Section Header <i class="fa-solid fa-chevron-down chev"></i></summary>
+        <div class="mini-body">
+          <label>Eyebrow</label><input type="text" class="fld-home" data-key="about-eye">
+          <label>Heading (2 lines)</label><textarea class="fld-home" data-key="about-h2" data-multiline="1"></textarea>
+          <label>Paragraph</label><textarea class="fld-home" data-key="about-p"></textarea>
+        </div>
+      </details>
+
+      <details class="mini"><summary>Card — A Seeker of Truth <i class="fa-solid fa-chevron-down chev"></i></summary>
+        <div class="mini-body">
+          <label>Heading (2 lines)</label><textarea class="fld-home" data-key="card1-h" data-multiline="1"></textarea>
+          <label>Paragraph</label><textarea class="fld-home" data-key="card1-p"></textarea>
+          <label>Interest list</label>
+          <div class="grid2">
+            <input type="text" class="fld-home" data-key="int1-label">
+            <input type="text" class="fld-home" data-key="int2-label">
+            <input type="text" class="fld-home" data-key="int3-label">
+            <input type="text" class="fld-home" data-key="int4-label">
+            <input type="text" class="fld-home" data-key="int5-label" style="grid-column:1/-1;">
+          </div>
+        </div>
+      </details>
+
+      <details class="mini"><summary>Card — Islamic Studies <i class="fa-solid fa-chevron-down chev"></i></summary>
+        <div class="mini-body"><label>Heading</label><input type="text" class="fld-home" data-key="card2-h"><label>Paragraph</label><textarea class="fld-home" data-key="card2-p"></textarea></div>
+      </details>
+      <details class="mini"><summary>Card — Scientific Curiosity <i class="fa-solid fa-chevron-down chev"></i></summary>
+        <div class="mini-body"><label>Heading</label><input type="text" class="fld-home" data-key="card3-h"><label>Paragraph</label><textarea class="fld-home" data-key="card3-p"></textarea></div>
+      </details>
+      <details class="mini"><summary>Card — Origin (BD) <i class="fa-solid fa-chevron-down chev"></i></summary>
+        <div class="mini-body"><label>Text</label><textarea class="fld-home" data-key="card4-p" data-bold="1"></textarea><div class="hint">Use **word** for bold.</div></div>
+      </details>
+      <details class="mini"><summary>Card — Reflective Writing <i class="fa-solid fa-chevron-down chev"></i></summary>
+        <div class="mini-body"><label>Heading</label><input type="text" class="fld-home" data-key="card5-h"><label>Paragraph</label><textarea class="fld-home" data-key="card5-p"></textarea></div>
+      </details>
+      <details class="mini"><summary>Card — Connect (heading/text only) <i class="fa-solid fa-chevron-down chev"></i></summary>
+        <div class="mini-body">
+          <label>Heading</label><input type="text" class="fld-home" data-key="card6-h">
+          <label>Paragraph</label><textarea class="fld-home" data-key="card6-p"></textarea>
+          <div class="hint"><i class="fa-solid fa-circle-info"></i> Social links themselves are managed from Contact.</div>
+        </div>
+      </details>
+
+      <details class="mini"><summary>Quote Section <i class="fa-solid fa-chevron-down chev"></i></summary>
+        <div class="mini-body"><label>Quote text</label><textarea class="fld-home" data-key="quote-text"></textarea><label>Source</label><input type="text" class="fld-home" data-key="quote-src"></div>
+      </details>
+
+      <details class="mini"><summary>Blog Teaser <i class="fa-solid fa-chevron-down chev"></i></summary>
+        <div class="mini-body"><label>Heading</label><input type="text" class="fld-home" data-key="teaser-h"><label>Paragraph</label><textarea class="fld-home" data-key="teaser-p"></textarea></div>
+      </details>
+
+      <details class="mini"><summary>Palestine Section <i class="fa-solid fa-chevron-down chev"></i></summary>
+        <div class="mini-body"><label>Heading</label><input type="text" class="fld-home" data-key="pal-h"><label>Paragraph</label><textarea class="fld-home" data-key="pal-p"></textarea></div>
+      </details>
+
+      <details class="mini"><summary>Bottom CTA <i class="fa-solid fa-chevron-down chev"></i></summary>
+        <div class="mini-body"><label>Heading</label><input type="text" class="fld-home" data-key="cta-h"><label>Paragraph</label><textarea class="fld-home" data-key="cta-p"></textarea></div>
+      </details>
+
+      <details class="mini"><summary>Footer <i class="fa-solid fa-chevron-down chev"></i></summary>
+        <div class="mini-body"><label>Tagline</label><input type="text" class="fld-home" data-key="footer-tag"></div>
+      </details>
+
+      <div class="panel">
+        <div class="btn-row" style="margin-top:0;">
+          <button class="btn btn-outline" onclick="loadHomeFields()"><i class="fa-solid fa-arrows-rotate"></i> Reload</button>
+          <button class="btn btn-dark" id="homeSaveBtn" onclick="saveHomeFields()"><i class="fa-solid fa-floppy-disk"></i> Save Home Changes</button>
+        </div>
+        <div class="alert" id="homeStatus"></div>
+      </div>
+    </section>
+
+    <!-- ══════════════ ABOUT (about.html) ══════════════ -->
+    <section class="page-section" id="sec-about">
+      <div class="page-head">
+        <div class="page-title">About</div>
+        <div class="page-sub">Edits about.html directly.</div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><div><div class="panel-title">Profile Photo</div><div class="panel-note">Replaces the about photo (riyad_about.jpg)</div></div></div>
+        <input type="file" id="about-photo" accept="image/*" onchange="previewPhoto(event,'about-photo-preview')">
+        <div class="photo-preview" id="about-photo-preview" style="display:none;"><img id="about-photo-img"><span style="font-size:12px;color:var(--dim);">New photo selected</span></div>
+        <div class="btn-row"><button class="btn btn-outline btn-sm" onclick="uploadFixedPhoto('about-photo','riyad_about.jpg','aboutPhotoStatus')"><i class="fa-solid fa-upload"></i> Upload Photo</button></div>
+        <div class="alert" id="aboutPhotoStatus"></div>
+      </div>
+
+      <details class="mini" open><summary>Role &amp; Tags <i class="fa-solid fa-chevron-down chev"></i></summary>
+        <div class="mini-body">
+          <label>Role line</label><input type="text" class="fld-about" data-key="role">
+          <label>Tags (5)</label>
+          <div class="grid2">
+            <input type="text" class="fld-about" data-key="tag1">
+            <input type="text" class="fld-about" data-key="tag2">
+            <input type="text" class="fld-about" data-key="tag3">
+            <input type="text" class="fld-about" data-key="tag4">
+            <input type="text" class="fld-about" data-key="tag5" style="grid-column:1/-1;">
+          </div>
+        </div>
+      </details>
+
+      <details class="mini"><summary>Bio Paragraph <i class="fa-solid fa-chevron-down chev"></i></summary>
+        <div class="mini-body"><textarea class="fld-about" data-key="bio" data-bold="1"></textarea><div class="hint">Use **word** for bold.</div></div>
+      </details>
+
+      <details class="mini"><summary>Interests (5) <i class="fa-solid fa-chevron-down chev"></i></summary>
+        <div class="mini-body">
+          <label>Islamic Studies</label><input type="text" class="fld-about" data-key="interest1" data-bold="1">
+          <label>Science</label><input type="text" class="fld-about" data-key="interest2" data-bold="1">
+          <label>History</label><input type="text" class="fld-about" data-key="interest3" data-bold="1">
+          <label>Writing</label><input type="text" class="fld-about" data-key="interest4" data-bold="1">
+          <label>Web Development</label><input type="text" class="fld-about" data-key="interest5" data-bold="1">
+          <div class="hint">Use **word** for bold (e.g. **Islamic Studies** — description).</div>
+        </div>
+      </details>
+
+      <details class="mini"><summary>Languages (3) <i class="fa-solid fa-chevron-down chev"></i></summary>
+        <div class="mini-body">
+          <div class="grid2"><input type="text" class="fld-about" data-key="lang1-name" placeholder="Name"><input type="text" class="fld-about" data-key="lang1-lvl" placeholder="Level"></div>
+          <div class="grid2" style="margin-top:8px;"><input type="text" class="fld-about" data-key="lang2-name" placeholder="Name"><input type="text" class="fld-about" data-key="lang2-lvl" placeholder="Level"></div>
+          <div class="grid2" style="margin-top:8px;"><input type="text" class="fld-about" data-key="lang3-name" placeholder="Name"><input type="text" class="fld-about" data-key="lang3-lvl" placeholder="Level"></div>
+        </div>
+      </details>
+
+      <details class="mini"><summary>Palestine Card <i class="fa-solid fa-chevron-down chev"></i></summary>
+        <div class="mini-body"><label>Heading</label><input type="text" class="fld-about" data-key="pal-h"><label>Text</label><textarea class="fld-about" data-key="pal-p"></textarea></div>
+      </details>
+
+      <details class="mini"><summary>Photo Caption <i class="fa-solid fa-chevron-down chev"></i></summary>
+        <div class="mini-body"><label>Label</label><input type="text" class="fld-about" data-key="photo-label"><label>Caption</label><input type="text" class="fld-about" data-key="photo-caption"></div>
+      </details>
+
+      <div class="panel">
+        <div class="btn-row" style="margin-top:0;">
+          <button class="btn btn-outline" onclick="loadAboutFields()"><i class="fa-solid fa-arrows-rotate"></i> Reload</button>
+          <button class="btn btn-dark" id="aboutSaveBtn" onclick="saveAboutFields()"><i class="fa-solid fa-floppy-disk"></i> Save About Changes</button>
+        </div>
+        <div class="alert" id="aboutStatus"></div>
+      </div>
+    </section>
+
+    <!-- ══════════════ SKILL (skills.html) ══════════════ -->
+    <section class="page-section" id="sec-skill">
+      <div class="page-head">
+        <div class="page-title">Skill</div>
+        <div class="page-sub">Edits skills.html directly.</div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><div><div class="panel-title">Profile Photo</div><div class="panel-note">Replaces the skills photo (riyad_skil.jpg)</div></div></div>
+        <input type="file" id="skill-photo" accept="image/*" onchange="previewPhoto(event,'skill-photo-preview')">
+        <div class="photo-preview" id="skill-photo-preview" style="display:none;"><img id="skill-photo-img"><span style="font-size:12px;color:var(--dim);">New photo selected</span></div>
+        <div class="btn-row"><button class="btn btn-outline btn-sm" onclick="uploadFixedPhoto('skill-photo','riyad_skil.jpg','skillPhotoStatus')"><i class="fa-solid fa-upload"></i> Upload Photo</button></div>
+        <div class="alert" id="skillPhotoStatus"></div>
+      </div>
+
+      <details class="mini" open><summary>Page Header <i class="fa-solid fa-chevron-down chev"></i></summary>
+        <div class="mini-body">
+          <label>Eyebrow</label><input type="text" class="fld-skill-page" data-key="page-eyebrow">
+          <label>Heading</label><input type="text" class="fld-skill-page" data-key="page-h1">
+          <label>Subtitle</label><textarea class="fld-skill-page" data-key="page-sub"></textarea>
+        </div>
+      </details>
+
+      <div class="panel">
+        <div class="panel-title">Skill Groups</div>
+        <div class="panel-note">Each group has a label and a list of skill bars. Add, edit, or remove skills freely.</div>
+        <div id="skillGroupsHost"></div>
+      </div>
+
+      <details class="mini"><summary>Sidebar — Quick Summary &amp; How I Work <i class="fa-solid fa-chevron-down chev"></i></summary>
+        <div class="mini-body">
+          <label>Quick Summary text</label><textarea class="fld-skill-page" data-key="summary-text"></textarea>
+          <label>"How I Work" list</label>
+          <div id="workListHost"></div>
+          <button class="btn btn-outline btn-sm" style="margin-top:8px;" onclick="addWorkItem()"><i class="fa-solid fa-plus"></i> Add Line</button>
+        </div>
+      </details>
+
+      <div class="panel">
+        <div class="btn-row" style="margin-top:0;">
+          <button class="btn btn-outline" onclick="loadSkillFields()"><i class="fa-solid fa-arrows-rotate"></i> Reload</button>
+          <button class="btn btn-dark" id="skillSaveBtn" onclick="saveSkillFields()"><i class="fa-solid fa-floppy-disk"></i> Save Skill Changes</button>
+        </div>
+        <div class="alert" id="skillStatus"></div>
+      </div>
+    </section>
+
+    <!-- ══════════════ BLOG (blog.html) ══════════════ -->
+    <section class="page-section" id="sec-blog">
+      <div class="page-head">
+        <div class="page-title">Blog</div>
+        <div class="page-sub">Edits blog.html directly.</div>
+      </div>
+
+      <div class="subtabs">
+        <div class="subtab active" data-sub="write" onclick="switchBlogTab('write')">Write</div>
+        <div class="subtab" data-sub="posts" onclick="switchBlogTab('posts')">Posts</div>
+      </div>
+
+      <div class="subpanel active" id="blogtab-write">
+        <div class="panel">
+          <div class="panel-head"><div><div class="panel-title" id="blogFormTitle">New Post</div></div></div>
+          <div class="editing-flag" id="blogEditingFlag"><span><i class="fa-solid fa-pen"></i> Editing: <span id="blogEditingTitle"></span></span><span style="cursor:pointer;" onclick="blogCancelEdit()">✕</span></div>
+
+          <label>Language</label>
+          <div class="seg"><div class="seg-btn active" id="blogLangEn" onclick="blogSetLang('en')">English</div><div class="seg-btn" id="blogLangBn" onclick="blogSetLang('bn')">বাংলা</div></div>
+
+          <label>Title</label><input type="text" id="blogTitle" oninput="blogUpdatePreview()">
+          <label>Tag / Category</label><input type="text" id="blogTag" oninput="blogUpdatePreview()">
+          <label>Content — blank line between paragraphs</label><textarea id="blogContent" oninput="blogUpdatePreview()" style="min-height:130px;"></textarea>
+          <label>Closing quote (optional)</label><input type="text" id="blogQuote" oninput="blogUpdatePreview()">
+
+          <label>Image (optional)</label>
+          <input type="file" id="blogImageFile" accept="image/*" onchange="blogHandleImageSelect(event)">
+          <div class="photo-preview" id="blogImagePreviewWrap" style="display:none;"><img id="blogImagePreviewImg"><button class="btn btn-outline btn-sm" onclick="blogClearImage()">Remove</button></div>
+
+          <label>Video (optional)</label>
+          <div class="seg"><div class="seg-btn active" id="blogVidYt" onclick="blogSetVideoMode('yt')">YouTube Link</div><div class="seg-btn" id="blogVidUp" onclick="blogSetVideoMode('upload')">Upload File</div></div>
+          <div id="blogVideoYtWrap" style="margin-top:8px;"><input type="text" id="blogVideoUrl" placeholder="https://youtube.com/watch?v=..." oninput="blogUpdatePreview()"></div>
+          <div id="blogVideoUpWrap" style="display:none;margin-top:8px;">
+            <input type="file" id="blogVideoFile" accept="video/*" onchange="blogHandleVideoSelect(event)">
+            <div class="hint"><i class="fa-solid fa-triangle-exclamation"></i> Keep under ~20MB.</div>
+            <div class="photo-preview" id="blogVideoPreviewWrap" style="display:none;"><span style="font-size:12px;" id="blogVideoFileName"></span><button class="btn btn-outline btn-sm" onclick="blogClearVideo()">Remove</button></div>
+          </div>
+
+          <div class="preview">
+            <div class="preview-tag"><i class="fa-solid fa-eye"></i> Preview</div>
+            <div id="blogPreviewBox" style="font-size:13px;color:var(--dim);">Start typing to preview...</div>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn btn-dark" id="blogPublishBtn" onclick="blogSubmitPost()"><i class="fa-solid fa-paper-plane"></i> <span id="blogPublishBtnText">Publish</span></button>
+          </div>
+          <div class="alert" id="blogPublishStatus"></div>
+        </div>
+      </div>
+
+      <div class="subpanel" id="blogtab-posts">
+        <div class="panel">
+          <div class="panel-head">
+            <div><div class="panel-title">All Posts</div></div>
+            <button class="btn btn-outline btn-sm" onclick="blogLoadPostsList()"><i class="fa-solid fa-arrows-rotate"></i> Refresh</button>
+          </div>
+          <div id="blogPostsList"><div class="item-empty">Connect first.</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════ LAB (lab.html) ══════════════ -->
+    <section class="page-section" id="sec-lab">
+      <div class="page-head">
+        <div class="page-title">Lab</div>
+        <div class="page-sub">Edits lab.html directly.</div>
+      </div>
+
+      <details class="mini" open><summary>HISAB App Card <i class="fa-solid fa-chevron-down chev"></i></summary>
+        <div class="mini-body">
+          <label>Title</label><input type="text" class="fld-lab" data-key="hisab-title">
+          <label>Tagline</label><input type="text" class="fld-lab" data-key="hisab-tagline">
+          <label>Description</label><textarea class="fld-lab" data-key="hisab-desc"></textarea>
+          <label>Download link</label><input type="text" class="fld-lab" data-key="hisab-download">
+          <label>Feature tags (4)</label>
+          <div class="grid2">
+            <input type="text" class="fld-lab" data-key="hisab-feat1">
+            <input type="text" class="fld-lab" data-key="hisab-feat2">
+            <input type="text" class="fld-lab" data-key="hisab-feat3">
+            <input type="text" class="fld-lab" data-key="hisab-feat4">
+          </div>
+        </div>
+      </details>
+
+      <div class="panel">
+        <div class="panel-head"><div><div class="panel-title">Live Websites</div><div class="panel-note">Add, edit, or remove site cards</div></div></div>
+        <div id="labSitesHost"></div>
+        <button class="btn btn-outline btn-sm" style="margin-top:6px;" onclick="labOpenSiteForm(null)"><i class="fa-solid fa-plus"></i> Add Site</button>
+      </div>
+
+      <details class="mini"><summary>Games <i class="fa-solid fa-chevron-down chev"></i></summary>
+        <div class="mini-body">
+          <label>Snake — title</label><input type="text" class="fld-lab" data-key="game1-title">
+          <label>Snake — description</label><textarea class="fld-lab" data-key="game1-desc"></textarea>
+          <label>Snake — play link</label><input type="text" class="fld-lab" data-key="game1-link">
+          <label style="margin-top:20px;">Pong — title</label><input type="text" class="fld-lab" data-key="game2-title">
+          <label>Pong — description</label><textarea class="fld-lab" data-key="game2-desc"></textarea>
+          <label>Pong — play link</label><input type="text" class="fld-lab" data-key="game2-link">
+        </div>
+      </details>
+
+      <details class="mini"><summary>Coming Soon Tags <i class="fa-solid fa-chevron-down chev"></i></summary>
+        <div class="mini-body">
+          <div class="chip-list" id="comingSoonChips"></div>
+          <div class="row-inline" style="margin-top:10px;">
+            <input type="text" id="comingSoonInput" placeholder="New tag...">
+            <button class="btn btn-outline btn-sm" onclick="addComingSoonChip()">Add</button>
+          </div>
+        </div>
+      </details>
+
+      <div class="panel">
+        <div class="btn-row" style="margin-top:0;">
+          <button class="btn btn-outline" onclick="loadLabFields()"><i class="fa-solid fa-arrows-rotate"></i> Reload</button>
+          <button class="btn btn-dark" id="labSaveBtn" onclick="saveLabFields()"><i class="fa-solid fa-floppy-disk"></i> Save Lab Changes</button>
+        </div>
+        <div class="alert" id="labStatus"></div>
+      </div>
+    </section>
+
+    <!-- ══════════════ CONTACT (contact.html + social.json) ══════════════ -->
+    <section class="page-section" id="sec-contact">
+      <div class="page-head">
+        <div class="page-title">Contact</div>
+        <div class="page-sub">Email &amp; location edit contact.html. Social links update everywhere automatically.</div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Contact Details</div>
+        <label>Email</label><input type="text" class="fld-contact" data-key="contact-email">
+        <label>Location</label><input type="text" class="fld-contact" data-key="contact-location">
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Social Media Links</div>
+        <div class="panel-note">Saved once here — Home, About, and Skill will show these same links automatically.</div>
+        <label>Facebook</label><input type="text" id="social-fb" placeholder="https://facebook.com/...">
+        <label>X (Twitter)</label><input type="text" id="social-x" placeholder="https://x.com/...">
+        <label>Instagram</label><input type="text" id="social-ig" placeholder="https://instagram.com/...">
+        <label>YouTube</label><input type="text" id="social-yt" placeholder="https://youtube.com/...">
+      </div>
+
+      <div class="panel">
+        <div class="btn-row" style="margin-top:0;">
+          <button class="btn btn-outline" onclick="loadContactFields()"><i class="fa-solid fa-arrows-rotate"></i> Reload</button>
+          <button class="btn btn-dark" id="contactSaveBtn" onclick="saveContactFields()"><i class="fa-solid fa-floppy-disk"></i> Save Contact Changes</button>
+        </div>
+        <div class="alert" id="contactStatus"></div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<!-- Delete confirmation modal (shared) -->
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal-box">
+    <div class="modal-icon"><i class="fa-solid fa-trash"></i></div>
+    <div class="modal-title">Delete this?</div>
+    <div class="modal-text">"<strong id="deleteModalTitle"></strong>" will be permanently removed.</div>
+    <div class="modal-btns">
+      <button class="btn btn-outline" onclick="closeDeleteModal()">Cancel</button>
+      <button class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Site card add/edit modal (Lab) -->
+<div class="modal-overlay" id="siteModal">
+  <div class="modal-box" style="max-width:420px;text-align:left;">
+    <div class="modal-title" id="siteModalTitle" style="margin-bottom:14px;">Add Site</div>
+    <label>Emoji</label><input type="text" id="siteEmoji" placeholder="🌙" maxlength="4">
+    <label>Tag</label><input type="text" id="siteTag" placeholder="Featured Project">
+    <label>Title</label><input type="text" id="siteTitle">
+    <label>Description</label><textarea id="siteDesc"></textarea>
+    <label>URL</label><input type="text" id="siteUrl" placeholder="https://...">
+    <div class="modal-btns" style="margin-top:16px;">
+      <button class="btn btn-outline" onclick="closeSiteModal()">Cancel</button>
+      <button class="btn btn-dark" id="siteModalSaveBtn">Save</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════
+   PASSWORD GATE
+══════════════════════════════════════ */
+const PW_HASH = '3770de42cd9ea2d94978d6e5f117d732190c295068c3bec5a45a63d8ebbe62fb';
+
+async function sha256(text){
+  const enc = new TextEncoder().encode(text);
+  const buf = await crypto.subtle.digest('SHA-256', enc);
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+async function checkPassword(){
+  const pw = document.getElementById('gatePw').value;
+  const hash = await sha256(pw);
+  if(hash === PW_HASH){
+    sessionStorage.setItem('admin_unlocked', '1');
+    unlockApp();
+  } else {
+    document.getElementById('gateErr').classList.add('show');
+  }
+}
+document.getElementById('gatePw').addEventListener('keydown', e => { if(e.key === 'Enter') checkPassword(); });
+
+function unlockApp(){
+  document.getElementById('gate').style.display = 'none';
+  document.getElementById('app').classList.add('show');
+  loadConnection();
+}
+
+function lockPanel(){
+  sessionStorage.removeItem('admin_unlocked');
+  location.reload();
+}
+
+if(sessionStorage.getItem('admin_unlocked') === '1'){
+  unlockApp();
+}
+
+/* ══════════════════════════════════════
+   DRAWER NAV / SECTION SWITCHING
+══════════════════════════════════════ */
+const SECTION_LABELS = { profile:'My Profile', home:'Home', about:'About', skill:'Skill', blog:'Blog', lab:'Lab', contact:'Contact' };
+
+function openDrawer(){ document.getElementById('drawer').classList.add('open'); document.getElementById('drawerOverlay').classList.add('open'); }
+function closeDrawer(){ document.getElementById('drawer').classList.remove('open'); document.getElementById('drawerOverlay').classList.remove('open'); }
+
+function goSection(name){
+  document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+  document.getElementById('sec-' + name).classList.add('active');
+  document.querySelectorAll('.drawer-item').forEach(i => i.classList.toggle('active', i.dataset.sec === name));
+  document.getElementById('currentSectionTag').textContent = SECTION_LABELS[name];
+  closeDrawer();
+
+  if(!localStorage.getItem('gh_token')) return;
+  if(name === 'home' && !homeLoaded){ loadHomeFields(); homeLoaded = true; }
+  if(name === 'about' && !aboutLoaded){ loadAboutFields(); aboutLoaded = true; }
+  if(name === 'skill' && !skillLoaded){ loadSkillFields(); skillLoaded = true; }
+  if(name === 'blog' && !blogLoaded){ blogLoadPostsList(); blogLoaded = true; }
+  if(name === 'lab' && !labLoaded){ loadLabFields(); labLoaded = true; }
+  if(name === 'contact' && !contactLoaded){ loadContactFields(); contactLoaded = true; }
+}
+let homeLoaded=false, aboutLoaded=false, skillLoaded=false, blogLoaded=false, labLoaded=false, contactLoaded=false;
+
+/* ══════════════════════════════════════
+   SHARED: CONNECTION + GITHUB HELPERS
+══════════════════════════════════════ */
+const API_BASE = 'https://api.github.com';
+
+function toggleTokenVisibility(){
+  const t = document.getElementById('token');
+  const icon = document.getElementById('eyeIcon');
+  if(t.type === 'password'){ t.type = 'text'; icon.className = 'fa-solid fa-eye-slash'; }
+  else { t.type = 'password'; icon.className = 'fa-solid fa-eye'; }
+}
+
+function loadConnection(){
+  const token = localStorage.getItem('gh_token');
+  const owner = localStorage.getItem('gh_owner');
+  const repo = localStorage.getItem('gh_repo');
+  if(token) document.getElementById('token').value = token;
+  if(owner) document.getElementById('owner').value = owner;
+  if(repo) document.getElementById('repo').value = repo;
+  if(token) setConnected(true);
+}
+
+function setConnected(on){
+  document.getElementById('connPill').classList.toggle('live', on);
+  document.getElementById('connLabel').textContent = on ? 'Connected' : 'Offline';
+}
+
+function showAlert(id, msg, type){
+  const el = document.getElementById(id);
+  el.innerHTML = msg;
+  el.className = 'alert show ' + type;
+}
+
+async function saveConnection(){
+  const token = document.getElementById('token').value.trim();
+  const owner = document.getElementById('owner').value.trim();
+  const repo = document.getElementById('repo').value.trim();
+  if(!token){ showAlert('connStatus','<i class="fa-solid fa-triangle-exclamation"></i> Enter a token first','alert-bad'); return; }
+  showAlert('connStatus','<i class="fa-solid fa-spinner fa-spin"></i> Verifying...','alert-load');
+  try {
+    const res = await fetch(`${API_BASE}/repos/${owner}/${repo}`, { headers:{ 'Authorization':`token ${token}`, 'Accept':'application/vnd.github+json' }});
+    if(!res.ok) throw new Error('Could not access the repo — check token or repo name');
+    localStorage.setItem('gh_token', token);
+    localStorage.setItem('gh_owner', owner);
+    localStorage.setItem('gh_repo', repo);
+    setConnected(true);
+    showAlert('connStatus','<i class="fa-solid fa-circle-check"></i> Connected successfully','alert-ok');
+  } catch(e){
+    setConnected(false);
+    showAlert('connStatus','<i class="fa-solid fa-circle-xmark"></i> ' + e.message,'alert-bad');
+  }
+}
+
+async function getFile(path){
+  const token = localStorage.getItem('gh_token');
+  const owner = localStorage.getItem('gh_owner');
+  const repo = localStorage.getItem('gh_repo');
+  const res = await fetch(`${API_BASE}/repos/${owner}/${repo}/contents/${path}`, { headers:{ 'Authorization':`token ${token}`, 'Accept':'application/vnd.github+json' }});
+  if(res.status === 404) return null;
+  if(!res.ok) throw new Error(`GitHub error: ${res.status}`);
+  const data = await res.json();
+  return { sha:data.sha, content:decodeURIComponent(escape(atob(data.content.replace(/\n/g,'')))) };
+}
+
+async function putFile(path, contentStr, sha, message){
+  const token = localStorage.getItem('gh_token');
+  const owner = localStorage.getItem('gh_owner');
+  const repo = localStorage.getItem('gh_repo');
+  const body = { message, content: btoa(unescape(encodeURIComponent(contentStr))) };
+  if(sha) body.sha = sha;
+  const res = await fetch(`${API_BASE}/repos/${owner}/${repo}/contents/${path}`, {
+    method:'PUT', headers:{ 'Authorization':`token ${token}`, 'Accept':'application/vnd.github+json' }, body: JSON.stringify(body)
+  });
+  if(!res.ok){ const err = await res.json().catch(()=>({})); throw new Error(err.message || `GitHub error: ${res.status}`); }
+  return res.json();
+}
+
+async function putBinaryFile(path, base64Content, sha, message){
+  const token = localStorage.getItem('gh_token');
+  const owner = localStorage.getItem('gh_owner');
+  const repo = localStorage.getItem('gh_repo');
+  const body = { message, content: base64Content };
+  if(sha) body.sha = sha;
+  const res = await fetch(`${API_BASE}/repos/${owner}/${repo}/contents/${path}`, {
+    method:'PUT', headers:{ 'Authorization':`token ${token}`, 'Accept':'application/vnd.github+json' }, body: JSON.stringify(body)
+  });
+  if(!res.ok){ const err = await res.json().catch(()=>({})); throw new Error(err.message || `GitHub error: ${res.status}`); }
+  return res.json();
+}
+
+function escapeHtml(str){
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function readFileAsBase64(file){
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result.split(',')[1]);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+/* Marker helpers shared by Home / About / Contact (simple text fields) */
+function htmlToText(html){
+  let s = html.trim();
+  s = s.replace(/<br\s*\/?>/gi, '\n');
+  s = s.replace(/<strong[^>]*>(.*?)<\/strong>/gi, '**$1**');
+  const div = document.createElement('div');
+  div.innerHTML = s;
+  return (div.textContent || '').trim();
+}
+function textToHtml(raw){
+  let escaped = escapeHtml(raw.trim());
+  escaped = escaped.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  escaped = escaped.replace(/\n/g, '<br>');
+  return escaped;
+}
+
+/* ══════════════════════════════════════
+   PHOTO UPLOAD (Home / About / Skill — fixed filenames)
+══════════════════════════════════════ */
+const pendingPhotos = {};
+
+function previewPhoto(event, wrapId){
+  const file = event.target.files[0];
+  if(!file) return;
+  const inputId = event.target.id;
+  pendingPhotos[inputId] = file;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const wrap = document.getElementById(wrapId);
+    wrap.style.display = 'flex';
+    wrap.querySelector('img').src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+async function uploadFixedPhoto(inputId, filename, statusId){
+  const file = pendingPhotos[inputId];
+  if(!file){ showAlert(statusId, '<i class="fa-solid fa-triangle-exclamation"></i> Choose a photo first', 'alert-bad'); return; }
+  if(!localStorage.getItem('gh_token')){ showAlert(statusId, '<i class="fa-solid fa-triangle-exclamation"></i> Connect in My Profile first', 'alert-bad'); return; }
+  showAlert(statusId, '<i class="fa-solid fa-spinner fa-spin"></i> Uploading...', 'alert-load');
+  try {
+    const existing = await getFile(filename);
+    const b64 = await readFileAsBase64(file);
+    await putBinaryFile(filename, b64, existing ? existing.sha : null, `Update photo: ${filename}`);
+    showAlert(statusId, '<i class="fa-solid fa-circle-check"></i> Photo updated! Live in a minute.', 'alert-ok');
+  } catch(e){
+    showAlert(statusId, '<i class="fa-solid fa-circle-xmark"></i> ' + e.message, 'alert-bad');
+  }
+}
+
+/* ══════════════════════════════════════
+   HOME (index.html)
+══════════════════════════════════════ */
+async function loadHomeFields(){
+  showAlert('homeStatus','<i class="fa-solid fa-spinner fa-spin"></i> Loading...','alert-load');
+  try {
+    const file = await getFile('index.html');
+    if(!file) throw new Error('index.html not found');
+    document.querySelectorAll('.fld-home').forEach(el => {
+      const key = el.dataset.key;
+      const s = file.content.indexOf(`<!-- EDIT:${key}:START -->`);
+      const e = file.content.indexOf(`<!-- EDIT:${key}:END -->`);
+      if(s === -1 || e === -1) return;
+      const raw = file.content.slice(s + `<!-- EDIT:${key}:START -->`.length, e);
+      el.value = htmlToText(raw);
+    });
+    showAlert('homeStatus','<i class="fa-solid fa-circle-check"></i> Loaded.','alert-ok');
+  } catch(e){ showAlert('homeStatus','<i class="fa-solid fa-circle-xmark"></i> ' + e.message,'alert-bad'); }
+}
+
+async function saveHomeFields(){
+  const btn = document.getElementById('homeSaveBtn');
+  btn.disabled = true;
+  showAlert('homeStatus','<i class="fa-solid fa-spinner fa-spin"></i> Saving...','alert-load');
+  try {
+    const file = await getFile('index.html');
+    if(!file) throw new Error('index.html not found');
+    let content = file.content;
+    document.querySelectorAll('.fld-home').forEach(el => {
+      const key = el.dataset.key;
+      const startTag = `<!-- EDIT:${key}:START -->`, endTag = `<!-- EDIT:${key}:END -->`;
+      const s = content.indexOf(startTag), e = content.indexOf(endTag);
+      if(s === -1 || e === -1) return;
+      content = content.slice(0, s + startTag.length) + textToHtml(el.value) + content.slice(e);
+    });
+    await putFile('index.html', content, file.sha, 'Update homepage via admin panel');
+    showAlert('homeStatus','<i class="fa-solid fa-circle-check"></i> Saved! Live in a minute.','alert-ok');
+  } catch(e){ showAlert('homeStatus','<i class="fa-solid fa-circle-xmark"></i> ' + e.message,'alert-bad'); }
+  finally { btn.disabled = false; }
+}
+
+/* ══════════════════════════════════════
+   ABOUT (about.html)
+══════════════════════════════════════ */
+async function loadAboutFields(){
+  showAlert('aboutStatus','<i class="fa-solid fa-spinner fa-spin"></i> Loading...','alert-load');
+  try {
+    const file = await getFile('about.html');
+    if(!file) throw new Error('about.html not found');
+    document.querySelectorAll('.fld-about').forEach(el => {
+      const key = el.dataset.key;
+      const s = file.content.indexOf(`<!-- EDIT:${key}:START -->`);
+      const e = file.content.indexOf(`<!-- EDIT:${key}:END -->`);
+      if(s === -1 || e === -1) return;
+      const raw = file.content.slice(s + `<!-- EDIT:${key}:START -->`.length, e);
+      el.value = htmlToText(raw);
+    });
+    showAlert('aboutStatus','<i class="fa-solid fa-circle-check"></i> Loaded.','alert-ok');
+  } catch(e){ showAlert('aboutStatus','<i class="fa-solid fa-circle-xmark"></i> ' + e.message,'alert-bad'); }
+}
+
+async function saveAboutFields(){
+  const btn = document.getElementById('aboutSaveBtn');
+  btn.disabled = true;
+  showAlert('aboutStatus','<i class="fa-solid fa-spinner fa-spin"></i> Saving...','alert-load');
+  try {
+    const file = await getFile('about.html');
+    if(!file) throw new Error('about.html not found');
+    let content = file.content;
+    document.querySelectorAll('.fld-about').forEach(el => {
+      const key = el.dataset.key;
+      const startTag = `<!-- EDIT:${key}:START -->`, endTag = `<!-- EDIT:${key}:END -->`;
+      const s = content.indexOf(startTag), e = content.indexOf(endTag);
+      if(s === -1 || e === -1) return;
+      content = content.slice(0, s + startTag.length) + textToHtml(el.value) + content.slice(e);
+    });
+    await putFile('about.html', content, file.sha, 'Update about page via admin panel');
+    showAlert('aboutStatus','<i class="fa-solid fa-circle-check"></i> Saved! Live in a minute.','alert-ok');
+  } catch(e){ showAlert('aboutStatus','<i class="fa-solid fa-circle-xmark"></i> ' + e.message,'alert-bad'); }
+  finally { btn.disabled = false; }
+}
+
+/* ══════════════════════════════════════
+   SKILL (skills.html) — dynamic groups of skill items
+══════════════════════════════════════ */
+const SKILL_GROUP_KEYS = ['group1','group2','group3','group4'];
+const SKILL_GROUP_TITLES = { group1:'Core Academic & Thinking', group2:'Communication & Community', group3:'Technical & Practical', group4:'Languages' };
+let skillGroupsData = {};
+let workItemsData = [];
+let skillIdCounter = 0;
+
+function renderSkillGroups(){
+  const host = document.getElementById('skillGroupsHost');
+  host.innerHTML = '';
+  SKILL_GROUP_KEYS.forEach(gKey => {
+    const items = skillGroupsData[gKey] || [];
+    const groupEl = document.createElement('details');
+    groupEl.className = 'mini';
+    groupEl.open = true;
+    groupEl.innerHTML = `
+      <summary>
+        <input type="text" class="fld-skill-group-label" data-group="${gKey}" value="${escapeHtml(SKILL_GROUP_TITLES[gKey])}" style="border:none;background:none;font-weight:600;font-size:13px;padding:0;width:auto;flex:1;" onclick="event.stopPropagation()">
+        <i class="fa-solid fa-chevron-down chev"></i>
+      </summary>
+      <div class="mini-body">
+        <div id="items-${gKey}"></div>
+        <button type="button" class="btn btn-outline btn-sm" style="margin-top:6px;" onclick="addSkillItem('${gKey}')"><i class="fa-solid fa-plus"></i> Add Skill</button>
+      </div>`;
+    host.appendChild(groupEl);
+    const itemsHost = groupEl.querySelector(`#items-${gKey}`);
+    if(!items.length){ itemsHost.innerHTML = '<div class="item-empty">No skills yet.</div>'; }
+    items.forEach(item => itemsHost.appendChild(buildSkillItemRow(gKey, item)));
+  });
+}
+
+function buildSkillItemRow(gKey, item){
+  const row = document.createElement('div');
+  row.className = 'item-row';
+  row.dataset.id = item.id;
+  const showDesc = gKey !== 'group4';
+  row.innerHTML = `
+    <div class="grid2">
+      <input type="text" class="sk-name" placeholder="Skill name" value="${escapeHtml(item.name||'')}">
+      <input type="text" class="sk-level" placeholder="Level label" value="${escapeHtml(item.level||'')}">
+    </div>
+    <div class="row-inline" style="margin-top:8px;">
+      <input type="text" class="sk-pct" placeholder="% (e.g. 82)" value="${escapeHtml(item.pct||'')}" style="max-width:110px;">
+      ${showDesc ? `<input type="text" class="sk-desc" placeholder="Short description" value="${escapeHtml(item.desc||'')}">` : ''}
+      <button type="button" class="btn-icon danger" onclick="removeSkillItem('${gKey}','${item.id}')" title="Remove"><i class="fa-solid fa-trash"></i></button>
+    </div>`;
+  return row;
+}
+
+function addSkillItem(gKey){
+  if(!skillGroupsData[gKey]) skillGroupsData[gKey] = [];
+  skillGroupsData[gKey].push({ id:'sk'+(skillIdCounter++), name:'', level:'', pct:'70', desc:'' });
+  renderSkillGroups();
+}
+function removeSkillItem(gKey, id){
+  skillGroupsData[gKey] = (skillGroupsData[gKey]||[]).filter(i => i.id !== id);
+  renderSkillGroups();
+}
+
+function renderWorkItems(){
+  const host = document.getElementById('workListHost');
+  host.innerHTML = '';
+  if(!workItemsData.length){ host.innerHTML = '<div class="item-empty">No lines yet.</div>'; }
+  workItemsData.forEach(item => {
+    const row = document.createElement('div');
+    row.className = 'row-inline';
+    row.style.marginTop = '6px';
+    row.innerHTML = `<input type="text" class="work-text" value="${escapeHtml(item.text)}" data-id="${item.id}"><button type="button" class="btn-icon danger" onclick="removeWorkItem('${item.id}')"><i class="fa-solid fa-trash"></i></button>`;
+    host.appendChild(row);
+  });
+}
+function addWorkItem(){ workItemsData.push({ id:'w'+(skillIdCounter++), text:'' }); renderWorkItems(); }
+function removeWorkItem(id){ workItemsData = workItemsData.filter(i => i.id !== id); renderWorkItems(); }
+
+function collectSkillGroupsFromDOM(){
+  SKILL_GROUP_KEYS.forEach(gKey => {
+    const host = document.getElementById(`items-${gKey}`);
+    if(!host) return;
+    const rows = Array.from(host.querySelectorAll('.item-row'));
+    skillGroupsData[gKey] = rows.map(row => ({
+      id: row.dataset.id,
+      name: row.querySelector('.sk-name').value.trim(),
+      level: row.querySelector('.sk-level').value.trim(),
+      pct: row.querySelector('.sk-pct').value.trim() || '70',
+      desc: row.querySelector('.sk-desc') ? row.querySelector('.sk-desc').value.trim() : ''
+    }));
+  });
+  workItemsData = Array.from(document.querySelectorAll('.work-text')).map(inp => ({ id: inp.dataset.id, text: inp.value.trim() })).filter(w => w.text);
+}
+
+async function loadSkillFields(){
+  showAlert('skillStatus','<i class="fa-solid fa-spinner fa-spin"></i> Loading...','alert-load');
+  try {
+    const file = await getFile('skills.html');
+    if(!file) throw new Error('skills.html not found');
+
+    document.querySelectorAll('.fld-skill-page').forEach(el => {
+      const key = el.dataset.key;
+      const s = file.content.indexOf(`<!-- EDIT:${key}:START -->`);
+      const e = file.content.indexOf(`<!-- EDIT:${key}:END -->`);
+      if(s === -1 || e === -1) return;
+      const raw = file.content.slice(s + `<!-- EDIT:${key}:START -->`.length, e);
+      el.value = htmlToText(raw);
+    });
+
+    SKILL_GROUP_KEYS.forEach(gKey => {
+      const labelS = file.content.indexOf(`<!-- EDIT:${gKey}-label:START -->`);
+      const labelE = file.content.indexOf(`<!-- EDIT:${gKey}-label:END -->`);
+      if(labelS !== -1 && labelE !== -1){
+        SKILL_GROUP_TITLES[gKey] = htmlToText(file.content.slice(labelS + `<!-- EDIT:${gKey}-label:START -->`.length, labelE));
+      }
+      const items = [];
+      const re = new RegExp(`<!-- SKITEM:(${gKey}-[\\w-]+):START -->([\\s\\S]*?)<!-- SKITEM:\\1:END -->`, 'g');
+      let m;
+      while((m = re.exec(file.content)) !== null){
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(`<div>${m[2]}</div>`, 'text/html');
+        const nameEl = doc.querySelector('.skill-name');
+        const levelEl = doc.querySelector('.skill-level');
+        const barEl = doc.querySelector('.skill-bar-fill');
+        const descEl = doc.querySelector('.skill-desc');
+        items.push({
+          id: m[1],
+          name: nameEl ? nameEl.textContent.trim() : '',
+          level: levelEl ? levelEl.textContent.trim() : '',
+          pct: barEl ? (barEl.getAttribute('data-w') || '70') : '70',
+          desc: descEl ? descEl.textContent.trim() : ''
+        });
+      }
+      skillGroupsData[gKey] = items;
+    });
+
+    workItemsData = [];
+    const workRe = /<!-- WORKITEM:([\w-]+):START -->([\s\S]*?)<!-- WORKITEM:\1:END -->/g;
+    let wm;
+    while((wm = workRe.exec(file.content)) !== null){
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(`<div>${wm[2]}</div>`, 'text/html');
+      workItemsData.push({ id: wm[1], text: (doc.textContent || '').trim() });
+    }
+
+    renderSkillGroups();
+    renderWorkItems();
+    showAlert('skillStatus','<i class="fa-solid fa-circle-check"></i> Loaded.','alert-ok');
+  } catch(e){ showAlert('skillStatus','<i class="fa-solid fa-circle-xmark"></i> ' + e.message,'alert-bad'); }
+}
+
+async function saveSkillFields(){
+  collectSkillGroupsFromDOM();
+  const btn = document.getElementById('skillSaveBtn');
+  btn.disabled = true;
+  showAlert('skillStatus','<i class="fa-solid fa-spinner fa-spin"></i> Saving...','alert-load');
+  try {
+    const file = await getFile('skills.html');
+    if(!file) throw new Error('skills.html not found');
+    let content = file.content;
+
+    document.querySelectorAll('.fld-skill-page').forEach(el => {
+      const key = el.dataset.key;
+      const startTag = `<!-- EDIT:${key}:START -->`, endTag = `<!-- EDIT:${key}:END -->`;
+      const s = content.indexOf(startTag), e = content.indexOf(endTag);
+      if(s === -1 || e === -1) return;
+      content = content.slice(0, s + startTag.length) + textToHtml(el.value) + content.slice(e);
+    });
+
+    SKILL_GROUP_KEYS.forEach(gKey => {
+      const labelInput = document.querySelector(`.fld-skill-group-label[data-group="${gKey}"]`);
+      const labelVal = labelInput ? labelInput.value.trim() : SKILL_GROUP_TITLES[gKey];
+      const labelStart = `<!-- EDIT:${gKey}-label:START -->`, labelEnd = `<!-- EDIT:${gKey}-label:END -->`;
+      const lS = content.indexOf(labelStart), lE = content.indexOf(labelEnd);
+      if(lS !== -1 && lE !== -1){
+        content = content.slice(0, lS + labelStart.length) + escapeHtml(labelVal) + content.slice(lE);
+      }
+
+      const insertMark = `<!-- GROUP:${gKey}:INSERT -->`;
+      const existingRe = new RegExp(`<!-- SKITEM:${gKey}-[\\w-]+:START -->[\\s\\S]*?<!-- SKITEM:${gKey}-[\\w-]+:END -->\\s*`, 'g');
+      content = content.replace(existingRe, '');
+
+      const items = skillGroupsData[gKey] || [];
+      const showDesc = gKey !== 'group4';
+      const blocks = items.map(item => {
+        const descHtml = showDesc && item.desc ? `\n          <div class="skill-desc">${escapeHtml(item.desc)}</div>` : '';
+        return `<!-- SKITEM:${item.id}:START -->
+        <div class="skill-item">
+          <div class="skill-top">
+            <span class="skill-name">${escapeHtml(item.name)}</span>
+            <span class="skill-level">${escapeHtml(item.level)}</span>
+          </div>
+          <div class="skill-bar"><div class="skill-bar-fill" data-w="${escapeHtml(item.pct)}"></div></div>${descHtml}
+        </div>
+        <!-- SKITEM:${item.id}:END -->`;
+      }).join('\n        ');
+
+      const iM = content.indexOf(insertMark);
+      if(iM !== -1){
+        content = content.slice(0, iM + insertMark.length) + '\n        ' + blocks + content.slice(iM + insertMark.length);
+      }
+    });
+
+    const workInsertMark = '<!-- WORK:INSERT -->';
+    const existingWorkRe = /<!-- WORKITEM:[\w-]+:START -->[\s\S]*?<!-- WORKITEM:[\w-]+:END -->\s*/g;
+    content = content.replace(existingWorkRe, '');
+    const workBlocks = workItemsData.map(item => `<!-- WORKITEM:${item.id}:START --><li>${escapeHtml(item.text)}</li><!-- WORKITEM:${item.id}:END -->`).join('\n          ');
+    const wIM = content.indexOf(workInsertMark);
+    if(wIM !== -1){
+      content = content.slice(0, wIM + workInsertMark.length) + '\n          ' + workBlocks + content.slice(wIM + workInsertMark.length);
+    }
+
+    await putFile('skills.html', content, file.sha, 'Update skills page via admin panel');
+    showAlert('skillStatus','<i class="fa-solid fa-circle-check"></i> Saved! Live in a minute.','alert-ok');
+  } catch(e){ showAlert('skillStatus','<i class="fa-solid fa-circle-xmark"></i> ' + e.message,'alert-bad'); }
+  finally { btn.disabled = false; }
+}
+
+/* ══════════════════════════════════════
+   LAB (lab.html)
+══════════════════════════════════════ */
+let labSitesData = [];
+let comingSoonTags = [];
+let editingSiteId = null;
+
+function renderLabSites(){
+  const host = document.getElementById('labSitesHost');
+  if(!labSitesData.length){ host.innerHTML = '<div class="item-empty">No sites yet.</div>'; return; }
+  host.innerHTML = labSitesData.map(site => `
+    <div class="item-row">
+      <div class="item-row-head">
+        <div class="item-row-title">${site.emoji||''} ${escapeHtml(site.title||'(untitled)')}</div>
+        <div class="item-row-actions">
+          <button class="btn-icon" onclick="labOpenSiteForm('${site.id}')" title="Edit"><i class="fa-solid fa-pen"></i></button>
+          <button class="btn-icon danger" onclick="labRemoveSite('${site.id}')" title="Delete"><i class="fa-solid fa-trash"></i></button>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--dim);">${escapeHtml(site.tag||'')}</div>
+    </div>`).join('');
+}
+
+function labOpenSiteForm(id){
+  editingSiteId = id;
+  const site = id ? labSitesData.find(s => s.id === id) : { emoji:'', tag:'', title:'', desc:'', url:'' };
+  document.getElementById('siteModalTitle').textContent = id ? 'Edit Site' : 'Add Site';
+  document.getElementById('siteEmoji').value = site.emoji || '';
+  document.getElementById('siteTag').value = site.tag || '';
+  document.getElementById('siteTitle').value = site.title || '';
+  document.getElementById('siteDesc').value = site.desc || '';
+  document.getElementById('siteUrl').value = site.url || '';
+  document.getElementById('siteModal').classList.add('show');
+}
+function closeSiteModal(){ document.getElementById('siteModal').classList.remove('show'); editingSiteId = null; }
+
+document.getElementById('siteModalSaveBtn').addEventListener('click', () => {
+  const data = {
+    emoji: document.getElementById('siteEmoji').value.trim(),
+    tag: document.getElementById('siteTag').value.trim(),
+    title: document.getElementById('siteTitle').value.trim(),
+    desc: document.getElementById('siteDesc').value.trim(),
+    url: document.getElementById('siteUrl').value.trim()
+  };
+  if(editingSiteId){
+    const idx = labSitesData.findIndex(s => s.id === editingSiteId);
+    if(idx !== -1) labSitesData[idx] = { ...labSitesData[idx], ...data };
+  } else {
+    labSitesData.push({ id:'site'+Date.now(), ...data });
+  }
+  renderLabSites();
+  closeSiteModal();
+});
+
+function labRemoveSite(id){
+  labSitesData = labSitesData.filter(s => s.id !== id);
+  renderLabSites();
+}
+
+function renderComingSoonChips(){
+  const host = document.getElementById('comingSoonChips');
+  host.innerHTML = comingSoonTags.map((tag,i) => `<span class="chip">${escapeHtml(tag)}<button onclick="removeComingSoonChip(${i})">✕</button></span>`).join('');
+}
+function addComingSoonChip(){
+  const input = document.getElementById('comingSoonInput');
+  const val = input.value.trim();
+  if(!val) return;
+  comingSoonTags.push(val);
+  input.value = '';
+  renderComingSoonChips();
+}
+function removeComingSoonChip(i){ comingSoonTags.splice(i,1); renderComingSoonChips(); }
+
+async function loadLabFields(){
+  showAlert('labStatus','<i class="fa-solid fa-spinner fa-spin"></i> Loading...','alert-load');
+  try {
+    const file = await getFile('lab.html');
+    if(!file) throw new Error('lab.html not found');
+
+    document.querySelectorAll('.fld-lab').forEach(el => {
+      const key = el.dataset.key;
+      if(key === 'hisab-download'){
+        const m = file.content.match(/id="hisab-download-link"[^>]*href="([^"]*)"/);
+        if(m) el.value = m[1];
+        return;
+      }
+      const s = file.content.indexOf(`<!-- EDIT:${key}:START -->`);
+      const e = file.content.indexOf(`<!-- EDIT:${key}:END -->`);
+      if(s === -1 || e === -1) return;
+      const raw = file.content.slice(s + `<!-- EDIT:${key}:START -->`.length, e);
+      el.value = htmlToText(raw);
+    });
+
+    for(const gk of ['game1','game2']){
+      const m = file.content.match(new RegExp(`id="${gk}-play-link"[^>]*href="([^"]*)"`));
+      const linkEl = document.querySelector(`.fld-lab[data-key="${gk}-link"]`);
+      if(m && linkEl) linkEl.value = m[1];
+    }
+
+    labSitesData = [];
+    const siteRe = /<!-- SITE:([\w-]+):START -->([\s\S]*?)<!-- SITE:\1:END -->/g;
+    let sm;
+    while((sm = siteRe.exec(file.content)) !== null){
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(`<div>${sm[2]}</div>`, 'text/html');
+      const emojiEl = doc.querySelector('.sf-emoji, .sc-emoji');
+      const tagEl = doc.querySelector('.sf-tag, .sc-tag');
+      const titleEl = doc.querySelector('.sf-h, .sc-h');
+      const descEl = doc.querySelector('.sf-p, .sc-p');
+      const linkEl = doc.querySelector('a');
+      labSitesData.push({
+        id: sm[1],
+        emoji: emojiEl ? emojiEl.textContent.trim() : '',
+        tag: tagEl ? tagEl.textContent.trim() : '',
+        title: titleEl ? titleEl.textContent.trim() : '',
+        desc: descEl ? descEl.textContent.trim() : '',
+        url: linkEl ? linkEl.getAttribute('href') : ''
+      });
+    }
+    renderLabSites();
+
+    comingSoonTags = [];
+    const csS = file.content.indexOf('<!-- EDIT:coming-soon:START -->');
+    const csE = file.content.indexOf('<!-- EDIT:coming-soon:END -->');
+    if(csS !== -1 && csE !== -1){
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(`<div>${file.content.slice(csS + '<!-- EDIT:coming-soon:START -->'.length, csE)}</div>`, 'text/html');
+      comingSoonTags = Array.from(doc.querySelectorAll('.coming-pill')).map(p => p.textContent.trim());
+    }
+    renderComingSoonChips();
+
+    showAlert('labStatus','<i class="fa-solid fa-circle-check"></i> Loaded.','alert-ok');
+  } catch(e){ showAlert('labStatus','<i class="fa-solid fa-circle-xmark"></i> ' + e.message,'alert-bad'); }
+}
+
+async function saveLabFields(){
+  const btn = document.getElementById('labSaveBtn');
+  btn.disabled = true;
+  showAlert('labStatus','<i class="fa-solid fa-spinner fa-spin"></i> Saving...','alert-load');
+  try {
+    const file = await getFile('lab.html');
+    if(!file) throw new Error('lab.html not found');
+    let content = file.content;
+
+    document.querySelectorAll('.fld-lab').forEach(el => {
+      const key = el.dataset.key;
+      if(key === 'hisab-download'){
+        content = content.replace(/(id="hisab-download-link"[^>]*href=")[^"]*(")/, `$1${el.value.trim()}$2`);
+        return;
+      }
+      if(key === 'game1-link' || key === 'game2-link'){
+        const gk = key.split('-')[0];
+        content = content.replace(new RegExp(`(id="${gk}-play-link"[^>]*href=")[^"]*(")`), `$1${el.value.trim()}$2`);
+        return;
+      }
+      const startTag = `<!-- EDIT:${key}:START -->`, endTag = `<!-- EDIT:${key}:END -->`;
+      const s = content.indexOf(startTag), e = content.indexOf(endTag);
+      if(s === -1 || e === -1) return;
+      content = content.slice(0, s + startTag.length) + textToHtml(el.value) + content.slice(e);
+    });
+
+    const siteInsertMark = '<!-- SITES:INSERT -->';
+    const existingSiteRe = /<!-- SITE:[\w-]+:START -->[\s\S]*?<!-- SITE:[\w-]+:END -->\s*/g;
+    content = content.replace(existingSiteRe, '');
+    const siteBlocks = labSitesData.map(site => `<!-- SITE:${site.id}:START -->
+      <a href="${escapeHtml(site.url)}" target="_blank" class="site-card reveal">
+        <div class="sc-visual"><div class="sc-emoji">${site.emoji}</div></div>
+        <div class="sc-body">
+          <div class="sc-tag">${escapeHtml(site.tag)}</div>
+          <div class="sc-h">${escapeHtml(site.title)}</div>
+          <p class="sc-p">${escapeHtml(site.desc)}</p>
+        </div>
+      </a>
+      <!-- SITE:${site.id}:END -->`).join('\n      ');
+    const sIM = content.indexOf(siteInsertMark);
+    if(sIM !== -1){
+      content = content.slice(0, sIM + siteInsertMark.length) + '\n      ' + siteBlocks + content.slice(sIM + siteInsertMark.length);
+    }
+
+    const csStart = '<!-- EDIT:coming-soon:START -->', csEnd = '<!-- EDIT:coming-soon:END -->';
+    const csS = content.indexOf(csStart), csE = content.indexOf(csEnd);
+    if(csS !== -1 && csE !== -1){
+      const pillsHtml = comingSoonTags.map(t => `<div class="coming-pill">${escapeHtml(t)}</div>`).join('\n      ');
+      content = content.slice(0, csS + csStart.length) + '\n      ' + pillsHtml + '\n      ' + content.slice(csE);
+    }
+
+    await putFile('lab.html', content, file.sha, 'Update lab page via admin panel');
+    showAlert('labStatus','<i class="fa-solid fa-circle-check"></i> Saved! Live in a minute.','alert-ok');
+  } catch(e){ showAlert('labStatus','<i class="fa-solid fa-circle-xmark"></i> ' + e.message,'alert-bad'); }
+  finally { btn.disabled = false; }
+}
+
+/* ══════════════════════════════════════
+   CONTACT (contact.html + social.json)
+══════════════════════════════════════ */
+async function loadContactFields(){
+  showAlert('contactStatus','<i class="fa-solid fa-spinner fa-spin"></i> Loading...','alert-load');
+  try {
+    const file = await getFile('contact.html');
+    if(file){
+      document.querySelectorAll('.fld-contact').forEach(el => {
+        const key = el.dataset.key;
+        const s = file.content.indexOf(`<!-- EDIT:${key}:START -->`);
+        const e = file.content.indexOf(`<!-- EDIT:${key}:END -->`);
+        if(s === -1 || e === -1) return;
+        const raw = file.content.slice(s + `<!-- EDIT:${key}:START -->`.length, e);
+        el.value = htmlToText(raw);
+      });
+    }
+    const socialFile = await getFile('social.json');
+    if(socialFile){
+      const data = JSON.parse(socialFile.content);
+      document.getElementById('social-fb').value = data.facebook || '';
+      document.getElementById('social-x').value = data.x || '';
+      document.getElementById('social-ig').value = data.instagram || '';
+      document.getElementById('social-yt').value = data.youtube || '';
+    }
+    showAlert('contactStatus','<i class="fa-solid fa-circle-check"></i> Loaded.','alert-ok');
+  } catch(e){ showAlert('contactStatus','<i class="fa-solid fa-circle-xmark"></i> ' + e.message,'alert-bad'); }
+}
+
+async function saveContactFields(){
+  const btn = document.getElementById('contactSaveBtn');
+  btn.disabled = true;
+  showAlert('contactStatus','<i class="fa-solid fa-spinner fa-spin"></i> Saving...','alert-load');
+  try {
+    const file = await getFile('contact.html');
+    if(file){
+      let content = file.content;
+      document.querySelectorAll('.fld-contact').forEach(el => {
+        const key = el.dataset.key;
+        const startTag = `<!-- EDIT:${key}:START -->`, endTag = `<!-- EDIT:${key}:END -->`;
+        const s = content.indexOf(startTag), e = content.indexOf(endTag);
+        if(s === -1 || e === -1) return;
+        content = content.slice(0, s + startTag.length) + textToHtml(el.value) + content.slice(e);
+      });
+      await putFile('contact.html', content, file.sha, 'Update contact page via admin panel');
+    }
+
+    const socialData = {
+      facebook: document.getElementById('social-fb').value.trim(),
+      x: document.getElementById('social-x').value.trim(),
+      instagram: document.getElementById('social-ig').value.trim(),
+      youtube: document.getElementById('social-yt').value.trim()
+    };
+    const existingSocial = await getFile('social.json');
+    await putFile('social.json', JSON.stringify(socialData, null, 2), existingSocial ? existingSocial.sha : null, 'Update social links via admin panel');
+
+    showAlert('contactStatus','<i class="fa-solid fa-circle-check"></i> Saved! Social links now live everywhere.','alert-ok');
+  } catch(e){ showAlert('contactStatus','<i class="fa-solid fa-circle-xmark"></i> ' + e.message,'alert-bad'); }
+  finally { btn.disabled = false; }
+}
+
+/* ══════════════════════════════════════
+   BLOG (blog.html) — full CRUD, ported from the standalone blog admin
+══════════════════════════════════════ */
+const BLOG_INSERT_MARK = '<!-- ADMIN:INSERT-AFTER -->';
+let blogCurrentLang = 'en';
+let blogEditingId = null;
+let blogEditingOriginalDateTime = null;
+let blogSelectedImageFile = null;
+let blogExistingImagePath = null;
+let blogSelectedVideoFile = null;
+let blogExistingVideoPath = null;
+let blogVideoMode = 'yt';
+
+function switchBlogTab(name){
+  document.querySelectorAll('.subtab').forEach(t => t.classList.toggle('active', t.dataset.sub === name));
+  document.querySelectorAll('.subpanel').forEach(p => p.classList.remove('active'));
+  document.getElementById('blogtab-' + name).classList.add('active');
+  if(name === 'posts') blogLoadPostsList();
+}
+
+function blogSetLang(lang){
+  blogCurrentLang = lang;
+  document.getElementById('blogLangEn').classList.toggle('active', lang === 'en');
+  document.getElementById('blogLangBn').classList.toggle('active', lang === 'bn');
+  blogUpdatePreview();
+}
+
+function blogHandleImageSelect(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  blogSelectedImageFile = file;
+  blogExistingImagePath = null;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    document.getElementById('blogImagePreviewImg').src = ev.target.result;
+    document.getElementById('blogImagePreviewWrap').style.display = 'flex';
+    blogUpdatePreview();
+  };
+  reader.readAsDataURL(file);
+}
+function blogClearImage(){
+  blogSelectedImageFile = null; blogExistingImagePath = null;
+  document.getElementById('blogImageFile').value = '';
+  document.getElementById('blogImagePreviewWrap').style.display = 'none';
+  blogUpdatePreview();
+}
+function blogSetVideoMode(mode){
+  blogVideoMode = mode;
+  document.getElementById('blogVidYt').classList.toggle('active', mode === 'yt');
+  document.getElementById('blogVidUp').classList.toggle('active', mode === 'upload');
+  document.getElementById('blogVideoYtWrap').style.display = mode === 'yt' ? 'block' : 'none';
+  document.getElementById('blogVideoUpWrap').style.display = mode === 'upload' ? 'block' : 'none';
+  blogUpdatePreview();
+}
+function blogHandleVideoSelect(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  blogSelectedVideoFile = file;
+  document.getElementById('blogVideoFileName').textContent = file.name + ' (' + (file.size/1024/1024).toFixed(1) + ' MB)';
+  document.getElementById('blogVideoPreviewWrap').style.display = 'flex';
+}
+function blogClearVideo(){
+  blogSelectedVideoFile = null; blogExistingVideoPath = null;
+  document.getElementById('blogVideoFile').value = '';
+  document.getElementById('blogVideoPreviewWrap').style.display = 'none';
+}
+function extractYouTubeId(url){
+  if(!url) return null;
+  const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([\w-]{11})/);
+  return m ? m[1] : null;
+}
+function formatDateTime(d){
+  const datePart = d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+  const timePart = d.toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit', hour12:true });
+  return `${datePart} · ${timePart}`;
+}
+
+function blogBuildArticleBlock(id, title, tag, content, quote, lang, dateTimeStr, imagePath, videoPath, videoUrl){
+  const h1Class = lang === 'bn' ? 'article-h1-bn' : 'article-h1';
+  const paragraphs = content.split(/\n\s*\n/).map(p => p.trim()).filter(Boolean);
+  const pHtml = paragraphs.map(p => `        <p class="article-p">${escapeHtml(p)}</p>`).join('\n\n');
+  const quoteHtml = quote && quote.trim() ? `\n\n        <div class="article-quote">\n          <p>${escapeHtml(quote.trim())}</p>\n        </div>` : '';
+  const finalDateTime = dateTimeStr || formatDateTime(new Date());
+  let mediaHtml = '';
+  if(imagePath) mediaHtml += `\n\n        <div class="article-image">\n          <img src="${escapeHtml(imagePath)}" alt="${escapeHtml(title)}">\n        </div>`;
+  if(videoPath) mediaHtml += `\n\n        <div class="article-video">\n          <video controls src="${escapeHtml(videoPath)}"></video>\n        </div>`;
+  else if(videoUrl){
+    const ytId = extractYouTubeId(videoUrl);
+    if(ytId) mediaHtml += `\n\n        <div class="article-video">\n          <iframe src="https://www.youtube.com/embed/${ytId}" title="video" allowfullscreen loading="lazy"></iframe>\n        </div>`;
+  }
+  return `<!-- POST:${id}:START -->
+      <article class="article reveal visible">
+        <div class="article-meta">
+          <span class="article-tag">${escapeHtml(tag || 'Reflection')}</span>
+          <span class="article-date">${escapeHtml(finalDateTime)}</span>
+        </div>
+        <h1 class="${h1Class}">${escapeHtml(title)}</h1>${mediaHtml}
+
+${pHtml}${quoteHtml}
+      </article>
+<!-- POST:${id}:END -->
+`;
+}
+
+function blogUpdatePreview(){
+  const title = document.getElementById('blogTitle').value.trim();
+  const tag = document.getElementById('blogTag').value.trim();
+  const content = document.getElementById('blogContent').value.trim();
+  const quote = document.getElementById('blogQuote').value.trim();
+  const box = document.getElementById('blogPreviewBox');
+  if(!title && !content){ box.innerHTML = 'Start typing to preview...'; return; }
+  const paragraphs = content.split(/\n\s*\n/).map(p => p.trim()).filter(Boolean);
+  let html = `<div style="font-size:11px;color:var(--dim);margin-bottom:6px;">${escapeHtml(tag||'Reflection')} · ${formatDateTime(new Date())}</div>`;
+  html += `<div style="font-weight:700;font-size:15px;margin-bottom:8px;">${escapeHtml(title||'Title')}</div>`;
+  if(blogSelectedImageFile) html += `<img src="${document.getElementById('blogImagePreviewImg').src}" style="max-width:140px;border-radius:8px;margin-bottom:8px;display:block;">`;
+  paragraphs.forEach(p => { html += `<div style="font-size:13px;color:var(--sub);margin-bottom:6px;">${escapeHtml(p)}</div>`; });
+  if(quote) html += `<div style="border-left:2px solid var(--text);padding-left:10px;font-style:italic;margin-top:8px;">${escapeHtml(quote)}</div>`;
+  box.innerHTML = html;
+}
+
+function blogEnterEditMode(id, title, tag, contentText, quoteText, lang, dateTimeStr){
+  blogEditingId = id;
+  blogEditingOriginalDateTime = dateTimeStr;
+  document.getElementById('blogFormTitle').textContent = 'Edit Post';
+  document.getElementById('blogEditingFlag').classList.add('show');
+  document.getElementById('blogEditingTitle').textContent = title;
+  document.getElementById('blogPublishBtnText').textContent = 'Save Changes';
+  document.getElementById('blogTitle').value = title;
+  document.getElementById('blogTag').value = tag;
+  document.getElementById('blogContent').value = contentText;
+  document.getElementById('blogQuote').value = quoteText;
+  blogSetLang(lang);
+  blogUpdatePreview();
+  switchBlogTab('write');
+}
+function blogCancelEdit(){
+  blogEditingId = null; blogEditingOriginalDateTime = null;
+  document.getElementById('blogFormTitle').textContent = 'New Post';
+  document.getElementById('blogEditingFlag').classList.remove('show');
+  document.getElementById('blogPublishBtnText').textContent = 'Publish';
+  document.getElementById('blogTitle').value = '';
+  document.getElementById('blogTag').value = '';
+  document.getElementById('blogContent').value = '';
+  document.getElementById('blogQuote').value = '';
+  blogClearImage(); blogClearVideo();
+  document.getElementById('blogVideoUrl').value = '';
+  blogSetVideoMode('yt');
+  blogSetLang('en');
+  blogUpdatePreview();
+}
+
+function sanitizeFilename(name){ return name.replace(/[^\w.\-]+/g,'-').toLowerCase(); }
+
+async function blogUploadPendingMedia(){
+  let imagePath = blogExistingImagePath;
+  let videoPath = blogExistingVideoPath;
+  if(blogSelectedImageFile){
+    const b64 = await readFileAsBase64(blogSelectedImageFile);
+    const fname = `uploads/${Date.now()}-${sanitizeFilename(blogSelectedImageFile.name)}`;
+    await putBinaryFile(fname, b64, null, `Upload image: ${blogSelectedImageFile.name}`);
+    imagePath = fname;
+  }
+  if(blogVideoMode === 'upload' && blogSelectedVideoFile){
+    const b64 = await readFileAsBase64(blogSelectedVideoFile);
+    const fname = `uploads/${Date.now()}-${sanitizeFilename(blogSelectedVideoFile.name)}`;
+    await putBinaryFile(fname, b64, null, `Upload video: ${blogSelectedVideoFile.name}`);
+    videoPath = fname;
+  } else if(blogVideoMode === 'yt'){
+    videoPath = null;
+  }
+  return { imagePath, videoPath };
+}
+
+async function blogSubmitPost(){
+  if(blogEditingId) await blogUpdatePost(); else await blogPublishPost();
+}
+
+async function blogPublishPost(){
+  const title = document.getElementById('blogTitle').value.trim();
+  const tag = document.getElementById('blogTag').value.trim();
+  const content = document.getElementById('blogContent').value.trim();
+  const quote = document.getElementById('blogQuote').value.trim();
+  if(!localStorage.getItem('gh_token')){ showAlert('blogPublishStatus','<i class="fa-solid fa-triangle-exclamation"></i> Connect in My Profile first','alert-bad'); return; }
+  if(!title || !content){ showAlert('blogPublishStatus','<i class="fa-solid fa-triangle-exclamation"></i> Title and content required','alert-bad'); return; }
+  const btn = document.getElementById('blogPublishBtn');
+  btn.disabled = true;
+  showAlert('blogPublishStatus','<i class="fa-solid fa-spinner fa-spin"></i> Publishing...','alert-load');
+  try {
+    const file = await getFile('blog.html');
+    if(!file) throw new Error('blog.html not found');
+    if(!file.content.includes(BLOG_INSERT_MARK)) throw new Error('Admin marker not found in blog.html');
+    const { imagePath, videoPath } = await blogUploadPendingMedia();
+    const videoUrlVal = blogVideoMode === 'yt' ? document.getElementById('blogVideoUrl').value.trim() : '';
+    const newId = 'post-' + Date.now();
+    const block = blogBuildArticleBlock(newId, title, tag, content, quote, blogCurrentLang, null, imagePath, videoPath, videoUrlVal);
+    const updatedContent = file.content.replace(BLOG_INSERT_MARK, BLOG_INSERT_MARK + '\n\n' + block);
+    await putFile('blog.html', updatedContent, file.sha, `Add blog post: ${title}`);
+    showAlert('blogPublishStatus','<i class="fa-solid fa-circle-check"></i> Published!','alert-ok');
+    blogCancelEdit();
+    blogLoadPostsList();
+  } catch(e){ showAlert('blogPublishStatus','<i class="fa-solid fa-circle-xmark"></i> ' + e.message,'alert-bad'); }
+  finally { btn.disabled = false; }
+}
+
+async function blogUpdatePost(){
+  const title = document.getElementById('blogTitle').value.trim();
+  const tag = document.getElementById('blogTag').value.trim();
+  const content = document.getElementById('blogContent').value.trim();
+  const quote = document.getElementById('blogQuote').value.trim();
+  if(!title || !content){ showAlert('blogPublishStatus','<i class="fa-solid fa-triangle-exclamation"></i> Title and content required','alert-bad'); return; }
+  const btn = document.getElementById('blogPublishBtn');
+  btn.disabled = true;
+  showAlert('blogPublishStatus','<i class="fa-solid fa-spinner fa-spin"></i> Saving...','alert-load');
+  try {
+    const file = await getFile('blog.html');
+    if(!file) throw new Error('blog.html not found');
+    const startTag = `<!-- POST:${blogEditingId}:START -->`, endTag = `<!-- POST:${blogEditingId}:END -->`;
+    const s = file.content.indexOf(startTag), e = file.content.indexOf(endTag);
+    if(s === -1 || e === -1) throw new Error('Post not found');
+    const { imagePath, videoPath } = await blogUploadPendingMedia();
+    const videoUrlVal = blogVideoMode === 'yt' ? document.getElementById('blogVideoUrl').value.trim() : '';
+    const newBlock = blogBuildArticleBlock(blogEditingId, title, tag, content, quote, blogCurrentLang, blogEditingOriginalDateTime, imagePath, videoPath, videoUrlVal).trim();
+    const updatedContent = file.content.slice(0, s) + newBlock + file.content.slice(e + endTag.length);
+    await putFile('blog.html', updatedContent, file.sha, `Update blog post: ${title}`);
+    showAlert('blogPublishStatus','<i class="fa-solid fa-circle-check"></i> Saved!','alert-ok');
+    blogCancelEdit();
+    blogLoadPostsList();
+  } catch(e){ showAlert('blogPublishStatus','<i class="fa-solid fa-circle-xmark"></i> ' + e.message,'alert-bad'); }
+  finally { btn.disabled = false; }
+}
+
+let blogPendingDeleteId = null, blogPendingDeleteTitle = null, blogPendingDeleteIsPost = false;
+
+async function blogStartEditPost(id){
+  try {
+    const file = await getFile('blog.html');
+    if(!file) throw new Error('blog.html not found');
+    const startTag = `<!-- POST:${id}:START -->`, endTag = `<!-- POST:${id}:END -->`;
+    const s = file.content.indexOf(startTag), e = file.content.indexOf(endTag);
+    if(s === -1 || e === -1) throw new Error('Post not found');
+    const blockHtml = file.content.slice(s + startTag.length, e);
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(`<div>${blockHtml}</div>`, 'text/html');
+    const article = doc.querySelector('article');
+    if(!article) throw new Error('Could not read this post');
+    const h1 = article.querySelector('.article-h1, .article-h1-bn');
+    const tagEl = article.querySelector('.article-tag');
+    const dateEl = article.querySelector('.article-date');
+    const quoteEl = article.querySelector('.article-quote p');
+    const imgEl = article.querySelector('.article-image img');
+    const videoEl = article.querySelector('.article-video video');
+    const iframeEl = article.querySelector('.article-video iframe');
+    const paragraphs = Array.from(article.querySelectorAll('.article-p')).map(p => p.textContent.trim());
+    const lang = h1 && h1.classList.contains('article-h1-bn') ? 'bn' : 'en';
+
+    blogClearImage(); blogClearVideo();
+    document.getElementById('blogVideoUrl').value = '';
+    blogSetVideoMode('yt');
+    if(imgEl){
+      blogExistingImagePath = imgEl.getAttribute('src');
+      document.getElementById('blogImagePreviewImg').src = blogExistingImagePath;
+      document.getElementById('blogImagePreviewWrap').style.display = 'flex';
+    }
+    if(videoEl){
+      blogSetVideoMode('upload');
+      blogExistingVideoPath = videoEl.getAttribute('src');
+      document.getElementById('blogVideoFileName').textContent = '(existing video — choose a new file to replace)';
+      document.getElementById('blogVideoPreviewWrap').style.display = 'flex';
+    } else if(iframeEl){
+      const src = iframeEl.getAttribute('src') || '';
+      const idMatch = src.match(/embed\/([\w-]{11})/);
+      if(idMatch) document.getElementById('blogVideoUrl').value = `https://youtube.com/watch?v=${idMatch[1]}`;
+      blogSetVideoMode('yt');
+    }
+
+    blogEnterEditMode(id, h1 ? h1.textContent.trim() : '', tagEl ? tagEl.textContent.trim() : '', paragraphs.join('\n\n'), quoteEl ? quoteEl.textContent.trim() : '', lang, dateEl ? dateEl.textContent.trim() : null);
+  } catch(e){ alert('Could not load post: ' + e.message); }
+}
+
+function blogDeletePost(id, title){
+  blogPendingDeleteId = id; blogPendingDeleteTitle = title; blogPendingDeleteIsPost = true;
+  document.getElementById('deleteModalTitle').textContent = title;
+  document.getElementById('deleteModal').classList.add('show');
+}
+
+async function blogLoadPostsList(){
+  const listEl = document.getElementById('blogPostsList');
+  if(!localStorage.getItem('gh_token')){ listEl.innerHTML = '<div class="item-empty">Connect first.</div>'; return; }
+  listEl.innerHTML = '<div class="item-empty"><i class="fa-solid fa-spinner fa-spin"></i> Loading...</div>';
+  try {
+    const file = await getFile('blog.html');
+    if(!file) throw new Error('blog.html not found');
+    const regex = /<!-- POST:([\w-]+):START -->([\s\S]*?)<!-- POST:\1:END -->/g;
+    let match, html = '', count = 0;
+    while((match = regex.exec(file.content)) !== null){
+      const id = match[1];
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(`<div>${match[2]}</div>`, 'text/html');
+      const article = doc.querySelector('article');
+      if(!article) continue;
+      const h1 = article.querySelector('.article-h1, .article-h1-bn');
+      const tagEl = article.querySelector('.article-tag');
+      const dateEl = article.querySelector('.article-date');
+      const titleText = h1 ? h1.textContent.trim() : '(untitled)';
+      html += `<div class="item-row">
+        <div class="item-row-head">
+          <div class="item-row-title">${escapeHtml(titleText)}</div>
+          <div class="item-row-actions">
+            <button class="btn-icon" data-baction="edit" data-bid="${escapeHtml(id)}" title="Edit"><i class="fa-solid fa-pen"></i></button>
+            <button class="btn-icon danger" data-baction="delete" data-bid="${escapeHtml(id)}" data-btitle="${escapeHtml(titleText)}" title="Delete"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        </div>
+        <div style="font-size:11.5px;color:var(--dim);">${tagEl ? escapeHtml(tagEl.textContent.trim()) : ''} · ${dateEl ? escapeHtml(dateEl.textContent.trim()) : ''}</div>
+      </div>`;
+      count++;
+    }
+    listEl.innerHTML = count ? html : '<div class="item-empty">No posts yet.</div>';
+  } catch(e){ listEl.innerHTML = `<div class="item-empty" style="color:var(--bad);">${escapeHtml(e.message)}</div>`; }
+}
+document.getElementById('blogPostsList').addEventListener('click', function(e){
+  const btn = e.target.closest('button[data-baction]');
+  if(!btn) return;
+  if(btn.dataset.baction === 'edit') blogStartEditPost(btn.dataset.bid);
+  else if(btn.dataset.baction === 'delete') blogDeletePost(btn.dataset.bid, btn.dataset.btitle);
+});
+
+/* ══════════════════════════════════════
+   SHARED DELETE MODAL (handles Blog posts)
+══════════════════════════════════════ */
+function closeDeleteModal(){
+  document.getElementById('deleteModal').classList.remove('show');
+  blogPendingDeleteId = null; blogPendingDeleteTitle = null; blogPendingDeleteIsPost = false;
+}
+document.getElementById('confirmDeleteBtn').addEventListener('click', async function(){
+  if(!blogPendingDeleteIsPost) { closeDeleteModal(); return; }
+  const id = blogPendingDeleteId, title = blogPendingDeleteTitle;
+  const btn = this;
+  btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+  try {
+    const file = await getFile('blog.html');
+    if(!file) throw new Error('blog.html not found');
+    const startTag = `<!-- POST:${id}:START -->`, endTag = `<!-- POST:${id}:END -->`;
+    const s = file.content.indexOf(startTag), e = file.content.indexOf(endTag);
+    if(s === -1 || e === -1) throw new Error('Post not found');
+    const updatedContent = file.content.slice(0, s) + file.content.slice(e + endTag.length);
+    await putFile('blog.html', updatedContent, file.sha, `Delete blog post: ${title}`);
+    if(blogEditingId === id) blogCancelEdit();
+    closeDeleteModal();
+    blogLoadPostsList();
+  } catch(e){ alert('Could not delete: ' + e.message); }
+  finally { btn.disabled = false; btn.innerHTML = 'Delete'; }
+});
+</script>
+</body>
+</html>
