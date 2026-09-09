@@ -18,15 +18,15 @@
   --shadow:0 1px 2px rgba(20,20,25,0.04), 0 8px 24px rgba(20,20,25,0.05);
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6;font-size:14.5px;}
+body{font-family:'Inter',system-ui,sans-serif;background:linear-gradient(180deg,#fafafb 0%,var(--bg) 320px);color:var(--text);min-height:100vh;line-height:1.6;font-size:14.5px;}
 h1,h2,h3,.brand,.btn,.summary-title{font-family:'Space Grotesk',sans-serif;}
 a{color:inherit;text-decoration:none;}
 button{font-family:inherit;}
 
 /* ══════════════ PASSWORD GATE ══════════════ */
-.gate{position:fixed;inset:0;z-index:2000;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px;}
+.gate{position:fixed;inset:0;z-index:2000;background:radial-gradient(circle at 50% 15%, #ffffff 0%, var(--bg) 65%);display:flex;align-items:center;justify-content:center;padding:24px;}
 .gate-card{width:100%;max-width:360px;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:36px 32px;box-shadow:var(--shadow);text-align:center;}
-.gate-mark{width:52px;height:52px;border-radius:14px;background:var(--text);color:#fff;display:grid;place-items:center;font-size:20px;font-weight:700;margin:0 auto 20px;font-family:'Space Grotesk',sans-serif;}
+.gate-mark{width:52px;height:52px;border-radius:14px;background:var(--text);color:#fff;display:grid;place-items:center;font-size:20px;font-weight:700;margin:0 auto 20px;font-family:'Space Grotesk',sans-serif;box-shadow:0 10px 24px rgba(17,17,20,0.28);}
 .gate-title{font-size:18px;font-weight:700;margin-bottom:6px;}
 .gate-sub{font-size:12.5px;color:var(--dim);margin-bottom:24px;}
 .gate-card input{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:14.5px;text-align:center;letter-spacing:0.05em;outline:none;transition:all .18s;}
@@ -48,9 +48,28 @@ button{font-family:inherit;}
 .brand-mark{width:26px;height:26px;border-radius:7px;background:var(--text);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:700;}
 .section-tag{font-size:12px;color:var(--dim);font-weight:600;padding:5px 12px;border-radius:20px;border:1px solid var(--line);}
 .conn-pill{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;font-weight:600;color:var(--dim);padding:6px 11px;border-radius:20px;border:1px solid var(--line);}
-.conn-pill .dot{width:6px;height:6px;border-radius:50%;background:var(--bad);}
+.conn-pill .dot{width:6px;height:6px;border-radius:50%;background:#c7c7cc;}
 .conn-pill.live .dot{background:var(--good);}
 .conn-pill.live{color:var(--good);border-color:rgba(31,157,90,0.25);background:var(--good-soft);}
+
+/* Profile card — cover banner + overlapping avatar, Facebook-style */
+.profile-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin-bottom:14px;box-shadow:var(--shadow);}
+.profile-cover{height:110px;background:linear-gradient(135deg,#17171b 0%,#3d3d47 55%,#17171b 100%);position:relative;}
+.profile-cover::after{content:'';position:absolute;inset:0;background-image:radial-gradient(circle at 18% 25%,rgba(255,255,255,0.09) 0,transparent 38%),radial-gradient(circle at 82% 75%,rgba(255,255,255,0.07) 0,transparent 42%);}
+.profile-photo-wrap{display:flex;justify-content:center;margin-top:-40px;}
+.profile-photo{width:80px;height:80px;border-radius:50%;background:var(--text);color:#fff;display:grid;place-items:center;font-size:26px;font-weight:700;font-family:'Space Grotesk',sans-serif;border:4px solid var(--panel);box-shadow:0 6px 16px rgba(17,17,20,0.18);overflow:hidden;}
+.profile-photo img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.profile-info{text-align:center;padding:8px 20px 22px;}
+.profile-name{font-size:16px;font-weight:700;font-family:'Space Grotesk',sans-serif;}
+.profile-meta{font-size:12px;color:var(--dim);margin-top:4px;display:flex;align-items:center;justify-content:center;gap:6px;}
+.profile-meta .dot{width:6px;height:6px;border-radius:50%;background:#c7c7cc;}
+.profile-meta.live{color:var(--good);}
+.profile-meta.live .dot{background:var(--good);}
+.profile-meta.err{color:var(--bad);}
+.profile-meta.err .dot{background:var(--bad);}
+.profile-disconnect{margin-top:9px;}
+.profile-disconnect span{font-size:11.5px;color:var(--dim);cursor:pointer;text-decoration:underline;text-underline-offset:2px;}
+.profile-disconnect span:hover{color:var(--bad);}
 
 /* Slide-in drawer */
 .drawer-overlay{position:fixed;inset:0;background:rgba(15,15,18,0.35);z-index:300;display:none;}
@@ -108,16 +127,21 @@ input[type="file"]{padding:8px 10px;font-size:12.5px;}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 18px;border-radius:9px;border:none;cursor:pointer;font-size:13px;font-weight:600;transition:all .16s;}
 .btn-dark{background:var(--text);color:#fff;}
 .btn-dark:hover{background:#000;}
+.btn-dark:active{transform:scale(0.97);}
 .btn-dark:disabled{opacity:0.45;cursor:not-allowed;}
 .btn-outline{background:transparent;border:1px solid var(--line);color:var(--sub);}
 .btn-outline:hover{border-color:#c8c8cc;color:var(--text);}
+.btn-outline:active{transform:scale(0.97);}
 .btn-danger{background:var(--bad);color:#fff;}
 .btn-danger:hover{background:#b83a33;}
+.btn-danger:active{transform:scale(0.97);}
 .btn-sm{padding:7px 12px;font-size:12px;}
-.btn-icon{width:32px;height:32px;padding:0;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--sub);}
+.btn-icon{width:34px;height:34px;padding:0;border-radius:9px;border:1px solid var(--line);background:var(--panel);color:var(--sub);}
 .btn-icon:hover{color:var(--text);border-color:#c8c8cc;}
+.btn-icon:active{transform:scale(0.92);}
 .btn-icon.danger:hover{color:var(--bad);border-color:rgba(209,69,61,0.35);background:var(--bad-soft);}
 .btn-row{display:flex;gap:9px;margin-top:16px;flex-wrap:wrap;}
+.btn:focus-visible,.btn-icon:focus-visible,.drawer-item:focus-visible,.seg-btn:focus-visible{outline:2px solid var(--text);outline-offset:2px;}
 
 /* Alerts */
 .alert{margin-top:12px;padding:10px 13px;border-radius:9px;font-size:12.5px;display:none;align-items:center;gap:8px;}
@@ -136,11 +160,12 @@ details.mini[open] summary .chev{transform:rotate(180deg);}
 .mini-body{padding:2px 16px 16px;border-top:1px solid var(--line-soft);}
 
 /* Item rows (skills, sites, games, work-items) */
-.item-row{border:1px solid var(--line);border-radius:11px;padding:13px 14px;margin-bottom:8px;background:var(--panel2);}
+.item-row{border:1px solid var(--line);border-radius:11px;padding:13px 14px;margin-bottom:8px;background:var(--panel2);transition:border-color .15s;}
+.item-row:hover{border-color:#d5d5d9;}
 .item-row-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:2px;}
 .item-row-title{font-size:13px;font-weight:600;}
 .item-row-actions{display:flex;gap:6px;flex-shrink:0;}
-.item-empty{font-size:12.5px;color:var(--dim);text-align:center;padding:18px 0;}
+.item-empty{font-size:12.5px;color:var(--dim);text-align:center;padding:22px 12px;border:1px dashed var(--line);border-radius:11px;background:var(--panel2);}
 
 /* Tag chips (coming soon / features) */
 .chip-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
@@ -246,7 +271,19 @@ details.mini[open] summary .chev{transform:rotate(180deg);}
         <div class="page-title">My Profile</div>
         <div class="page-sub">Connect once — every section below uses this same connection.</div>
       </div>
+
+      <div class="profile-card">
+        <div class="profile-cover"></div>
+        <div class="profile-photo-wrap"><div class="profile-photo" id="profilePhoto">R</div></div>
+        <div class="profile-info">
+          <div class="profile-name" id="profileName">Riyad Bin Alom</div>
+          <div class="profile-meta" id="profileMeta"><span class="dot"></span> Not connected</div>
+          <div class="profile-disconnect" id="profileDisconnect" style="display:none;"><span onclick="disconnectGithub()">Disconnect</span></div>
+        </div>
+      </div>
+
       <div class="panel">
+        <div class="panel-title" style="margin-bottom:14px;">GitHub Connection</div>
         <label>Personal Access Token</label>
         <div class="row-inline">
           <div><input type="password" id="token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"></div>
@@ -756,12 +793,70 @@ function loadConnection(){
   if(token) document.getElementById('token').value = token;
   if(owner) document.getElementById('owner').value = owner;
   if(repo) document.getElementById('repo').value = repo;
-  if(token) setConnected(true);
+  if(token){
+    setConnected(true);
+    renderCachedProfile();
+    refreshGithubProfile(token);
+  }
+}
+
+/* Shows whatever profile info we already have saved (avatar/name from the
+   last successful connect) immediately, before any network call returns. */
+function renderCachedProfile(){
+  const name = localStorage.getItem('gh_profile_name');
+  const login = localStorage.getItem('gh_profile_login');
+  const avatar = localStorage.getItem('gh_profile_avatar');
+  if(name) document.getElementById('profileName').textContent = name;
+  if(login) setProfileMeta(`@${login}`, 'live');
+  if(avatar) document.getElementById('profilePhoto').innerHTML = `<img src="${avatar}" alt="">`;
+}
+
+function setProfileMeta(text, state){
+  const el = document.getElementById('profileMeta');
+  el.innerHTML = `<span class="dot"></span> ${escapeHtml(text)}`;
+  el.className = 'profile-meta' + (state ? ' ' + state : '');
+}
+
+/* Fetches the connected GitHub account's name/avatar so the "My Profile"
+   card can show who you're actually connected as — purely cosmetic, never
+   blocks the token/owner/repo connection itself if it fails. */
+async function refreshGithubProfile(token){
+  try {
+    const res = await fetch(`${API_BASE}/user`, { headers:{ 'Authorization':`token ${token}`, 'Accept':'application/vnd.github+json' }});
+    if(!res.ok) return;
+    const profile = await res.json();
+    document.getElementById('profileName').textContent = profile.name || profile.login || 'Riyad Bin Alom';
+    setProfileMeta(`@${profile.login}`, 'live');
+    if(profile.avatar_url){
+      document.getElementById('profilePhoto').innerHTML = `<img src="${profile.avatar_url}" alt="">`;
+      localStorage.setItem('gh_profile_avatar', profile.avatar_url);
+    }
+    localStorage.setItem('gh_profile_name', profile.name || profile.login || '');
+    localStorage.setItem('gh_profile_login', profile.login || '');
+  } catch(e){ /* cosmetic only — silently ignore */ }
+}
+
+function resetProfileCard(){
+  document.getElementById('profileName').textContent = 'Riyad Bin Alom';
+  document.getElementById('profilePhoto').innerHTML = 'R';
+  setProfileMeta('Not connected', null);
+  ['gh_profile_name','gh_profile_login','gh_profile_avatar'].forEach(k => localStorage.removeItem(k));
 }
 
 function setConnected(on){
   document.getElementById('connPill').classList.toggle('live', on);
   document.getElementById('connLabel').textContent = on ? 'Connected' : 'Offline';
+  document.getElementById('profileDisconnect').style.display = on ? 'block' : 'none';
+}
+
+function disconnectGithub(){
+  localStorage.removeItem('gh_token');
+  localStorage.removeItem('gh_owner');
+  localStorage.removeItem('gh_repo');
+  document.getElementById('token').value = '';
+  resetProfileCard();
+  setConnected(false);
+  showAlert('connStatus','<i class="fa-solid fa-circle-check"></i> Disconnected. Enter a token to reconnect.','alert-ok');
 }
 
 function showAlert(id, msg, type){
@@ -776,6 +871,7 @@ async function saveConnection(){
   const repo = document.getElementById('repo').value.trim();
   if(!token){ showAlert('connStatus','<i class="fa-solid fa-triangle-exclamation"></i> Enter a token first','alert-bad'); return; }
   showAlert('connStatus','<i class="fa-solid fa-spinner fa-spin"></i> Verifying...','alert-load');
+  setProfileMeta('Connecting...', null);
   try {
     const res = await fetch(`${API_BASE}/repos/${owner}/${repo}`, { headers:{ 'Authorization':`token ${token}`, 'Accept':'application/vnd.github+json' }});
     if(!res.ok) throw new Error('Could not access the repo — check token or repo name');
@@ -784,8 +880,10 @@ async function saveConnection(){
     localStorage.setItem('gh_repo', repo);
     setConnected(true);
     showAlert('connStatus','<i class="fa-solid fa-circle-check"></i> Connected successfully','alert-ok');
+    refreshGithubProfile(token);
   } catch(e){
     setConnected(false);
+    setProfileMeta('Connection failed', 'err');
     showAlert('connStatus','<i class="fa-solid fa-circle-xmark"></i> ' + e.message,'alert-bad');
   }
 }
@@ -799,6 +897,22 @@ async function getFile(path){
   if(!res.ok) throw new Error(`GitHub error: ${res.status}`);
   const data = await res.json();
   return { sha:data.sha, content:decodeURIComponent(escape(atob(data.content.replace(/\n/g,'')))) };
+}
+
+/* Lightweight lookup used before uploading BINARY files (images/videos).
+   It only needs the current sha to know whether we're creating or updating —
+   it must NOT try to decode the file's bytes as UTF-8 text, because binary
+   content (e.g. JPEG bytes) is not valid UTF-8 and decodeURIComponent()
+   throws "URI malformed" on it. */
+async function getFileSha(path){
+  const token = localStorage.getItem('gh_token');
+  const owner = localStorage.getItem('gh_owner');
+  const repo = localStorage.getItem('gh_repo');
+  const res = await fetch(`${API_BASE}/repos/${owner}/${repo}/contents/${path}`, { headers:{ 'Authorization':`token ${token}`, 'Accept':'application/vnd.github+json' }});
+  if(res.status === 404) return null;
+  if(!res.ok) throw new Error(`GitHub error: ${res.status}`);
+  const data = await res.json();
+  return data.sha;
 }
 
 async function putFile(path, contentStr, sha, message){
@@ -837,7 +951,7 @@ function readFileAsBase64(file){
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => resolve(reader.result.split(',')[1]);
-    reader.onerror = reject;
+    reader.onerror = () => reject(new Error('Could not read that file'));
     reader.readAsDataURL(file);
   });
 }
@@ -918,9 +1032,9 @@ async function uploadFixedPhoto(inputId, filename, statusId){
   if(!localStorage.getItem('gh_token')){ showAlert(statusId, '<i class="fa-solid fa-triangle-exclamation"></i> Connect in My Profile first', 'alert-bad'); return; }
   showAlert(statusId, '<i class="fa-solid fa-spinner fa-spin"></i> Uploading...', 'alert-load');
   try {
-    const existing = await getFile(filename);
+    const existingSha = await getFileSha(filename);
     const b64 = await readFileAsBase64(file);
-    await putBinaryFile(filename, b64, existing ? existing.sha : null, `Update photo: ${filename}`);
+    await putBinaryFile(filename, b64, existingSha, `Update photo: ${filename}`);
     showAlert(statusId, '<i class="fa-solid fa-circle-check"></i> Photo updated! Live in a minute.', 'alert-ok');
   } catch(e){
     showAlert(statusId, '<i class="fa-solid fa-circle-xmark"></i> Upload failed — ' + e.message, 'alert-bad');
@@ -1062,12 +1176,20 @@ function buildSkillItemRow(gKey, item){
 
 function addSkillItem(gKey){
   if(!skillGroupsData[gKey]) skillGroupsData[gKey] = [];
-  skillGroupsData[gKey].push({ id:'sk'+(skillIdCounter++), name:'', level:'', pct:'70', desc:'' });
+  /* ID must start with "<gKey>-" — loadSkillFields()'s per-group regex only
+     recognizes markers in that shape. Without the prefix, a newly added
+     skill would save fine once, but vanish from the admin on the next
+     reload while staying stuck on the live page forever (orphaned). */
+  skillGroupsData[gKey].push({ id:`${gKey}-new${Date.now()}${skillIdCounter++}`, name:'', level:'', pct:'70', desc:'' });
   renderSkillGroups();
 }
 function removeSkillItem(gKey, id){
-  skillGroupsData[gKey] = (skillGroupsData[gKey]||[]).filter(i => i.id !== id);
-  renderSkillGroups();
+  const row = document.querySelector(`.item-row[data-id="${id}"]`);
+  const nameVal = row ? row.querySelector('.sk-name').value.trim() : '';
+  requestDelete(nameVal || 'this skill', () => {
+    skillGroupsData[gKey] = (skillGroupsData[gKey]||[]).filter(i => i.id !== id);
+    renderSkillGroups();
+  });
 }
 
 function renderWorkItems(){
@@ -1240,13 +1362,21 @@ function renderLabSites(){
       <div class="item-row-head">
         <div class="item-row-title">${site.emoji||''} ${escapeHtml(site.title||'(untitled)')}</div>
         <div class="item-row-actions">
-          <button class="btn-icon" onclick="labOpenSiteForm('${site.id}')" title="Edit"><i class="fa-solid fa-pen"></i></button>
-          <button class="btn-icon danger" onclick="labRemoveSite('${site.id}')" title="Delete"><i class="fa-solid fa-trash"></i></button>
+          <button class="btn-icon" data-siteaction="edit" data-siteid="${site.id}" title="Edit"><i class="fa-solid fa-pen"></i></button>
+          <button class="btn-icon danger" data-siteaction="delete" data-siteid="${site.id}" title="Delete"><i class="fa-solid fa-trash"></i></button>
         </div>
       </div>
       <div style="font-size:12px;color:var(--dim);">${escapeHtml(site.tag||'')}</div>
     </div>`).join('');
 }
+document.getElementById('labSitesHost').addEventListener('click', function(e){
+  const btn = e.target.closest('button[data-siteaction]');
+  if(!btn) return;
+  const id = btn.dataset.siteid;
+  if(btn.dataset.siteaction === 'edit'){ labOpenSiteForm(id); return; }
+  const site = labSitesData.find(s => s.id === id);
+  requestDelete((site && site.title) || 'this site', () => { labRemoveSite(id); });
+});
 
 function labOpenSiteForm(id){
   editingSiteId = id;
@@ -1297,6 +1427,7 @@ function addComingSoonChip(){
   renderComingSoonChips();
 }
 function removeComingSoonChip(i){ comingSoonTags.splice(i,1); renderComingSoonChips(); }
+document.getElementById('comingSoonInput').addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); addComingSoonChip(); } });
 
 async function loadLabFields(){
   showAlert('labStatus','<i class="fa-solid fa-spinner fa-spin"></i> Loading...','alert-load');
@@ -1714,127 +1845,18 @@ async function blogUpdatePost(){
   finally { btn.disabled = false; }
 }
 
-let blogPendingDeleteId = null, blogPendingDeleteTitle = null, blogPendingDeleteIsPost = false;
+/* Generic delete-confirmation helper — any destructive action (blog post,
+   lab site, skill item, ...) can hand its cleanup work to requestDelete()
+   and the shared modal below will confirm with the user before running it. */
+let pendingDeleteAction = null;
+function requestDelete(title, onConfirm){
+  pendingDeleteAction = onConfirm;
+  document.getElementById('deleteModalTitle').textContent = title;
+  document.getElementById('deleteModal').classList.add('show');
+}
 
 async function blogStartEditPost(id){
   try {
     const file = await getFile('blog.html');
     if(!file) throw new Error('blog.html not found');
-    const startTag = `<!-- POST:${id}:START -->`, endTag = `<!-- POST:${id}:END -->`;
-    const s = file.content.indexOf(startTag), e = file.content.indexOf(endTag);
-    if(s === -1 || e === -1) throw new Error('Post not found');
-    const blockHtml = file.content.slice(s + startTag.length, e);
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(`<div>${blockHtml}</div>`, 'text/html');
-    const article = doc.querySelector('article');
-    if(!article) throw new Error('Could not read this post');
-    const h1 = article.querySelector('.article-h1, .article-h1-bn');
-    const tagEl = article.querySelector('.article-tag');
-    const dateEl = article.querySelector('.article-date');
-    const quoteEl = article.querySelector('.article-quote p');
-    const imgEl = article.querySelector('.article-image img');
-    const videoEl = article.querySelector('.article-video video');
-    const iframeEl = article.querySelector('.article-video iframe');
-    const paragraphs = Array.from(article.querySelectorAll('.article-p')).map(p => p.textContent.trim());
-    const lang = h1 && h1.classList.contains('article-h1-bn') ? 'bn' : 'en';
-
-    blogClearImage(); blogClearVideo();
-    document.getElementById('blogVideoUrl').value = '';
-    blogSetVideoMode('yt');
-    if(imgEl){
-      blogExistingImagePath = imgEl.getAttribute('src');
-      document.getElementById('blogImagePreviewImg').src = blogExistingImagePath;
-      document.getElementById('blogImagePreviewWrap').style.display = 'flex';
-    }
-    if(videoEl){
-      blogSetVideoMode('upload');
-      blogExistingVideoPath = videoEl.getAttribute('src');
-      document.getElementById('blogVideoFileName').textContent = '(existing video — choose a new file to replace)';
-      document.getElementById('blogVideoPreviewWrap').style.display = 'flex';
-    } else if(iframeEl){
-      const src = iframeEl.getAttribute('src') || '';
-      const idMatch = src.match(/embed\/([\w-]{11})/);
-      if(idMatch) document.getElementById('blogVideoUrl').value = `https://youtube.com/watch?v=${idMatch[1]}`;
-      blogSetVideoMode('yt');
-    }
-
-    blogEnterEditMode(id, h1 ? h1.textContent.trim() : '', tagEl ? tagEl.textContent.trim() : '', paragraphs.join('\n\n'), quoteEl ? quoteEl.textContent.trim() : '', lang, dateEl ? dateEl.textContent.trim() : null);
-  } catch(e){ alert('Could not load post: ' + e.message); }
-}
-
-function blogDeletePost(id, title){
-  blogPendingDeleteId = id; blogPendingDeleteTitle = title; blogPendingDeleteIsPost = true;
-  document.getElementById('deleteModalTitle').textContent = title;
-  document.getElementById('deleteModal').classList.add('show');
-}
-
-async function blogLoadPostsList(){
-  const listEl = document.getElementById('blogPostsList');
-  if(!localStorage.getItem('gh_token')){ listEl.innerHTML = '<div class="item-empty">Connect first.</div>'; return; }
-  listEl.innerHTML = '<div class="item-empty"><i class="fa-solid fa-spinner fa-spin"></i> Loading...</div>';
-  try {
-    const file = await getFile('blog.html');
-    if(!file) throw new Error('blog.html not found');
-    const regex = /<!-- POST:([\w-]+):START -->([\s\S]*?)<!-- POST:\1:END -->/g;
-    let match, html = '', count = 0;
-    while((match = regex.exec(file.content)) !== null){
-      const id = match[1];
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(`<div>${match[2]}</div>`, 'text/html');
-      const article = doc.querySelector('article');
-      if(!article) continue;
-      const h1 = article.querySelector('.article-h1, .article-h1-bn');
-      const tagEl = article.querySelector('.article-tag');
-      const dateEl = article.querySelector('.article-date');
-      const titleText = h1 ? h1.textContent.trim() : '(untitled)';
-      html += `<div class="item-row">
-        <div class="item-row-head">
-          <div class="item-row-title">${escapeHtml(titleText)}</div>
-          <div class="item-row-actions">
-            <button class="btn-icon" data-baction="edit" data-bid="${escapeHtml(id)}" title="Edit"><i class="fa-solid fa-pen"></i></button>
-            <button class="btn-icon danger" data-baction="delete" data-bid="${escapeHtml(id)}" data-btitle="${escapeHtml(titleText)}" title="Delete"><i class="fa-solid fa-trash"></i></button>
-          </div>
-        </div>
-        <div style="font-size:11.5px;color:var(--dim);">${tagEl ? escapeHtml(tagEl.textContent.trim()) : ''} · ${dateEl ? escapeHtml(dateEl.textContent.trim()) : ''}</div>
-      </div>`;
-      count++;
-    }
-    listEl.innerHTML = count ? html : '<div class="item-empty">No posts yet.</div>';
-  } catch(e){ listEl.innerHTML = `<div class="item-empty" style="color:var(--bad);">${escapeHtml(e.message)}</div>`; }
-}
-document.getElementById('blogPostsList').addEventListener('click', function(e){
-  const btn = e.target.closest('button[data-baction]');
-  if(!btn) return;
-  if(btn.dataset.baction === 'edit') blogStartEditPost(btn.dataset.bid);
-  else if(btn.dataset.baction === 'delete') blogDeletePost(btn.dataset.bid, btn.dataset.btitle);
-});
-
-/* ══════════════════════════════════════
-   SHARED DELETE MODAL (handles Blog posts)
-══════════════════════════════════════ */
-function closeDeleteModal(){
-  document.getElementById('deleteModal').classList.remove('show');
-  blogPendingDeleteId = null; blogPendingDeleteTitle = null; blogPendingDeleteIsPost = false;
-}
-document.getElementById('confirmDeleteBtn').addEventListener('click', async function(){
-  if(!blogPendingDeleteIsPost) { closeDeleteModal(); return; }
-  const id = blogPendingDeleteId, title = blogPendingDeleteTitle;
-  const btn = this;
-  btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
-  try {
-    const file = await getFile('blog.html');
-    if(!file) throw new Error('blog.html not found');
-    const startTag = `<!-- POST:${id}:START -->`, endTag = `<!-- POST:${id}:END -->`;
-    const s = file.content.indexOf(startTag), e = file.content.indexOf(endTag);
-    if(s === -1 || e === -1) throw new Error('Post not found');
-    const updatedContent = file.content.slice(0, s) + file.content.slice(e + endTag.length);
-    await putFile('blog.html', updatedContent, file.sha, `Delete blog post: ${title}`);
-    if(blogEditingId === id) blogCancelEdit();
-    closeDeleteModal();
-    blogLoadPostsList();
-  } catch(e){ alert('Could not delete: ' + e.message); }
-  finally { btn.disabled = false; btn.innerHTML = 'Delete'; }
-});
-</script>
-</body>
-</html>
+    const sta
