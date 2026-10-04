@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Admin Login</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --night:#060a15;
+    --ink:#14213d;
+    --amber:#e0a45a;
+    --amber-soft:#ffe9b8;
+    --road:#101828;
+    --road-dark:#0a101c;
+    --ok:#1e8e5a;
+    --err:#c0392b;
+    --display:'Space Grotesk','Segoe UI',system-ui,sans-serif;
+    --text:'Inter','Segoe UI',system-ui,-apple-system,Roboto,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:100%;height:100%;overflow:hidden;background:var(--night);font-family:var(--text);color:#fff;
+    -webkit-tap-highlight-color:transparent}
+
+  /* ───────── Scene ───────── */
+  .scene{position:fixed;inset:0;overflow:hidden;opacity:0;animation:sceneIn .9s ease .05s forwards;
+    background:
+      radial-gradient(120% 55% at 50% 100%,rgba(224,164,90,.16),transparent 62%),
+      linear-gradient(180deg,#04070f 0%,#0b1430 48%,#1a2750 78%,#2b2f5a 100%)}
+  @keyframes sceneIn{to{opacity:1}}
+
+  .star{position:absolute;border-radius:50%;background:#fff;animation:twinkle 3.2s ease-in-out infinite alternate}
+  @keyframes twinkle{from{opacity:.15;transform:scale(.8)}to{opacity:.95;transform:scale(1.15)}}
+
+  .moon{position:absolute;top:9%;right:13%;width:clamp(44px,7vw,78px);aspect-ratio:1;border-radius:50%;
+    background:
+      radial-gradient(circle at 30% 32%,rgba(0,0,0,.07) 0 9%,transparent 10%),
+      radial-gradient(circle at 62% 58%,rgba(0,0,0,.07) 0 13%,transparent 14%),
+      radial-gradient(circle at 44% 78%,rgba(0,0,0,.06) 0 7%,transparent 8%),
+      radial-gradient(circle at 35% 30%,#fffaf0,#e4dcc6 70%,#cfc6ad);
+    box-shadow:0 0 36px 8px rgba(255,244,214,.22),0 0 120px 40px rgba(255,244,214,.08)}
+
+  .layer{position:absolute;left:0;right:0;background-repeat:repeat-x;pointer-events:none;will-change:background-position}
+  #hills{bottom:150px;height:220px}
+  #skyline{bottom:150px;height:200px}
+  #near{bottom:146px;height:240px}
+  .haze{position:absolute;left:0;right:0;bottom:150px;height:120px;pointer-events:none;
+    background:linear-gradient(180deg,transparent,rgba(43,47,90,.55))}
+
+  /* ───────── Road ───────── */
+  .road{position:absolute;left:0;right:0;bottom:0;height:150px;
+    background:
+      linear-gradient(180deg,rgba(255,255,255,.05) 0,transparent 14px),
+      linear-gradient(180deg,var(--road) 0%,var(--road-dark) 100%)}
+  .kerb{position:absolute;left:0;right:0;top:0;height:9px;background:linear-gradient(180deg,#34415f,#1c2640);
+    border-bottom:1px solid rgba(255,255,255,.08)}
+  .edge{position:absolute;left:0;right:0;bottom:12px;height:2px;background:rgba(255,255,255,.14)}
+  #dashes{position:absolute;left:0;right:0;bottom:46px;height:5px;border-radius:3px;
+    background-image:repeating-linear-gradient(90deg,var(--amber) 0 58px,transparent 58px 112px);
+    background-size:112px 5px;background-repeat:repeat-x;opacity:.92}
+
+  /* ───────── Truck stage (560 × 258, scaled by JS) ───────── */
+  .scaler{position:absolute;left:50%;width:560px;height:258px;transform-origin:50% 100%;z-index:5}
+  .truck{position:absolute;inset:0;will-change:transform}
+  .art,.wheels,.ground{position:absolute;left:0;top:0;width:560px;height:258px;overflow:visible;pointer-events:none}
+  .body{position:absolute;inset:0;transform-origin:322px 224px;will-change:transform}
+  .shake{position:absolute;inset:0}
+  .shake.go{animation:shake .5s cubic-bezier(.36,.07,.19,.97)}
+  @keyframes shake{
+    10%,90%{transform:translateX(-2px)}
+    20%,80%{transform:translateX(5px)}
+    30%,50%,70%{transform:translateX(-9px)}
+    40%,60%{transform:translateX(9px)}
+  }
+
+  .tail{opacity:.55;transition:opacity .12s}
+  .brakeglow{opacity:0;transition:opacity .12s}
+  .truck.brake .tail{opacity:1;filter:drop-shadow(0 0 6px #ff3b3b)}
+  .truck.brake .brakeglow{opacity:.95}
+  .truck.alarm .brakeglow{animation:alarm .24s steps(2) 3}
+  @keyframes alarm{0%{opacity:.95}50%{opacity:.1}}
+  .beam{transition:opacity .2s}
+  .truck.flash .beam{animation:flash .34s ease-in-out 2}
+  @keyframes flash{50%{opacity:.25}}
+
+  #fx{position:absolute;left:0;top:0;width:0;height:0;overflow:visible;pointer-events:none}
+  #fx i{position:absolute;left:0;top:0;display:block;border-radius:50%;pointer-events:none;will-change:transform,opacity}
+  #fx i.smoke{background:radial-gradient(circle,rgba(210,216,232,.55),rgba(150,160,185,.0) 70%)}
+  #fx i.dust{background:radial-gradient(circle,rgba(190,170,140,.55),rgba(190,170,140,0) 70%)}
+
+  /* ───────── Form painted on the cargo box ───────── */
+  .cargo-form{position:absolute;left:22px;top:17px;width:348px;height:158px;color:var(--ink)}
+  .brand{display:flex;align-items:center;justify-content:center;gap:8px;height:20px;margin-bottom:7px;
+    font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:.01em}
+  .brand i{width:7px;height:7px;border-radius:50%;background:var(--amber);box-shadow:0 0 0 3px rgba(224,164,90,.25)}
+  .field{display:block;margin-bottom:7px}
+  .field input{width:100%;height:35px;border:1.5px solid #a9b1c4;border-radius:8px;background:#fff;
+    padding:0 11px;font:500 16px/1 var(--text);color:var(--ink);outline:none;transition:border-color .15s,box-shadow .15s}
+  .field input::placeholder{color:#7d869b;font-weight:400}
+  .field input:focus{border-color:var(--ink);box-shadow:0 0 0 3px rgba(224,164,90,.45)}
+  .field input:disabled{background:#eef0f5;color:#6d768b}
+  .btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:37px;border:0;border-radius:8px;
+    background:var(--ink);color:#fff;font:700 15px/1 var(--display);letter-spacing:.02em;cursor:pointer;
+    transition:background .2s,transform .1s}
+  .btn:hover:not(:disabled){background:#1d3057}
+  .btn:active:not(:disabled){transform:translateY(1px)}
+  .btn:disabled{cursor:default;opacity:.6}
+  .btn:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+  .btn.ok{background:var(--ok);opacity:1}
+  .btn svg{width:16px;height:16px;display:none}
+  .btn.ok svg{display:block}
+  .btn.ok svg path{stroke-dasharray:24;stroke-dashoffset:24;animation:tick .45s ease .05s forwards}
+  @keyframes tick{to{stroke-dashoffset:0}}
+  .msg{height:17px;margin-top:5px;font-size:12.5px;font-weight:600;text-align:center;line-height:17px}
+  .msg.err{color:var(--err)}
+  .msg.ok{color:var(--ok)}
+
+  /* ───────── Effects ───────── */
+  #lines{position:absolute;inset:0;z-index:7;pointer-events:none;overflow:hidden}
+  #lines i{position:absolute;left:0;top:0;height:2px;border-radius:2px;opacity:0;
+    background:linear-gradient(90deg,transparent,rgba(255,235,190,.85),transparent)}
+  .vignette{position:absolute;inset:0;z-index:8;pointer-events:none;
+    background:radial-gradient(ellipse at 50% 55%,transparent 55%,rgba(0,0,0,.5) 100%)}
+  .fade{position:absolute;inset:0;z-index:20;background:#05080f;opacity:0;pointer-events:none;transition:opacity .6s ease}
+  .fade.on{opacity:1}
+  .toast{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);z-index:21;text-align:center;
+    font:700 18px/1.4 var(--display);letter-spacing:.02em;color:#dfe6f7;opacity:0;transition:opacity .5s ease;pointer-events:none}
+  .toast.show{opacity:1}
+  .toast span{display:block;font:500 13px var(--text);color:#8f9ab6;margin-top:4px}
+
+  @media (prefers-reduced-motion:reduce){
+    .star{animation:none}
+    .shake.go{animation:none}
+  }
+</style>
+</head>
+<body>
+<div class="scene" id="scene">
+  <div class="moon"></div>
+  <div class="layer" id="hills"></div>
+  <div class="layer" id="skyline"></div>
+  <div class="haze"></div>
+  <div class="layer" id="near"></div>
+
+  <div class="road">
+    <div class="kerb"></div>
+    <div class="edge"></div>
+    <div id="dashes"></div>
+  </div>
+
+  <div class="scaler" id="scaler">
+    <div class="truck" id="truck">
+
+      <!-- ground: shadow + headlight beam (not tilted) -->
+      <svg class="ground" viewBox="0 0 560 258" aria-hidden="true">
+        <defs>
+          <linearGradient id="gBeam" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#fff0c4" stop-opacity=".62"/>
+            <stop offset=".55" stop-color="#ffe6a8" stop-opacity=".16"/>
+            <stop offset="1" stop-color="#ffe6a8" stop-opacity="0"/>
+          </linearGradient>
+          <radialGradient id="gRoadGlow" cx=".5" cy=".5" r=".5">
+            <stop offset="0" stop-color="#ffd98a" stop-opacity=".34"/>
+            <stop offset="1" stop-color="#ffd98a" stop-opacity="0"/>
+          </radialGradient>
+          <filter id="blur5" x="-20%" y="-200%" width="140%" height="500%"><feGaussianBlur stdDeviation="5"/></filter>
+        </defs>
+        <ellipse cx="290" cy="254" rx="312" ry="8" fill="#000" opacity=".6" filter="url(#blur5)"/>
+        <g class="beam">
+          <polygon points="556,160 1180,92 1180,258 556,172" fill="url(#gBeam)"/>
+          <ellipse cx="830" cy="252" rx="300" ry="13" fill="url(#gRoadGlow)"/>
+        </g>
+      </svg>
+
+      <div class="shake" id="shake">
+        <div class="body" id="body">
+
+          <svg class="art" viewBox="0 0 560 258" aria-hidden="true">
+            <defs>
+              <linearGradient id="gBox" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dde1ea"/>
+              </linearGradient>
+              <linearGradient id="gCab" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#d6dbe5"/>
+              </linearGradient>
+              <linearGradient id="gGlass" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#2a3d66"/><stop offset="1" stop-color="#0c1630"/>
+              </linearGradient>
+              <linearGradient id="gChrome" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#6c7588"/><stop offset=".4" stop-color="#e6eaf2"/><stop offset="1" stop-color="#7b8498"/>
+              </linearGradient>
+              <linearGradient id="gStripe" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#e0a45a"/><stop offset="1" stop-color="#f0c27f"/>
+              </linearGradient>
+              <radialGradient id="gHead" cx=".5" cy=".5" r=".5">
+                <stop offset="0" stop-color="#fff6d6" stop-opacity=".95"/><stop offset="1" stop-color="#fff6d6" stop-opacity="0"/>
+              </radialGradient>
+              <radialGradient id="gBrake" cx=".5" cy=".5" r=".5">
+                <stop offset="0" stop-color="#ff3b3b" stop-opacity=".8"/><stop offset="1" stop-color="#ff3b3b" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+
+            <!-- rear glow when braking -->
+            <circle class="brakeglow" cx="-4" cy="172" r="58" fill="url(#gBrake)"/>
+
+            <!-- cargo box -->
+            <rect x="0" y="0" width="392" height="206" rx="9" fill="url(#gBox)"/>
+            <rect x="3" y="3" width="386" height="200" rx="7" fill="none" stroke="#eef0f5" stroke-width="1.5"/>
+            <path d="M0 9 Q0 0 9 0 L383 0 Q392 0 392 9 L392 12 L0 12 Z" fill="#c7cdd9"/>
+            <rect x="0" y="197" width="392" height="9" fill="#c2c8d5"/>
+            <rect x="0" y="189" width="392" height="4" fill="url(#gStripe)"/>
+            <rect x="-1" y="148" width="6" height="30" rx="2" fill="#ff4a4a" class="tail"/>
+
+            <!-- chassis + tank -->
+            <rect x="0" y="206" width="560" height="16" fill="#0e1421"/>
+            <rect x="248" y="208" width="84" height="26" rx="9" fill="url(#gChrome)"/>
+            <rect x="256" y="213" width="68" height="4" rx="2" fill="#fff" opacity=".35"/>
+
+            <!-- exhaust stack -->
+            <rect x="384" y="44" width="8" height="172" rx="3" fill="url(#gChrome)"/>
+            <ellipse cx="388" cy="44" rx="5" ry="2.2" fill="#2a3144"/>
+
+            <!-- cab -->
+            <g transform="translate(396 76)">
+              <path d="M0 146 L0 14 Q0 0 14 0 L74 0 Q92 0 102 16 L130 62 Q144 68 156 74 Q162 80 162 92 L162 146 Z" fill="url(#gCab)"/>
+              <path d="M14 14 L70 14 Q80 14 86 24 L108 58 L14 58 Z" fill="url(#gGlass)"/>
+              <path d="M20 17 L40 17 L23 56 L14 56 L14 28 Z" fill="#fff" opacity=".09"/>
+              <rect x="0" y="58" width="152" height="3" fill="#d2d7e1"/>
+              <line x1="50" y1="62" x2="50" y2="140" stroke="#cdd2dc" stroke-width="1.6"/>
+              <rect x="56" y="72" width="15" height="4" rx="2" fill="#aab1bf"/>
+              <rect x="112" y="34" width="8" height="22" rx="3" fill="#182034"/>
+              <line x1="112" y1="46" x2="105" y2="46" stroke="#182034" stroke-width="3"/>
+              <rect x="134" y="84" width="24" height="42" rx="4" fill="#182034"/>
+              <g stroke="#3b4764" stroke-width="2"><line x1="137" y1="93" x2="155" y2="93"/><line x1="137" y1="101" x2="155" y2="101"/><line x1="137" y1="109" x2="155" y2="109"/><line x1="137" y1="117" x2="155" y2="117"/></g>
+              <circle cx="156" cy="87" r="20" fill="url(#gHead)"/>
+              <rect x="148" y="80" width="14" height="14" rx="5" fill="#fff4cf"/>
+              <rect x="148" y="98" width="10" height="5" rx="2" fill="#f2a33c"/>
+              <rect x="122" y="128" width="42" height="18" rx="5" fill="#1b2336"/>
+              <g fill="#f2a33c"><circle cx="30" cy="3" r="1.8"/><circle cx="40" cy="3" r="1.8"/><circle cx="50" cy="3" r="1.8"/></g>
+            </g>
+
+            <!-- wheel arches + mud flap -->
+            <g fill="#080c16" stroke="#1a2236" stroke-width="2">
+              <path d="M57 224 A35 35 0 0 1 127 224 Z"/>
+              <path d="M127 224 A35 35 0 0 1 197 224 Z"/>
+              <path d="M457 224 A35 35 0 0 1 527 224 Z"/>
+            </g>
+            <rect x="44" y="222" width="9" height="26" rx="2" fill="#0a0f1a"/>
+          </svg>
+
+          <form class="cargo-form" id="form" autocomplete="off" novalidate>
+            <div class="brand"><i></i>Riyad Deliveries</div>
+            <label class="field"><input id="u" type="text" placeholder="Username" aria-label="Username" autocomplete="username" autocapitalize="none" spellcheck="false" disabled></label>
+            <label class="field"><input id="p" type="password" placeholder="Password" aria-label="Password" autocomplete="current-password" disabled></label>
+            <button class="btn" id="go" type="submit" disabled>
+              <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2.5 8.5l3.6 3.6L13.5 4.6" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span id="goText">Confirm</span>
+            </button>
+            <div class="msg" id="msg" role="status" aria-live="polite"></div>
+          </form>
+        </div>
+      </div>
+
+      <!-- wheels stay on the ground while the body pitches -->
+      <svg class="wheels" viewBox="0 0 560 258" aria-hidden="true">
+        <defs>
+          <radialGradient id="gRim" cx=".4" cy=".35" r=".8">
+            <stop offset="0" stop-color="#f3f5fa"/><stop offset="1" stop-color="#8a92a5"/>
+          </radialGradient>
+          <g id="wheelArt">
+            <circle r="30" fill="#090d16"/>
+            <circle r="26.5" fill="none" stroke="#1b2335" stroke-width="2"/>
+            <g stroke="#9aa3b8" stroke-width="2.4" stroke-linecap="round" opacity=".55">
+              <line x1="0" y1="-24" x2="0" y2="-28"/><line x1="17" y1="-17" x2="19.8" y2="-19.8"/>
+              <line x1="24" y1="0" x2="28" y2="0"/><line x1="17" y1="17" x2="19.8" y2="19.8"/>
+              <line x1="0" y1="24" x2="0" y2="28"/><line x1="-17" y1="17" x2="-19.8" y2="19.8"/>
+              <line x1="-24" y1="0" x2="-28" y2="0"/><line x1="-17" y1="-17" x2="-19.8" y2="-19.8"/>
+            </g>
+            <circle r="18" fill="url(#gRim)"/>
+            <circle r="12.5" fill="#6f788c"/>
+            <g fill="#10151f"><circle cx="0" cy="-8" r="1.9"/><circle cx="5.7" cy="-5.7" r="1.9"/><circle cx="8" cy="0" r="1.9"/><circle cx="5.7" cy="5.7" r="1.9"/><circle cx="0" cy="8" r="1.9"/><circle cx="-5.7" cy="5.7" r="1.9"/><circle cx="-8" cy="0" r="1.9"/><circle cx="-5.7" cy="-5.7" r="1.9"/></g>
+            <circle r="4.5" fill="#c9cfdc"/>
+          </g>
+        </defs>
+        <g transform="translate(92 224)"><g class="spin"><use href="#wheelArt"/></g></g>
+        <g transform="translate(162 224)"><g class="spin"><use href="#wheelArt"/></g></g>
+        <g transform="translate(492 224)"><g class="spin"><use href="#wheelArt"/></g></g>
+      </svg>
+
+      <div id="fx"></div>
+    </div>
+  </div>
+
+  <div id="lines"></div>
+  <div class="vignette"></div>
+  <div class="fade" id="fade"></div>
+  <div class="toast" id="toast">Login complete<span>Opening admin panel</span></div>
+</div>
+
+<script>
+(function(){
+  /* ───────────── Settings ───────────── */
+  // Salted SHA-256 of "username:password:truck-gate-v1" (username lowercased).
+  var HASH = "3eac7d60d04a80ec88c731cc255ed96d0e3a5d681ea1feb4666dfc7c60fb5640";
+  var SALT = ":truck-gate-v1";
+  var NEXT = "admin.html";      // page opened after a successful login
+  var KEY  = "admin_auth";      // sessionStorage flag that admin.html checks
+
+  var $ = function(id){ return document.getElementById(id); };
+  var scene=$("scene"), scaler=$("scaler"), truck=$("truck"), body=$("body"), shake=$("shake"),
+      form=$("form"), uIn=$("u"), pIn=$("p"), go=$("go"), goText=$("goText"), msg=$("msg"),
+      fade=$("fade"), toast=$("toast"), fx=$("fx"), linesBox=$("lines");
+  var spins = Array.prototype.slice.call(document.querySelectorAll(".spin"));
+
+  var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var finePointer = window.matchMedia && matchMedia("(pointer: fine)").matches;
+  var clamp = function(x,a,b){ return Math.max(a, Math.min(b, x)); };
+
+  /* ───────────── Procedural backdrop ───────────── */
+  function rng(seed){ return function(){ seed = (seed*16807) % 2147483647; return (seed-1)/2147483646; }; }
+  function svgUrl(svg){ return 'url("data:image/svg+xml,' + encodeURIComponent(svg) + '")'; }
+
+  function hillsSvg(W,H){
+    var pts = ["0,"+H], x;
+    for (x=0; x<=W; x+=10){
+      var y = H*0.52 + Math.sin(x/W*Math.PI*2)*H*0.12 + Math.sin(x/W*Math.PI*4+1.3)*H*0.07 + Math.sin(x/W*Math.PI*6+.4)*H*0.03;
+      pts.push(x+","+y.toFixed(1));
+    }
+    pts.push(W+","+H);
+    return '<svg xmlns="http://www.w3.org/2000/svg" width="'+W+'" height="'+H+'"><polygon points="'+pts.join(" ")+'" fill="#17234a" opacity=".85"/></svg>';
+  }
+  function skylineSvg(W,H){
+    var r = rng(7), x = 0, out = "";
+    while (x < W){
+      var w = 26 + Math.floor(r()*52); if (x + w > W || W - (x + w) < 22) w = W - x;
+      var h = 46 + Math.floor(r()*(H-70));
+      out += '<rect x="'+x+'" y="'+(H-h)+'" width="'+w+'" height="'+h+'" fill="#0d1733"/>';
+      if (r() > .72) out += '<rect x="'+(x+w/2-1)+'" y="'+(H-h-14)+'" width="2" height="14" fill="#0d1733"/>';
+      for (var wy = H-h+9; wy < H-8; wy += 11){
+        for (var wx = x+6; wx < x+w-8; wx += 9){
+          if (r() < .2) out += '<rect x="'+wx+'" y="'+wy+'" width="3.5" height="5" fill="#f3c26b" opacity="'+(0.35+r()*0.55).toFixed(2)+'"/>';
+        }
+      }
+      x += w;
+    }
+    return '<svg xmlns="http://www.w3.org/2000/svg" width="'+W+'" height="'+H+'">'+out+'</svg>';
+  }
+  function nearSvg(W,H){
+    function pine(cx,base,s){
+      var o = '<rect x="'+(cx-3*s)+'" y="'+(base-22*s)+'" width="'+(6*s)+'" height="'+(22*s)+'" fill="#050912"/>';
+      for (var i=0;i<3;i++){
+        var wdt = (46-i*11)*s, top = base-(34+i*30)*s, bot = base-(8+i*28)*s;
+        o += '<polygon points="'+(cx-wdt/2)+','+bot+' '+cx+','+top+' '+(cx+wdt/2)+','+bot+'" fill="#06101d"/>';
+      }
+      return o;
+    }
+    function lamp(x){
+      var top = H-168;
+      return '<circle cx="'+(x+34)+'" cy="'+(top+6)+'" r="86" fill="url(#lg)"/>' +
+             '<rect x="'+(x-2)+'" y="'+top+'" width="5" height="'+(H-top)+'" fill="#04070d"/>' +
+             '<path d="M'+(x+1)+' '+(top+4)+' Q'+(x+22)+' '+(top-8)+' '+(x+38)+' '+(top+2)+'" stroke="#04070d" stroke-width="4" fill="none"/>' +
+             '<rect x="'+(x+30)+'" y="'+(top+1)+'" width="15" height="6" rx="3" fill="#ffe2a0"/>';
+    }
+    var out = '<defs><radialGradient id="lg"><stop offset="0" stop-color="#ffd88a" stop-opacity=".42"/><stop offset="1" stop-color="#ffd88a" stop-opacity="0"/></radialGradient></defs>';
+    out += pine(70,H,1.0) + pine(120,H,.78) + pine(470,H,.9) + pine(735,H,1.05);
+    out += lamp(270) + lamp(600);
+    out += '<ellipse cx="400" cy="'+H+'" rx="60" ry="14" fill="#050a14"/><ellipse cx="200" cy="'+H+'" rx="44" ry="10" fill="#050a14"/>';
+    return '<svg xmlns="http://www.w3.org/2000/svg" width="'+W+'" height="'+H+'">'+out+'</svg>';
+  }
+
+  var layers = [
+    { el:$("hills"),   w:1000, h:220, k:.05, x:0, svg:hillsSvg },
+    { el:$("skyline"), w:1200, h:200, k:.14, x:0, svg:skylineSvg },
+    { el:$("near"),    w:800,  h:240, k:.55, x:0, svg:nearSvg },
+    { el:$("dashes"),  w:112,  h:5,   k:.95, x:0 }
+  ];
+  layers.forEach(function(L){
+    if (L.svg){
+      L.el.style.backgroundImage = svgUrl(L.svg(L.w, L.h));
+      L.el.style.backgroundSize = L.w + "px " + L.h + "px";
+    }
+    L.el.style.backgroundPositionX = "0px";
+  });
+
+  // stars
+  var sr = rng(99);
+  for (var si=0; si<70; si++){
+    var st = document.createElement("div");
+    st.className = "star";
+    var sz = 1 + sr()*1.8;
+    st.style.cssText = "left:"+(sr()*100).toFixed(1)+"%;top:"+(sr()*52).toFixed(1)+"%;width:"+sz.toFixed(1)+"px;height:"+sz.toFixed(1)+"px;animation-delay:"+(sr()*3).toFixed(2)+"s;animation-duration:"+(2+sr()*3).toFixed(1)+"s";
+    scene.insertBefore(st, scene.firstChild);
+  }
+
+  // speed lines
+  var lines = [];
+  if (!reduce){
+    var lr = rng(5);
+    for (var li=0; li<14; li++){
+      var le = document.createElement("i");
+      var lw = 90 + lr()*220;
+      le.style.width = lw + "px";
+      linesBox.appendChild(le);
+      lines.push({ el:le, w:lw, x:lr()*1200, y:lr(), f:.7+lr()*.8 });
+    }
+  }
+
+  /* ───────────── Layout ───────────── */
+  var vw = innerWidth, vh0 = innerHeight, scale = 1, off = 900;
+  function layout(){
+    if (innerWidth !== vw) vh0 = innerHeight;       // ignore height changes from on-screen keyboards
+    vw = innerWidth;
+    scale = clamp(Math.min((vw - 12) / 560, (vh0 - 150 - 70) / 258), .5, 1.35);
+    scaler.style.transform = "translateX(-50%) scale(" + scale + ")";
+    scaler.style.bottom = (108 - 4*scale) + "px";
+    off = (vw / scale) / 2 + 280 + 60;
+  }
+  layout();
+  window.addEventListener("resize", layout);
+
+  /* ───────────── Physics-driven motion ───────────── */
+  var p = -off, v = 0, vPrev = 0, accS = 0, pitch = 0, pitchV = 0, bias = 0;
+  var wheelAngle = 0, motion = null, last = 0, smokeT = 0, dustT = 0, burst = 0;
+
+  // profile(u): normalized distance 0→1
+  function profile(type, u){
+    if (type === "arrive"){                     // cruise, then brake at constant deceleration
+      var u1 = .36, vc = 1 / (u1 + (1-u1)/2);
+      if (u < u1) return vc*u;
+      var d = u - u1;
+      return vc*u1 + vc*d - .5*vc*d*d/(1-u1);
+    }
+    return u*u;                                 // "leave": constant acceleration
+  }
+  function startMotion(from, to, dur, type, cb){
+    motion = { from:from, to:to, dur:dur, type:type, cb:cb, t0:null };
+  }
+
+  var parts = [];
+  function spawn(kind, x, y, vx, vy, life, size){
+    if (parts.length > 46) return;
+    var el = document.createElement("i");
+    el.className = kind;
+    el.style.width = el.style.height = size + "px";
+    el.style.marginLeft = el.style.marginTop = (-size/2) + "px";
+    fx.appendChild(el);
+    parts.push({ el:el, kind:kind, x:x, y:y, vx:vx, vy:vy, life:life, age:0 });
+  }
+
+  function tick(now){
+    if (!last) last = now;
+    var dt = clamp((now - last)/1000, .001, .05); last = now;
+
+    var prevP = p;
+    if (motion){
+      if (motion.t0 === null) motion.t0 = now;
+      var u = Math.min(1, (now - motion.t0) / motion.dur);
+      p = motion.from + (motion.to - motion.from) * profile(motion.type, u);
+      if (u >= 1){ var m = motion; motion = null; p = m.to; if (m.cb) m.cb(); }
+    }
+    var vRaw = (p - prevP) / dt;
+    v += (vRaw - v) * Math.min(1, dt*20);
+    var a = (v - vPrev) / dt; vPrev = v;
+    accS += (a - accS) * Math.min(1, dt*6);
+
+    // body pitch: spring-damper driven by acceleration (nose dives when braking)
+    var target = reduce ? 0 : clamp(-accS*.0042, -.95, .95) + bias;
+    pitchV += (150*(target - pitch) - 11*pitchV) * dt;
+    pitch  += pitchV * dt;
+    var mv = Math.min(1, Math.abs(v)/250);
+    var bob = reduce ? 0 : Math.sin(now/38) * .9 * mv;
+
+    truck.style.transform = "translate3d(" + p.toFixed(2) + "px,0,0)";
+    body.style.transform = "translateY(" + bob.toFixed(2) + "px) rotate(" + pitch.toFixed(3) + "deg)";
+
+    // wheels turn with real speed (radius 30)
+    wheelAngle = (wheelAngle + v*dt/30*57.2958) % 360;
+    for (var i=0;i<spins.length;i++) spins[i].setAttribute("transform", "rotate(" + wheelAngle.toFixed(1) + ")");
+
+    // parallax backdrop (screen px)
+    for (var j=0;j<layers.length;j++){
+      var L = layers[j];
+      L.x = (L.x - v*scale*L.k*dt) % L.w;
+      L.el.style.backgroundPositionX = L.x.toFixed(1) + "px";
+    }
+
+    // brake lights
+    truck.classList.toggle("brake", accS < -22 && Math.abs(v) > 6);
+
+    if (!reduce){
+      // speed lines
+      var sp = clamp((Math.abs(v) - 260) / 520, 0, .65);
+      for (var k=0;k<lines.length;k++){
+        var ln = lines[k];
+        ln.x -= v*scale*1.9*ln.f*dt;
+        if (ln.x < -ln.w) ln.x += vw + ln.w + Math.random()*200;
+        if (ln.x > vw)    ln.x -= vw + ln.w + Math.random()*200;
+        ln.el.style.transform = "translate(" + ln.x.toFixed(0) + "px," + (innerHeight*(.16 + ln.y*.58)).toFixed(0) + "px)";
+        ln.el.style.opacity = (sp * (.5 + ln.f*.4)).toFixed(2);
+      }
+
+      // exhaust smoke
+      smokeT -= dt;
+      var rate = burst > 0 ? .035 : (Math.abs(v) > 30 ? .07 : .2);
+      if (smokeT <= 0){
+        smokeT = rate;
+        spawn("smoke", 388, 42, -(24 + Math.abs(v)*.85) + (Math.random()*16-8), -(34 + Math.random()*36), 1.1 + Math.random()*.5, 9 + Math.random()*5);
+      }
+      if (burst > 0) burst -= dt;
+
+      // wheel dust
+      dustT -= dt;
+      if (Math.abs(v) > 220 && dustT <= 0){
+        dustT = .045;
+        spawn("dust", 66 + Math.random()*10, 250, -(Math.abs(v)*.35 + 20), -(14 + Math.random()*30), .45 + Math.random()*.25, 6 + Math.random()*7);
+      }
+
+      for (var n=parts.length-1; n>=0; n--){
+        var q = parts[n];
+        q.age += dt;
+        var t = q.age / q.life;
+        if (t >= 1){ q.el.remove(); parts.splice(n,1); continue; }
+        q.x += q.vx*dt; q.y += q.vy*dt;
+        var s = q.kind === "smoke" ? 1 + t*2.4 : 1 + t*1.3;
+        q.el.style.opacity = ((q.kind === "smoke" ? .75 : .8) * (1 - t)).toFixed(2);
+        q.el.style.transform = "translate(" + q.x.toFixed(1) + "px," + q.y.toFixed(1) + "px) scale(" + s.toFixed(2) + ")";
+      }
+    }
+
+    requestAnimationFrame(tick);
+  }
+
+  /* ───────────── Login logic ───────────── */
+  var tries = 0, locked = false;
+  function say(text, cls){ msg.textContent = text; msg.className = "msg" + (cls ? " " + cls : ""); }
+
+  function sha256(text){
+    var data = new TextEncoder().encode(text);
+    return crypto.subtle.digest("SHA-256", data).then(function(buf){
+      return Array.prototype.map.call(new Uint8Array(buf), function(b){ return b.toString(16).padStart(2,"0"); }).join("");
+    });
+  }
+
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+    if (locked || go.disabled) return;
+    var user = uIn.value.trim().toLowerCase(), pass = pIn.value;
+    if (!user || !pass){ say("Enter username and password"); return; }
+    go.disabled = true; goText.textContent = "Checking...";
+    sha256(user + ":" + pass + SALT).then(function(h){
+      if (h === HASH) success(); else fail();
+    }).catch(function(){
+      go.disabled = false; goText.textContent = "Confirm";
+      say("This browser can't check the login. Open the page over https.", "err");
+    });
+  });
+
+  function fail(){
+    tries++;
+    pIn.value = "";
+    shake.classList.remove("go"); void shake.offsetWidth; shake.classList.add("go");
+    truck.classList.add("alarm"); setTimeout(function(){ truck.classList.remove("alarm"); }, 800);
+    pitchV += 22;
+    goText.textContent = "Confirm";
+    if (tries >= 5){
+      locked = true; var left = 30;
+      uIn.disabled = pIn.disabled = go.disabled = true;
+      say("Too many tries. Wait " + left + "s", "err");
+      var t = setInterval(function(){
+        left--;
+        if (left <= 0){
+          clearInterval(t); locked = false; tries = 0;
+          uIn.disabled = pIn.disabled = go.disabled = false; say(""); pIn.focus();
+        } else say("Too many tries. Wait " + left + "s", "err");
+      }, 1000);
+      return;
+    }
+    go.disabled = false;
+    say("Wrong username or password", "err");
+    pIn.focus();
+  }
+
+  function success(){
+    try { sessionStorage.setItem(KEY, "1"); } catch (err) {}
+    uIn.disabled = pIn.disabled = true;
+    go.classList.add("ok"); goText.textContent = "Verified";
+    say("Access granted", "ok");
+    truck.classList.add("flash");
+    burst = 1.2; bias = reduce ? 0 : -.7;            // engine revs, truck squats
+    setTimeout(function(){
+      bias = 0;
+      startMotion(0, off, reduce ? 300 : 2500, "leave", function(){
+        fade.classList.add("on");
+        setTimeout(function(){ toast.classList.add("show"); }, 350);
+        setTimeout(function(){ location.replace(NEXT); }, reduce ? 400 : 1500);
+      });
+    }, reduce ? 100 : 750);
+  }
+
+  /* ───────────── Entrance ───────────── */
+  truck.style.transform = "translate3d(" + (-off) + "px,0,0)";
+  requestAnimationFrame(function(t0){
+    last = t0;
+    startMotion(-off, 0, reduce ? 300 : 3000, "arrive", function(){
+      uIn.disabled = pIn.disabled = go.disabled = false;
+      if (finePointer) uIn.focus();
+    });
+    requestAnimationFrame(tick);
+  });
+})();
+</script>
+</body>
+</html>
