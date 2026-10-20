@@ -278,6 +278,203 @@ a{color:inherit;text-decoration:none;}
 
 <!-- ADMIN:INSERT-AFTER -->
 
+<!-- POST:post-1792485208682:START -->
+      <article class="article reveal visible">
+        <div class="article-meta">
+          <span class="article-tag">AI</span>
+          <span class="article-date">Oct 20, 2026 · 2:33 PM</span>
+        </div>
+        <h1 class="article-h1">Meet Miku: A Free Personal AI Assistant That Runs My PC</h1>
+
+        <div class="article-image">
+          <img src="uploads/1792485206681-photo.jpg" alt="Meet Miku: A Free Personal AI Assistant That Runs My PC">
+        </div>
+
+        <p class="article-p">MIKU is a personal AI assistant that lives on my PC and does real work. It can find files, organize folders, launch applications, search the web, manage notes, and remember what matters to me. With more than 25 built-in tools, MIKU is designed to go beyond ordinary AI conversations and help with practical desktop tasks. My goal was to build it using the computer I already own, without requiring a dedicated graphics card or paid AI subscriptions.</p>
+
+        <p class="article-p">Why I Built MIKU</p>
+
+        <p class="article-p">Most AI chatbots can talk, but they cannot directly manage my computer. I wanted an assistant that could organize messy folders, find a video in seconds, and open the right application when I ask.</p>
+
+        <p class="article-p">I built MIKU around three principles:</p>
+
+        <p class="article-p">Free to use: Minimize costs by using free AI services and local alternatives.</p>
+
+        <p class="article-p">Runs on existing hardware: Work with the PC I already own.</p>
+
+        <p class="article-p">Bilingual: Understand and communicate in both Bengali and English.</p>
+
+        <p class="article-p">The goal was simple: turn an AI assistant from something I chat with into something that can help me get things done.</p>
+
+        <p class="article-p">What MIKU Can Do</p>
+
+        <p class="article-p">MIKU comes equipped with more than 25 built-in tools, organized into categories for different tasks. Here is a closer look at its capabilities.</p>
+
+        <p class="article-p">1. File and Folder Management</p>
+
+        <p class="article-p">List the contents of any permitted folder.</p>
+
+        <p class="article-p">Organize loose files into subfolders by type, such as images, videos, documents, archives, and code, or by date.</p>
+
+        <p class="article-p">Move individual files after showing a preview.</p>
+
+        <p class="article-p">Undo the most recent organization or move operation.</p>
+
+        <p class="article-p">2. File Search and Media Discovery</p>
+
+        <p class="article-p">Search for files by name across permitted drives.</p>
+
+        <p class="article-p">Find photos and videos and calculate their total size.</p>
+
+        <p class="article-p">Detect exact duplicate photos and videos using file size and SHA-256 checksums.</p>
+
+        <p class="article-p">Search personal notes, text files, and PDFs by keyword.</p>
+
+        <p class="article-p">3. Application Launching and Navigation</p>
+
+        <p class="article-p">Open files, folders, and websites.</p>
+
+        <p class="article-p">Launch installed applications through their Start Menu shortcuts.</p>
+
+        <p class="article-p">Search Google or YouTube directly in the browser.</p>
+
+        <p class="article-p">4. Web Research</p>
+
+        <p class="article-p">Read text from web pages.</p>
+
+        <p class="article-p">Look up recent information using Google-backed web search.</p>
+
+        <p class="article-p">5. Memory and Personal Organization</p>
+
+        <p class="article-p">Remember facts and preferences, with the ability to forget them on request.</p>
+
+        <p class="article-p">Save notes and to-do items.</p>
+
+        <p class="article-p">Create and save daily routines.</p>
+
+        <p class="article-p">Maintain separate, editable sections for profile information, health and routine data, and an anime list.</p>
+
+        <p class="article-p">6. Safer File Cleanup</p>
+
+        <p class="article-p">Move folders to a dedicated trash area called MikuTrash instead of permanently deleting them.</p>
+
+        <p class="article-p">View trashed folders and restore them to their original locations.</p>
+
+        <p class="article-p">Keep a log of recent actions so I can review what MIKU has done.</p>
+
+        <p class="article-p">7. Custom Commands</p>
+
+        <p class="article-p">MIKU also supports commands for specific tasks:</p>
+
+        <p class="article-p">Email: Send an email using a short command containing the contact, subject, and message.</p>
+
+        <p class="article-p">WhatsApp: Prepare a WhatsApp message using a similar command format.</p>
+
+        <p class="article-p">System control: Shut down the computer on request.</p>
+
+        <p class="article-p">8. The Desktop Experience</p>
+
+        <p class="article-p">Beyond its tools, MIKU includes a desktop interface designed around usability and personalization:</p>
+
+        <p class="article-p">Saved chat history.</p>
+
+        <p class="article-p">A collapsible navigation menu.</p>
+
+        <p class="article-p">An animated robot.</p>
+
+        <p class="article-p">Bengali and English support in the interface and conversations.</p>
+
+        <p class="article-p">Automatic switching between AI providers when one reaches its free usage limit.</p>
+
+        <p class="article-p">How MIKU Works</p>
+
+        <p class="article-p">MIKU is a Python-based application built around three main components: the brain, the hands, and the memory.</p>
+
+        <p class="article-p">The Brain: AI Models</p>
+
+        <p class="article-p">The AI model interprets my messages and determines what action is needed. MIKU uses function calling, allowing the model to request a specific tool with the appropriate arguments rather than simply returning plain text.</p>
+
+        <p class="article-p">The Hands: Python Tools</p>
+
+        <p class="article-p">Each capability is implemented as a Python function registered in a tool registry. When the AI requests an action, the application executes the corresponding function on my PC and sends the result back to the model.</p>
+
+        <p class="article-p">The model can then respond to me or request another tool. This cycle continues until the task is complete or a predefined step limit is reached.</p>
+
+        <p class="article-p">The modular design also makes it easier to extend MIKU: adding a capability generally means implementing and registering a new function.</p>
+
+        <p class="article-p">The Memory: Local Data</p>
+
+        <p class="article-p">MIKU stores facts, notes, routines, settings, and chat history in JSON files on my drive. Data writes are handled atomically, and corrupted files are set aside rather than being allowed to crash the application.</p>
+
+        <p class="article-p">The Interface</p>
+
+        <p class="article-p">The desktop interface uses pywebview with an HTML, CSS, and JavaScript front end. Its dark, terminal-inspired design and animated robot give MIKU a distinctive identity.</p>
+
+        <p class="article-p">AI Provider Fallback</p>
+
+        <p class="article-p">To work around free-tier usage limits, MIKU is designed to try Google Gemini first, then Groq, and finally a small local model running through Ollama.</p>
+
+        <p class="article-p">This fallback approach aims to keep the assistant useful even when one provider becomes unavailable or reaches its usage limit.</p>
+
+        <p class="article-p">Built with Safety in Mind</p>
+
+        <p class="article-p">An assistant that can interact with local files needs more than a good AI model. It needs safeguards built into the application itself.</p>
+
+        <p class="article-p">MIKU incorporates several protective measures:</p>
+
+        <p class="article-p">Restricted access: Only permitted locations can be accessed, while system directories such as Windows and Program Files are blocked.</p>
+
+        <p class="article-p">Preview and confirmation: File moves display the intended action and wait for confirmation.</p>
+
+        <p class="article-p">Undo and recovery: Supported moves can be reversed, and trashed folders can be restored.</p>
+
+        <p class="article-p">Controlled application launching: Programs and scripts are not treated as ordinary documents, and application launching is restricted to approved apps.</p>
+
+        <p class="article-p">Untrusted web content: Text retrieved from websites is treated as data, not as instructions to follow.</p>
+
+        <p class="article-p">Private local memory: Personal memory is stored on the local drive. API keys are kept in environment variables rather than embedded in the source code.</p>
+
+        <p class="article-p">Sensitive-data control: A setting can exclude health notes from AI requests.</p>
+
+        <p class="article-p">Action logging: Recent operations are recorded for review.</p>
+
+        <p class="article-p">These measures are intended to make MIKU's actions more controlled and predictable. They do not eliminate every possible security risk, but they provide a foundation for safer desktop automation.</p>
+
+        <p class="article-p">What I Learned</p>
+
+        <p class="article-p">Building MIKU has taught me several important lessons.</p>
+
+        <p class="article-p">1. Free AI services have limits.</p>
+
+        <p class="article-p">A free model may impose strict request limits. I encountered a provider that allowed only 20 requests per day. Choosing the right model matters, but having a fallback plan matters just as much.</p>
+
+        <p class="article-p">2. Safety should be enforced in code.</p>
+
+        <p class="article-p">Prompts alone are not enough to control potentially risky operations. Application-level checks, restricted permissions, confirmations, and recovery mechanisms provide a stronger foundation.</p>
+
+        <p class="article-p">3. Small tools can accomplish big things.</p>
+
+        <p class="article-p">A collection of focused, well-tested functions can make an AI assistant genuinely useful. Rather than relying on one complicated feature, MIKU combines many smaller capabilities into a practical system.</p>
+
+        <p class="article-p">4. Hardware limitations encourage smarter design.</p>
+
+        <p class="article-p">Building for an older computer encourages careful resource use and a modular architecture. The objective is not to run the largest model possible, but to make the overall assistant useful on the hardware available.</p>
+
+        <p class="article-p">What's Next?</p>
+
+        <p class="article-p">MIKU is an ongoing project, and there is still room to improve it.</p>
+
+        <p class="article-p">My next priorities are to expand its toolset, make AI provider switching smoother, and improve interface responsiveness. I also want to continue refining its memory system, reliability, and ability to handle everyday tasks safely.</p>
+
+        <p class="article-p">The long-term vision is to make MIKU a dependable personal assistant that combines AI reasoning with useful desktop tools, while remaining practical to run and affordable to maintain.</p>
+
+        <div class="article-quote">
+          <p>MIKU started with a simple idea: an AI assistant should do more than answer questions. It should help turn instructions into useful actions.</p>
+        </div>
+      </article>
+<!-- POST:post-1792485208682:END -->
+
+
 
 
 
