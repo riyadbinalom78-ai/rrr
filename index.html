@@ -807,6 +807,7 @@ img{display:block;max-width:100%;}
   .intro-mark{width:118px;height:118px;}
 }
 </style>
+<link rel="stylesheet" href="assets/css/portfolio.css">
 </head>
 <body class="locked">
 
@@ -1052,34 +1053,10 @@ img{display:block;max-width:100%;}
   <div class="wrap">
     <div class="sec-eye reveal">From the Blog</div>
     <h2 class="sec-h2 reveal d1">Recent Reflections</h2>
-    <p class="sec-p reveal d2">Thoughts on faith, identity, and the art of being a stranger in a world that never stops moving.</p>
+    <p class="sec-p reveal d2">New writing, projects, and ideas from my desk.</p>
 
-    <div class="blog-grid">
-      <a class="blog-card reveal" href="blog.html">
-        <div class="blog-tag">Featured</div>
-        <div class="blog-h">The Weight of Wearing a Mask</div>
-        <p class="blog-p">In a world that feels like a never-ending masquerade, the hardest thing to do is to show your true face. We trade our authenticity for acceptance...</p>
-        <div class="blog-link">Read Article <i class="fa-solid fa-arrow-right"></i></div>
-      </a>
-      <a class="blog-card reveal d1" href="blog.html">
-        <div class="blog-tag">Identity</div>
-        <div class="blog-h">The Art of Being a Stranger</div>
-        <p class="blog-p">There is a profound beauty in not belonging. A quiet strength in choosing to remain a stranger in a world that demands you fit in...</p>
-        <div class="blog-link">Read Article <i class="fa-solid fa-arrow-right"></i></div>
-      </a>
-      <a class="blog-card reveal d2" href="blog.html">
-        <div class="blog-tag">বাংলা · গল্প</div>
-        <div class="blog-h">বাতিঘর</div>
-        <p class="blog-p">বিশাল এক সমুদ্রের মাঝে একা দাঁড়িয়ে আছে একটি বাতিঘর। রাত হলে সে নিজের বুক চিরে আলো জ্বালায়...</p>
-        <div class="blog-link">পড়ুন <i class="fa-solid fa-arrow-right"></i></div>
-      </a>
-      <a class="blog-card reveal d3" href="blog.html">
-        <div class="blog-tag">Faith · Reflection</div>
-        <div class="blog-h">The Quiet Weight of Thinking Differently</div>
-        <p class="blog-p">There is a specific kind of exhaustion that comes with being surrounded by people, yet feeling entirely unseen...</p>
-        <div class="blog-link">Read Article <i class="fa-solid fa-arrow-right"></i></div>
-      </a>
-    </div>
+    <div class="blog-grid" id="homeBlogGrid" aria-live="polite"><p class="home-blog-empty">Loading recent posts…</p></div>
+    <!-- Posts are rendered from the published articles in blog.html. -->
   </div>
 </section>
 
@@ -1121,6 +1098,7 @@ img{display:block;max-width:100%;}
       <a href="blog.html">Blog</a>
       <a href="lab.html">Lab</a>
       <a href="contact.html">Contact</a>
+      <a href="admin.html" aria-label="Site owner administration">Site owner</a>
     </div>
 
     <div class="footer-copy">
@@ -1136,8 +1114,8 @@ const introEl = document.getElementById('intro');
 const heroEls = document.querySelectorAll(
   '.hero-eyebrow,.hero-h1,.hero-subtitle,.hero-div,.hero-desc,.hero-cta,.hero-stats'
 );
-// total intro runtime ≈ 5.0s (rule finishes ~5.05s); we then fade it out and unlock the page
-const INTRO_MS = 5000;
+// Keep the intro brief so visitors reach the content quickly.
+const INTRO_MS = 1500;
 const FADE_MS = 900;
 
 function finishIntro(){
@@ -1219,6 +1197,8 @@ secretCopy.addEventListener('click', () => {
   }
 });
 </script>
+<script src="assets/js/home-blog.js" defer></script>
 
+<script src="assets/js/social-links.js" defer></script>
 </body>
 </html>

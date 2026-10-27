@@ -563,19 +563,20 @@ async function saveConnection(){
     if(!(info.permissions&&info.permissions.push))throw new Error('Repository is accessible, but this token does not have write permission.');
     localStorage.setItem('gh_token',token);localStorage.setItem('gh_owner',owner);localStorage.setItem('gh_repo',repo);setConnected(true);updateDashboard();
     showAlert('connStatus','<i class="fa-solid fa-circle-check"></i> Connected and write access verified.','alert-ok');Object.keys(SECTION_LOADED).forEach(k=>SECTION_LOADED[k]=false);return true
-  }catch(e){clearStoredConnection();setConnected(false);updateDashboard();showErrorAlert('connStatus','Connection failed — '+e.message);return false}
+  }catch(e){setConnected(!!(localStorage.getItem('gh_token')&&localStorage.getItem('gh_owner')&&localStorage.getItem('gh_repo')));updateDashboard();showErrorAlert('connStatus','Connection failed — '+e.message);return false}
   finally{btn.disabled=false}
 }
 
 
 
-async function getFile(path){requireConnection();const owner=localStorage.getItem('gh_owner'),repo=localStorage.getItem('gh_repo'),data=await githubFetch(`/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/contents/${path}`);if(Array.isArray(data))throw new Error(`"${path}" is a directory, not a file.`);return{sha:data.sha,content:base64ToUtf8(String(data.content||'').replace(/\s/g,'')),url:data.html_url||''}}
+function githubContentPath(path){return String(path).split('/').map(encodeURIComponent).join('/')}
+async function getFile(path){requireConnection();const owner=localStorage.getItem('gh_owner'),repo=localStorage.getItem('gh_repo'),data=await githubFetch(`/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/contents/${githubContentPath(path)}`);if(Array.isArray(data))throw new Error(`"${path}" is a directory, not a file.`);return{sha:data.sha,content:base64ToUtf8(String(data.content||'').replace(/\s/g,'')),url:data.html_url||''}}
 
 
-async function putFile(path,contentStr,sha,message){requireConnection();const owner=localStorage.getItem('gh_owner'),repo=localStorage.getItem('gh_repo'),body={message:String(message||'Update file'),content:utf8ToBase64(contentStr)};if(sha)body.sha=sha;return githubFetch(`/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/contents/${path}`,{method:'PUT',body:JSON.stringify(body)})}
+async function putFile(path,contentStr,sha,message){requireConnection();const owner=localStorage.getItem('gh_owner'),repo=localStorage.getItem('gh_repo'),body={message:String(message||'Update file'),content:utf8ToBase64(contentStr)};if(sha)body.sha=sha;return githubFetch(`/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/contents/${githubContentPath(path)}`,{method:'PUT',body:JSON.stringify(body)})}
 
 
-async function putBinaryFile(path,base64Content,sha,message){requireConnection();const owner=localStorage.getItem('gh_owner'),repo=localStorage.getItem('gh_repo'),body={message:String(message||'Update binary file'),content:base64Content};if(sha)body.sha=sha;return githubFetch(`/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/contents/${path}`,{method:'PUT',body:JSON.stringify(body)})}
+async function putBinaryFile(path,base64Content,sha,message){requireConnection();const owner=localStorage.getItem('gh_owner'),repo=localStorage.getItem('gh_repo'),body={message:String(message||'Update binary file'),content:base64Content};if(sha)body.sha=sha;return githubFetch(`/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/contents/${githubContentPath(path)}`,{method:'PUT',body:JSON.stringify(body)})}
 
 
 function escapeHtml(str){
@@ -992,6 +993,9 @@ async function saveContactFields(){
         if(s === -1 || e === -1) return;
         content = content.slice(0, s + startTag.length) + textToHtml(el.value) + content.slice(e);
       });
+      const email = document.querySelector('.fld-contact[data-key="contact-email"]').value.trim();
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new Error('Enter a valid contact email address.');
+      content = content.replace(/(href="mailto:)[^"]*(")/, `$1${escapeHtml(email)}$2`);
       await putFile('contact.html', content, file.sha, 'Update contact page via admin panel');
     }
 
@@ -1097,7 +1101,7 @@ function blogBuildArticleBlock(id, title, tag, content, quote, lang, dateTimeStr
     if(ytId) mediaHtml += `\n\n        <div class="article-video">\n          <iframe src="https://www.youtube.com/embed/${ytId}" title="video" allowfullscreen loading="lazy"></iframe>\n        </div>`;
   }
   return `<!-- POST:${id}:START -->
-      <article class="article reveal visible">
+      <article class="article reveal visible" id="${escapeHtml(id)}">
         <div class="article-meta">
           <span class="article-tag">${escapeHtml(tag || 'Reflection')}</span>
           <span class="article-date">${escapeHtml(finalDateTime)}</span>

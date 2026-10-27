@@ -101,6 +101,7 @@ textarea{min-height:140px;resize:vertical;}
 @media(max-width:840px){.wrap{padding:0 20px;}.nav-links{display:none;}.nav-ham{display:grid;}}
 @media(max-width:500px){.form-row{grid-template-columns:1fr;}}
 </style>
+<link rel="stylesheet" href="assets/css/portfolio.css">
 </head>
 <body>
 
@@ -154,7 +155,7 @@ textarea{min-height:140px;resize:vertical;}
           <div>
             <div class="contact-item-label">Email</div>
             <div class="contact-item-value">
-              <a href="mailto:riyadbinalom78@gmail.com">riyadbinalom78@gmail.com</a>
+              <a href="mailto:riyadbinalom78@gmail.com"><!-- EDIT:contact-email:START -->riyadbinalom78@gmail.com<!-- EDIT:contact-email:END --></a>
             </div>
           </div>
         </div>
@@ -163,7 +164,7 @@ textarea{min-height:140px;resize:vertical;}
           <div class="contact-icon"><i class="fa-solid fa-location-dot"></i></div>
           <div>
             <div class="contact-item-label">Location</div>
-            <div class="contact-item-value">Bangladesh 🇧🇩</div>
+            <div class="contact-item-value"><!-- EDIT:contact-location:START -->Bangladesh 🇧🇩<!-- EDIT:contact-location:END --></div>
           </div>
         </div>
 
@@ -233,6 +234,7 @@ textarea{min-height:140px;resize:vertical;}
       <a href="blog.html">Blog</a>
       <a href="lab.html">Lab</a>
       <a href="contact.html" style="color:var(--gold)">Contact</a>
+      <a href="admin.html">Site owner</a>
     </div>
     © 2026 · <span>Riyad Bin Alom</span> · All rights reserved
   </div>
@@ -311,5 +313,6 @@ form.addEventListener('submit', async function(e) {
   }
 });
 </script>
+<script src="assets/js/social-links.js" defer></script>
 </body>
 </html>
